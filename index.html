@@ -666,6 +666,136 @@ footer {
 @media (max-width: 560px) {
   .sec-head { flex-direction: column; gap: 1rem; }
 }
+
+/* ─────────────────────────────────────────────
+   QUALITY ATTRIBUTES — PART 7
+───────────────────────────────────────────── */
+.qa-central {
+  margin-bottom: 3rem;
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 1.5rem;
+  background: var(--surface);
+}
+.qa-central svg { width: 100%; height: auto; }
+
+.qa10-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.qa10-card {
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 1.8rem;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.qa10-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: var(--qa-color, #3b82f6);
+  opacity: 0.05;
+}
+.qa10-card:hover {
+  border-color: color-mix(in srgb, var(--qa-color, #3b82f6) 50%, transparent);
+  transform: translateY(-2px);
+}
+
+.qa10-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--qa-color, #3b82f6);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+.qa10-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+.qa10-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.qa10-body {
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.qa10-types { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.qa10-type {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.4rem 0.7rem;
+  background: var(--surface2); border-radius: 4px;
+  font-size: 0.78rem;
+}
+.qa10-type-label { font-family: var(--mono); color: var(--qa-color, #3b82f6); font-size: 0.7rem; }
+.qa10-type-val { color: var(--muted); font-size: 0.75rem; }
+
+.qa10-metrics { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.qa10-metric {
+  padding: 0.3rem 0.7rem;
+  background: color-mix(in srgb, var(--qa-color, #f59e0b) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--qa-color, #f59e0b) 30%, transparent);
+  border-radius: 4px;
+}
+.qa10-metric-v { font-family: var(--mono); font-size: 0.7rem; color: var(--qa-color, #f59e0b); }
+
+.qa10-table { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.qa10-row {
+  display: flex; justify-content: space-between;
+  padding: 0.35rem 0.7rem;
+  background: var(--surface2); border-radius: 3px;
+  font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+}
+.qa10-row-hl {
+  background: color-mix(in srgb, var(--qa-color, #22c55e) 12%, transparent);
+  color: var(--qa-color, #22c55e);
+  font-weight: 600;
+}
+
+.qa10-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.qa10-pill {
+  font-family: var(--mono); font-size: 0.68rem;
+  padding: 0.25rem 0.6rem;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  color: var(--muted);
+}
+
+.qa10-pillars { display: flex; gap: 0.6rem; margin-bottom: 1rem; }
+.qa10-pillar {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  padding: 0.6rem; border-radius: 6px;
+  background: color-mix(in srgb, var(--qa-color, #6366f1) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--qa-color, #6366f1) 20%, transparent);
+  font-size: 0.72rem; color: var(--qa-color, #6366f1); font-weight: 600;
+  font-family: var(--mono);
+}
+.qa10-pillar-icon { font-size: 1rem; }
+
+.qa10-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+
+@media (max-width: 960px) {
+  .qa10-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .qa-central { overflow-x: auto; }
+}
+
+[data-theme="light"] .qa10-card { background: var(--surface); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+[data-theme="light"] .qa10-type { background: var(--surface2); }
+[data-theme="light"] .qa10-row { background: var(--surface2); }
+[data-theme="light"] .qa10-pill { background: var(--surface2); }
+[data-theme="light"] .qa-central { background: var(--surface); }
 </style>
 </head>
 <body>
@@ -686,6 +816,7 @@ footer {
     <li><a href="#part4"><span class="nav-num">04</span> Cross-cutting</a></li>
     <li><a href="#part5"><span class="nav-num">05</span> AI Arch</a></li>
     <li><a href="#part6"><span class="nav-num">06</span> Futuro</a></li>
+    <li><a href="#part7"><span class="nav-num">07</span> Quality Attrs</a></li>
   </ul>
   <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
     <!-- Moon icon (shown in dark mode) -->
@@ -711,10 +842,10 @@ footer {
       <span class="g1">Arquitectura</span><br>
       <span class="g2">de Software</span>
     </h1>
-    <p class="hero-sub">Desde monolitos a sistemas autónomos impulsados por IA. 6 capítulos, 18 tópicos, diagramas interactivos.</p>
+    <p class="hero-sub">Desde monolitos a sistemas autónomos impulsados por IA. 7 capítulos, 28 tópicos, diagramas interactivos.</p>
     <div class="hero-stats">
-      <div><div class="stat-num">6</div><div class="stat-label">Partes</div></div>
-      <div><div class="stat-num">18</div><div class="stat-label">Tópicos</div></div>
+      <div><div class="stat-num">7</div><div class="stat-label">Partes</div></div>
+      <div><div class="stat-num">28</div><div class="stat-label">Tópicos</div></div>
       <div><div class="stat-num">∞</div><div class="stat-label">Trade-offs</div></div>
     </div>
   </div>
@@ -1899,13 +2030,271 @@ footer {
   </div>
 </section>
 
+<!-- ═══════════════════ PART 7: QUALITY ATTRIBUTES ═══════════════════ -->
+<section class="section reveal" id="part7">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 07</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// SEI · TOGAF · ISO 25010</div>
+      <h2 class="sec-title">Quality <span class="hl">Attributes</span></h2>
+      <p class="sec-desc">Los 10 atributos de calidad más importantes en arquitectura de software. La arquitectura está en el centro porque sus decisiones afectan todos los atributos simultáneamente.</p>
+    </div>
+  </div>
+
+  <!-- Central radial diagram -->
+  <div class="qa-central reveal">
+    <svg viewBox="0 0 620 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Center: Architecture -->
+      <rect x="245" y="113" width="130" height="64" rx="8" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="2"/>
+      <text x="310" y="140" font-family="'Outfit'" font-size="12" fill="#93c5fd" text-anchor="middle" font-weight="800">Architecture</text>
+      <text x="310" y="157" font-family="'JetBrains Mono'" font-size="7.5" fill="#3b82f6" text-anchor="middle">decisions &amp; trade-offs</text>
+
+      <!-- Security — top-left -->
+      <rect x="8"   y="18"  width="95"  height="34" rx="5" fill="rgba(244,63,94,0.1)"   stroke="#f43f5e" stroke-width="1.2"/>
+      <text x="55"  y="33"  font-family="'JetBrains Mono'" font-size="8"   fill="#f43f5e" text-anchor="middle">🔒 Security</text>
+      <text x="55"  y="44"  font-family="'JetBrains Mono'" font-size="6.5" fill="#f43f5e" text-anchor="middle" opacity="0.65">Zero Trust</text>
+      <line x1="103" y1="35" x2="245" y2="128" stroke="#f43f5e" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Performance — top-center -->
+      <rect x="225" y="8"   width="110" height="34" rx="5" fill="rgba(245,158,11,0.1)"  stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="280" y="23"  font-family="'JetBrains Mono'" font-size="8"   fill="#f59e0b" text-anchor="middle">⚡ Performance</text>
+      <text x="280" y="34"  font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle" opacity="0.65">latency · throughput</text>
+      <line x1="280" y1="42" x2="290" y2="113" stroke="#f59e0b" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Scalability — top-right -->
+      <rect x="517" y="18"  width="98"  height="34" rx="5" fill="rgba(6,182,212,0.1)"   stroke="#06b6d4" stroke-width="1.2"/>
+      <text x="566" y="33"  font-family="'JetBrains Mono'" font-size="8"   fill="#06b6d4" text-anchor="middle">📈 Scalability</text>
+      <text x="566" y="44"  font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle" opacity="0.65">H-scale · V-scale</text>
+      <line x1="517" y1="35" x2="375" y2="128" stroke="#06b6d4" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Availability — left -->
+      <rect x="8"   y="125" width="100" height="34" rx="5" fill="rgba(34,197,94,0.1)"   stroke="#22c55e" stroke-width="1.2"/>
+      <text x="58"  y="140" font-family="'JetBrains Mono'" font-size="7.5" fill="#22c55e" text-anchor="middle">🟢 Availability</text>
+      <text x="58"  y="151" font-family="'JetBrains Mono'" font-size="6.5" fill="#22c55e" text-anchor="middle" opacity="0.65">99.99% uptime</text>
+      <line x1="108" y1="142" x2="245" y2="145" stroke="#22c55e" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Reliability — right -->
+      <rect x="512" y="125" width="100" height="34" rx="5" fill="rgba(139,92,246,0.1)"  stroke="#8b5cf6" stroke-width="1.2"/>
+      <text x="562" y="140" font-family="'JetBrains Mono'" font-size="7.5" fill="#8b5cf6" text-anchor="middle">🛡 Reliability</text>
+      <text x="562" y="151" font-family="'JetBrains Mono'" font-size="6.5" fill="#8b5cf6" text-anchor="middle" opacity="0.65">circuit breakers</text>
+      <line x1="512" y1="142" x2="375" y2="145" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Cost Efficiency — bottom-left far -->
+      <rect x="8"   y="232" width="115" height="34" rx="5" fill="rgba(34,197,94,0.08)"  stroke="#22c55e" stroke-width="1" stroke-opacity="0.7"/>
+      <text x="65"  y="247" font-family="'JetBrains Mono'" font-size="7"   fill="#22c55e" text-anchor="middle">💰 Cost Efficiency</text>
+      <text x="65"  y="258" font-family="'JetBrains Mono'" font-size="6"   fill="#22c55e" text-anchor="middle" opacity="0.6">FinOps · serverless</text>
+      <line x1="123" y1="249" x2="245" y2="168" stroke="#22c55e" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="5,3"/>
+
+      <!-- Maintainability — bottom-left -->
+      <rect x="8"   y="182" width="118" height="34" rx="5" fill="rgba(20,184,166,0.1)"  stroke="#14b8a6" stroke-width="1.2"/>
+      <text x="67"  y="197" font-family="'JetBrains Mono'" font-size="7"   fill="#14b8a6" text-anchor="middle">🔧 Maintainability</text>
+      <text x="67"  y="208" font-family="'JetBrains Mono'" font-size="6.5" fill="#14b8a6" text-anchor="middle" opacity="0.65">clean · hexagonal</text>
+      <line x1="126" y1="199" x2="245" y2="162" stroke="#14b8a6" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Observability — bottom-center -->
+      <rect x="215" y="248" width="115" height="34" rx="5" fill="rgba(99,102,241,0.1)"  stroke="#6366f1" stroke-width="1.2"/>
+      <text x="272" y="263" font-family="'JetBrains Mono'" font-size="7"   fill="#6366f1" text-anchor="middle">🔍 Observability</text>
+      <text x="272" y="274" font-family="'JetBrains Mono'" font-size="6.5" fill="#6366f1" text-anchor="middle" opacity="0.65">logs · metrics · traces</text>
+      <line x1="272" y1="248" x2="285" y2="177" stroke="#6366f1" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Deployability — bottom-right -->
+      <rect x="405" y="248" width="105" height="34" rx="5" fill="rgba(245,158,11,0.1)"  stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="457" y="263" font-family="'JetBrains Mono'" font-size="7"   fill="#f59e0b" text-anchor="middle">🚀 Deployability</text>
+      <text x="457" y="274" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle" opacity="0.65">CI/CD · canary</text>
+      <line x1="405" y1="265" x2="375" y2="177" stroke="#f59e0b" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="5,3"/>
+
+      <!-- Modifiability — bottom-right far -->
+      <rect x="497" y="193" width="105" height="34" rx="5" fill="rgba(244,63,94,0.08)"  stroke="#f43f5e" stroke-width="1" stroke-opacity="0.7"/>
+      <text x="549" y="208" font-family="'JetBrains Mono'" font-size="7"   fill="#f43f5e" text-anchor="middle">🧩 Modifiability</text>
+      <text x="549" y="219" font-family="'JetBrains Mono'" font-size="6"   fill="#f43f5e" text-anchor="middle" opacity="0.6">plugin arch</text>
+      <line x1="497" y1="210" x2="375" y2="162" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="5,3"/>
+    </svg>
+  </div>
+
+  <!-- 10 QA cards -->
+  <div class="qa10-grid">
+
+    <!-- 01 Scalability -->
+    <div class="qa10-card reveal" style="--qa-color:#06b6d4">
+      <div class="qa10-num">01</div>
+      <div class="qa10-icon">📈</div>
+      <div class="qa10-title">Scalability</div>
+      <p class="qa10-body">Capacidad del sistema de manejar aumento de carga: más usuarios, más transacciones, más datos.</p>
+      <div class="qa10-types">
+        <div class="qa10-type">
+          <span class="qa10-type-label">Vertical</span>
+          <span class="qa10-type-val">↑ CPU / RAM</span>
+        </div>
+        <div class="qa10-type">
+          <span class="qa10-type-label">Horizontal</span>
+          <span class="qa10-type-val">Load Balancer + N instancias</span>
+        </div>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">microservices</span><span class="ctag">serverless</span><span class="ctag">event-driven</span>
+      </div>
+    </div>
+
+    <!-- 02 Performance -->
+    <div class="qa10-card reveal" style="--qa-color:#f59e0b">
+      <div class="qa10-num">02</div>
+      <div class="qa10-icon">⚡</div>
+      <div class="qa10-title">Performance</div>
+      <p class="qa10-body">Capacidad del sistema de responder rápidamente bajo carga real.</p>
+      <div class="qa10-metrics">
+        <div class="qa10-metric"><span class="qa10-metric-v">latency</span></div>
+        <div class="qa10-metric"><span class="qa10-metric-v">throughput</span></div>
+        <div class="qa10-metric"><span class="qa10-metric-v">response time</span></div>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">caching</span><span class="ctag">async processing</span><span class="ctag">CDN</span>
+      </div>
+    </div>
+
+    <!-- 03 Availability -->
+    <div class="qa10-card reveal" style="--qa-color:#22c55e">
+      <div class="qa10-num">03</div>
+      <div class="qa10-icon">🟢</div>
+      <div class="qa10-title">Availability</div>
+      <p class="qa10-body">Capacidad del sistema de seguir funcionando. Se mide en número de nueves.</p>
+      <div class="qa10-table">
+        <div class="qa10-row"><span>99%</span><span>3.6 días/año</span></div>
+        <div class="qa10-row"><span>99.9%</span><span>8.7 horas/año</span></div>
+        <div class="qa10-row qa10-row-hl"><span>99.99%</span><span>52 min/año</span></div>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">redundancy</span><span class="ctag">failover</span><span class="ctag">multi-region</span>
+      </div>
+    </div>
+
+    <!-- 04 Reliability -->
+    <div class="qa10-card reveal" style="--qa-color:#8b5cf6">
+      <div class="qa10-num">04</div>
+      <div class="qa10-icon">🛡</div>
+      <div class="qa10-title">Reliability</div>
+      <p class="qa10-body">Probabilidad de que el sistema funcione <em>correctamente</em>. Un sistema puede estar disponible pero devolver errores.</p>
+      <div class="qa10-pills">
+        <span class="qa10-pill">retries</span>
+        <span class="qa10-pill">circuit breakers</span>
+        <span class="qa10-pill">idempotency</span>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">MTBF</span><span class="ctag">MTTR</span><span class="ctag">SLO</span>
+      </div>
+    </div>
+
+    <!-- 05 Security -->
+    <div class="qa10-card reveal" style="--qa-color:#f43f5e">
+      <div class="qa10-num">05</div>
+      <div class="qa10-icon">🔒</div>
+      <div class="qa10-title">Security</div>
+      <p class="qa10-body">Protección contra accesos no autorizados y ataques. Concepto moderno: Identity-first security.</p>
+      <div class="qa10-pills">
+        <span class="qa10-pill">authentication</span>
+        <span class="qa10-pill">authorization</span>
+        <span class="qa10-pill">encryption</span>
+        <span class="qa10-pill">secrets mgmt</span>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">Zero Trust</span><span class="ctag">mTLS</span><span class="ctag">OWASP</span>
+      </div>
+    </div>
+
+    <!-- 06 Maintainability -->
+    <div class="qa10-card reveal" style="--qa-color:#14b8a6">
+      <div class="qa10-num">06</div>
+      <div class="qa10-icon">🔧</div>
+      <div class="qa10-title">Maintainability</div>
+      <p class="qa10-body">Facilidad para modificar el sistema: cambios más rápidos, menor riesgo, menor costo de evolución.</p>
+      <div class="qa10-pills">
+        <span class="qa10-pill">clean architecture</span>
+        <span class="qa10-pill">hexagonal arch</span>
+        <span class="qa10-pill">low coupling</span>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">DDD</span><span class="ctag">SOLID</span><span class="ctag">high cohesion</span>
+      </div>
+    </div>
+
+    <!-- 07 Modifiability -->
+    <div class="qa10-card reveal" style="--qa-color:#f43f5e">
+      <div class="qa10-num">07</div>
+      <div class="qa10-icon">🧩</div>
+      <div class="qa10-title">Modifiability</div>
+      <p class="qa10-body">Capacidad de agregar nuevas funcionalidades sin romper componentes existentes.</p>
+      <div class="qa10-pills">
+        <span class="qa10-pill">modular monolith</span>
+        <span class="qa10-pill">microservices</span>
+        <span class="qa10-pill">plugin architectures</span>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">open/closed</span><span class="ctag">extensibility</span>
+      </div>
+    </div>
+
+    <!-- 08 Observability -->
+    <div class="qa10-card reveal" style="--qa-color:#6366f1">
+      <div class="qa10-num">08</div>
+      <div class="qa10-icon">🔍</div>
+      <div class="qa10-title">Observability</div>
+      <p class="qa10-body">Capacidad de entender lo que ocurre dentro del sistema basándose en sus salidas externas.</p>
+      <div class="qa10-pillars">
+        <div class="qa10-pillar"><span class="qa10-pillar-icon">📋</span><span>Logs</span></div>
+        <div class="qa10-pillar"><span class="qa10-pillar-icon">📊</span><span>Metrics</span></div>
+        <div class="qa10-pillar"><span class="qa10-pillar-icon">🔗</span><span>Traces</span></div>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">OpenTelemetry</span><span class="ctag">Prometheus</span><span class="ctag">Grafana</span>
+      </div>
+    </div>
+
+    <!-- 09 Deployability -->
+    <div class="qa10-card reveal" style="--qa-color:#f59e0b">
+      <div class="qa10-num">09</div>
+      <div class="qa10-icon">🚀</div>
+      <div class="qa10-title">Deployability</div>
+      <p class="qa10-body">Facilidad para desplegar nuevas versiones con seguridad. Habilita deploys diarios o múltiples veces al día.</p>
+      <div class="qa10-pills">
+        <span class="qa10-pill">CI/CD pipelines</span>
+        <span class="qa10-pill">blue/green</span>
+        <span class="qa10-pill">canary releases</span>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">GitOps</span><span class="ctag">feature flags</span><span class="ctag">rollback</span>
+      </div>
+    </div>
+
+    <!-- 10 Cost Efficiency -->
+    <div class="qa10-card reveal" style="--qa-color:#22c55e">
+      <div class="qa10-num">10</div>
+      <div class="qa10-icon">💰</div>
+      <div class="qa10-title">Cost Efficiency</div>
+      <p class="qa10-body">Muy importante en cloud. La arquitectura debe optimizar infraestructura, compute, storage y networking.</p>
+      <div class="qa10-types">
+        <div class="qa10-type">
+          <span class="qa10-type-label">Variable load</span>
+          <span class="qa10-type-val">Serverless reduce costos</span>
+        </div>
+        <div class="qa10-type">
+          <span class="qa10-type-label">Steady load</span>
+          <span class="qa10-type-val">Reserved instances</span>
+        </div>
+      </div>
+      <div class="qa10-tags">
+        <span class="ctag">FinOps</span><span class="ctag">spot instances</span><span class="ctag">auto-scaling</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div style="display:flex;align-items:center;gap:0.6rem">
     <span class="footer-dot"></span>
     <span>Arquitectura de Software — Guía Interactiva</span>
   </div>
-  <span>6 Partes · 18 Tópicos · GitHub Pages Ready</span>
+  <span>7 Partes · 28 Tópicos · GitHub Pages Ready</span>
 </footer>
 
 <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
