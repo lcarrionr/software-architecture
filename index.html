@@ -36,6 +36,18 @@
   --r:        8px;
 }
 
+[data-theme="light"] {
+  --bg:       #f8fafc;
+  --surface:  #ffffff;
+  --surface2: #f1f5f9;
+  --border:   rgba(59,130,246,0.2);
+  --border2:  rgba(15,23,42,0.1);
+
+  --text:     #0f172a;
+  --muted:    #475569;
+  --dim:      #94a3b8;
+}
+
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
@@ -44,6 +56,7 @@ body {
   font-size: 16px;
   line-height: 1.7;
   overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
 }
 
 /* scrollbar */
@@ -70,7 +83,31 @@ nav {
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
   padding: 0 2rem; gap: 0;
+  transition: background 0.3s, border-color 0.3s;
 }
+[data-theme="light"] nav {
+  background: rgba(240,244,248,0.92);
+}
+
+/* Theme toggle button */
+.theme-btn {
+  margin-left: auto;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { background: var(--surface); color: var(--text); border-color: var(--border); }
+.theme-btn svg { width: 16px; height: 16px; }
+.theme-btn .icon-sun { display: none; }
+.theme-btn .icon-moon { display: block; }
+[data-theme="light"] .theme-btn .icon-sun { display: block; }
+[data-theme="light"] .theme-btn .icon-moon { display: none; }
 .nav-brand {
   font-weight: 800; font-size: 0.9rem;
   letter-spacing: 0.05em;
@@ -485,6 +522,134 @@ footer {
 @keyframes floating { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
 
 /* ─────────────────────────────────────────────
+   LIGHT MODE OVERRIDES — UI
+───────────────────────────────────────────── */
+[data-theme="light"] body { background: var(--bg); color: var(--text); }
+[data-theme="light"] #bg-canvas { opacity: 0.08; }
+
+/* Cards */
+[data-theme="light"] .card {
+  background: var(--surface);
+  border-color: var(--border2);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.04);
+}
+[data-theme="light"] .card:hover {
+  background: var(--surface2);
+  box-shadow: 0 4px 20px rgba(59,130,246,0.12);
+}
+[data-theme="light"] .card::before {
+  background: radial-gradient(circle at 30% 30%, rgba(59,130,246,0.06), transparent 60%);
+}
+[data-theme="light"] .ctag { background: rgba(15,23,42,0.05); border-color: rgba(15,23,42,0.1); }
+
+/* Cloud cards */
+[data-theme="light"] .c-card.eda { background: linear-gradient(145deg, #eff6ff, #ecfeff); border-color: rgba(6,182,212,0.25); }
+[data-theme="light"] .c-card.srv { background: linear-gradient(145deg, #f5f3ff, #faf5ff); border-color: rgba(139,92,246,0.25); }
+[data-theme="light"] .c-card.cn  { background: linear-gradient(145deg, #f0fdf4, #f0fdfa); border-color: rgba(20,184,166,0.25); }
+
+/* Future cards */
+[data-theme="light"] .f-card {
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.06);
+}
+[data-theme="light"] .f-list li { background: var(--surface2); color: var(--text); }
+
+/* Cross-cutting accordion */
+[data-theme="light"] .cc-block { background: var(--surface); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
+[data-theme="light"] .cc-header:hover { background: var(--surface2); }
+[data-theme="light"] .cc-pill { background: var(--surface2); color: var(--text); }
+
+/* AI steps */
+[data-theme="light"] .ai-step { background: var(--surface2); border-left-color: var(--blue); }
+[data-theme="light"] .ai-tab { background: var(--surface); }
+[data-theme="light"] .ai-tab:hover { background: var(--surface2); color: var(--text); }
+
+/* Evo tabs */
+[data-theme="light"] .evo-tabs { border-bottom-color: var(--border2); }
+
+/* Tooltip */
+[data-theme="light"] .tooltip {
+  background: var(--surface);
+  box-shadow: 0 4px 20px rgba(15,23,42,0.15);
+  color: var(--text);
+}
+
+/* Scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg); }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: var(--dim); }
+
+/* Hero */
+[data-theme="light"] .hero-title .g1 {
+  background: linear-gradient(120deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+[data-theme="light"] .hero-tag { color: var(--cyan); }
+[data-theme="light"] .hero-sub { color: var(--muted); }
+[data-theme="light"] .qa-track { background: var(--border2); }
+
+/* Section */
+[data-theme="light"] .section { border-top-color: var(--border2); }
+[data-theme="light"] footer { border-top-color: var(--border2); color: var(--muted); }
+[data-theme="light"] .sec-desc { color: var(--muted); }
+
+/* ─────────────────────────────────────────────
+   LIGHT MODE OVERRIDES — SVG DIAGRAMS
+   CSS overrides SVG presentation attributes
+───────────────────────────────────────────── */
+
+/* Near-white text → dark in light mode */
+[data-theme="light"] svg text[fill*="226,232,240"],
+[data-theme="light"] svg text[fill*="255,255,255"] { fill: #1e293b; }
+
+/* Washed-out light-purple/teal text */
+[data-theme="light"] svg text[fill*="196,181,253"][fill*="0.5"],
+[data-theme="light"] svg text[fill*="94,234,212"][fill*="0.5"],
+[data-theme="light"] svg text[fill*="196,181,253"][fill*="0.4"] { fill: #6d28d9; }
+
+/* Hardcoded very dark rects (AI agent box, etc.) */
+[data-theme="light"] svg rect[fill="#0f172a"] {
+  fill: #f8fafc;
+  filter: drop-shadow(0 0 6px rgba(245,158,11,0.2));
+}
+
+/* Near-invisible faint rects */
+[data-theme="light"] svg rect[fill*="255,255,255"][fill*="0.03"] { fill: rgba(15,23,42,0.04); }
+[data-theme="light"] svg rect[fill*="0.03"] { fill: rgba(15,23,42,0.04); }
+
+/* Muted gray label text — darken for contrast */
+[data-theme="light"] svg text[fill="#94a3b8"] { fill: #475569; }
+[data-theme="light"] svg text[fill="#64748b"] { fill: #475569; }
+
+/* Dark-mode subtle labels used as diagram guides */
+[data-theme="light"] svg text[fill="#334155"] { fill: #64748b; }
+
+/* Stroke colors on subtler connector lines */
+[data-theme="light"] svg line[stroke="#334155"] { stroke: #94a3b8; }
+[data-theme="light"] svg rect[stroke="#334155"] { stroke: #94a3b8; }
+
+/* Background grid lines in hero SVG */
+[data-theme="light"] #hero-svg g[opacity="0.06"] { opacity: 0.15; }
+[data-theme="light"] #hero-svg g[opacity="0.06"] line { stroke: #94a3b8; }
+
+/* Low-opacity colored text — boost saturation/darken */
+[data-theme="light"] svg text[fill*="6,182,212"][fill*="0.5"],
+[data-theme="light"] svg text[fill*="6,182,212"][fill*="0.6"],
+[data-theme="light"] svg text[fill*="6,182,212"][fill*="0.7"] { fill: #0891b2; }
+[data-theme="light"] svg text[fill*="196,181,253"][fill*="0.5"],
+[data-theme="light"] svg text[fill*="196,181,253"][fill*="0.4"] { fill: #7c3aed; }
+[data-theme="light"] svg text[fill*="94,234,212"][fill*="0.5"] { fill: #0d9488; }
+
+/* Pastel (Tailwind-300) SVG text → Tailwind-600/700 equivalents for light bg contrast */
+[data-theme="light"] svg text[fill="#93c5fd"] { fill: #2563eb; }   /* blue-300   → blue-600   */
+[data-theme="light"] svg text[fill="#67e8f9"] { fill: #0891b2; }   /* cyan-300   → cyan-600   */
+[data-theme="light"] svg text[fill="#5eead4"] { fill: #0d9488; }   /* teal-300   → teal-600   */
+[data-theme="light"] svg text[fill="#a5b4fc"] { fill: #4338ca; }   /* indigo-300 → indigo-700 */
+[data-theme="light"] svg text[fill="#c4b5fd"] { fill: #7c3aed; }   /* violet-300 → violet-600 */
+[data-theme="light"] svg text[fill="#fcd34d"] { fill: #b45309; }   /* amber-300  → amber-700  */
+[data-theme="light"] svg text[fill="#86efac"] { fill: #16a34a; }   /* green-300  → green-600  */
+[data-theme="light"] svg text[fill="#fca5a5"] { fill: #b91c1c; }   /* red-300    → red-700    */
+
+/* ─────────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────────── */
 @media (max-width: 960px) {
@@ -522,6 +687,20 @@ footer {
     <li><a href="#part5"><span class="nav-num">05</span> AI Arch</a></li>
     <li><a href="#part6"><span class="nav-num">06</span> Futuro</a></li>
   </ul>
+  <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
+    <!-- Moon icon (shown in dark mode) -->
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+    <!-- Sun icon (shown in light mode) -->
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
 </nav>
 
 <!-- ═══════════════════ HERO ═══════════════════ -->
@@ -1870,6 +2049,23 @@ function toggleCC(id) {
   const block = document.getElementById(id);
   block.classList.toggle('open');
 }
+
+/* ── Theme toggle ── */
+(function() {
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  btn.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+})();
 
 /* ── SVG path draw on scroll ── */
 const pathObserver = new IntersectionObserver((entries) => {
