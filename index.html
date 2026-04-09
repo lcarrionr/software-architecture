@@ -668,7 +668,7 @@ footer {
 }
 
 /* ─────────────────────────────────────────────
-   QUALITY ATTRIBUTES — PART 7
+   QUALITY ATTRIBUTES — PART 5
 ───────────────────────────────────────────── */
 .qa-central {
   margin-bottom: 3rem;
@@ -814,9 +814,9 @@ footer {
     <li><a href="#part2"><span class="nav-num">02</span> Evolución</a></li>
     <li><a href="#part3"><span class="nav-num">03</span> Cloud</a></li>
     <li><a href="#part4"><span class="nav-num">04</span> Cross-cutting</a></li>
-    <li><a href="#part5"><span class="nav-num">05</span> AI Arch</a></li>
-    <li><a href="#part6"><span class="nav-num">06</span> Futuro</a></li>
-    <li><a href="#part7"><span class="nav-num">07</span> Quality Attrs</a></li>
+    <li><a href="#part5"><span class="nav-num">05</span> Quality Attrs</a></li>
+    <li><a href="#part6"><span class="nav-num">06</span> AI Arch</a></li>
+    <li><a href="#part7"><span class="nav-num">07</span> Futuro</a></li>
   </ul>
   <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
     <!-- Moon icon (shown in dark mode) -->
@@ -1703,337 +1703,10 @@ footer {
   </div>
 </section>
 
-<!-- ═══════════════════ PART 5: AI ARCHITECTURES ═══════════════════ -->
+<!-- ═══════════════════ PART 5: QUALITY ATTRIBUTES ═══════════════════ -->
 <section class="section reveal" id="part5">
   <div class="sec-head">
     <div class="sec-num">PARTE 05</div>
-    <div class="sec-title-wrap">
-      <div class="sec-label">// Inteligencia Artificial en Sistemas</div>
-      <h2 class="sec-title">Arquitecturas <span class="hl">de AI</span></h2>
-      <p class="sec-desc">Los nuevos paradigmas que emergen al integrar modelos de lenguaje y razonamiento en sistemas de producción.</p>
-    </div>
-  </div>
-
-  <div class="ai-tabs">
-    <button class="ai-tab active" data-ai="rag">🔍 RAG</button>
-    <button class="ai-tab" data-ai="agent">🤖 AI Agents</button>
-    <button class="ai-tab" data-ai="multi">🕸 Multi-Agent Systems</button>
-  </div>
-
-  <!-- RAG Panel -->
-  <div class="ai-panel active" id="ai-rag">
-    <div class="ai-info">
-      <div class="ai-name">RAG</div>
-      <div class="ai-full">Retrieval-Augmented Generation</div>
-      <p class="ai-desc">RAG combina la capacidad generativa de un LLM con recuperación dinámica de información de fuentes externas. En lugar de depender del conocimiento pre-entrenado, el modelo recibe contexto relevante recuperado en tiempo real.</p>
-      <p class="ai-desc" style="margin-top:0.8rem">El pipeline convierte el query del usuario en un embedding vectorial → busca documentos similares en un vector store → inyecta los documentos como contexto en el prompt → el LLM genera una respuesta fundamentada y citable.</p>
-      <div class="ai-steps">
-        <div class="ai-step"><span class="ai-step-n">01</span><span>Query del usuario → Embedding vectorial</span></div>
-        <div class="ai-step"><span class="ai-step-n">02</span><span>Búsqueda semántica en Vector DB (cosine similarity)</span></div>
-        <div class="ai-step"><span class="ai-step-n">03</span><span>Re-ranking de documentos recuperados</span></div>
-        <div class="ai-step"><span class="ai-step-n">04</span><span>Context injection en el prompt del LLM</span></div>
-        <div class="ai-step"><span class="ai-step-n">05</span><span>LLM genera respuesta fundamentada + citas</span></div>
-      </div>
-    </div>
-    <div class="ai-diagram-wrap">
-      <svg viewBox="0 0 360 320" fill="none">
-        <!-- User -->
-        <rect x="130" y="10" width="100" height="32" rx="5" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
-        <text x="180" y="30" font-family="'Outfit'" font-size="11" fill="#93c5fd" text-anchor="middle" font-weight="600">User Query</text>
-        <path d="M180 42 L180 62" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-
-        <!-- Embedding -->
-        <rect x="80" y="64" width="200" height="32" rx="5" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="180" y="84" font-family="'JetBrains Mono'" font-size="8.5" fill="#c4b5fd" text-anchor="middle">Embedding Model</text>
-        <path d="M180 96 L180 116" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-
-        <!-- Vector search -->
-        <rect x="60" y="118" width="240" height="50" rx="5" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1.5"/>
-        <text x="180" y="139" font-family="'Outfit'" font-size="11" fill="#67e8f9" text-anchor="middle" font-weight="700">Vector Store</text>
-        <text x="180" y="157" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Pinecone · pgvector · Weaviate · Qdrant</text>
-
-        <!-- Retrieved docs -->
-        <path d="M180 168 L180 188" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-        <rect x="30" y="190" width="100" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
-        <text x="80" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 1</text>
-        <rect x="145" y="190" width="100" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
-        <text x="195" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 2</text>
-        <rect x="260" y="190" width="90" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
-        <text x="305" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 3</text>
-
-        <!-- Merge to LLM -->
-        <path d="M80 216 L160 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
-        <path d="M195 216 L185 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
-        <path d="M305 216 L210 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
-
-        <!-- LLM -->
-        <rect x="80" y="242" width="200" height="42" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
-        <text x="180" y="260" font-family="'Outfit'" font-size="12" fill="#fcd34d" text-anchor="middle" font-weight="700">LLM</text>
-        <text x="180" y="277" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Context + Query → Grounded Response</text>
-
-        <!-- Output -->
-        <path d="M180 284 L180 304" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-        <rect x="100" y="306" width="160" height="12" rx="3" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="0.8"/>
-        <text x="180" y="315.5" font-family="'JetBrains Mono'" font-size="6.5" fill="#86efac" text-anchor="middle">Cited · Grounded · Up-to-date Response</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- AI Agent Panel -->
-  <div class="ai-panel" id="ai-agent">
-    <div class="ai-info">
-      <div class="ai-name">AI Agents</div>
-      <div class="ai-full">Autonomous Reasoning & Acting Systems</div>
-      <p class="ai-desc">Un AI agent es un sistema que usa un LLM como motor de razonamiento para planificar y ejecutar acciones de forma autónoma. Opera en el ciclo <strong style="color:var(--blue)">Observe → Think → Act → Observe...</strong></p>
-      <p class="ai-desc" style="margin-top:0.8rem">Los agentes tienen acceso a <em>tools</em> (funciones, APIs, buscadores) y pueden mantener memoria a corto y largo plazo. El framework <strong style="color:var(--cyan)">ReAct</strong> formaliza el patrón de razonamiento encadenado con acciones.</p>
-      <div class="ai-steps">
-        <div class="ai-step"><span class="ai-step-n">01</span><span>Goal ingestion + context loading (memory)</span></div>
-        <div class="ai-step"><span class="ai-step-n">02</span><span>LLM Reasoning: planificar pasos y seleccionar herramienta</span></div>
-        <div class="ai-step"><span class="ai-step-n">03</span><span>Tool execution: API call, web search, code execution</span></div>
-        <div class="ai-step"><span class="ai-step-n">04</span><span>Observation: parsear resultado de la herramienta</span></div>
-        <div class="ai-step"><span class="ai-step-n">05</span><span>Replanning o entrega del resultado final</span></div>
-      </div>
-    </div>
-    <div class="ai-diagram-wrap">
-      <svg viewBox="0 0 340 320" fill="none">
-        <!-- Goal input -->
-        <rect x="110" y="8" width="120" height="28" rx="4" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
-        <text x="170" y="26" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Goal / Task</text>
-        <path d="M170 36 L170 56" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-
-        <!-- LLM Core -->
-        <rect x="50" y="58" width="240" height="80" rx="6" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="2"/>
-        <text x="170" y="82" font-family="'Outfit'" font-size="13" fill="#fcd34d" text-anchor="middle" font-weight="800">LLM Reasoner</text>
-        <text x="170" y="100" font-family="'JetBrains Mono'" font-size="7.5" fill="#f59e0b" text-anchor="middle">Observe → Think → Plan → Act</text>
-        <!-- Memory + context inside -->
-        <rect x="65" y="108" width="70" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
-        <text x="100" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Short Memory</text>
-        <rect x="145" y="108" width="70" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
-        <text x="180" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Long Memory</text>
-        <rect x="225" y="108" width="55" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
-        <text x="252" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Context</text>
-
-        <!-- Tool selection arrow -->
-        <path d="M170 138 L170 162" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4 2" marker-end="url(#arrowBlue)"/>
-        <text x="183" y="155" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b">tool_call</text>
-
-        <!-- Tools row -->
-        <rect x="15" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
-        <text x="45" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Web Search</text>
-        <rect x="85" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
-        <text x="115" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Code Exec</text>
-        <rect x="155" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
-        <text x="185" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">DB Query</text>
-        <rect x="225" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
-        <text x="255" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">API Call</text>
-        <rect x="295" y="164" width="36" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
-        <text x="313" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">...</text>
-
-        <!-- Observation return -->
-        <path d="M170 192 L170 214" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-        <text x="183" y="207" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4">observation</text>
-
-        <!-- Re-plan or finish -->
-        <rect x="70" y="216" width="200" height="28" rx="4" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1"/>
-        <text x="170" y="234" font-family="'Outfit'" font-size="10" fill="#86efac" text-anchor="middle" font-weight="600">Re-plan? → Loop / Finish → Response</text>
-
-        <!-- Guardrails -->
-        <rect x="15" y="258" width="310" height="20" rx="3" fill="rgba(244,63,94,0.06)" stroke="#f43f5e" stroke-width="0.8" stroke-dasharray="3 2"/>
-        <text x="170" y="272" font-family="'JetBrains Mono'" font-size="6.5" fill="#f43f5e" text-anchor="middle">Guardrails: max iterations · content safety · human-in-the-loop</text>
-
-        <!-- Frameworks -->
-        <text x="170" y="300" font-family="'JetBrains Mono'" font-size="7" fill="#334155" text-anchor="middle">LangChain · LlamaIndex · AutoGen · CrewAI · Claude MCP</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- Multi-Agent Panel -->
-  <div class="ai-panel" id="ai-multi">
-    <div class="ai-info">
-      <div class="ai-name">Multi-Agent Systems</div>
-      <div class="ai-full">Collaborative AI Networks</div>
-      <p class="ai-desc">Los sistemas multi-agente coordinan múltiples agentes especializados para resolver problemas que un agente único no puede abordar eficientemente. Cada agente tiene rol, habilidades y responsabilidades específicas.</p>
-      <p class="ai-desc" style="margin-top:0.8rem">Dos topologías: <strong style="color:var(--blue)">Orquestación</strong> (supervisor coordina a los agentes) y <strong style="color:var(--cyan)">Coreografía</strong> (agentes autónomos se comunican directamente). El protocolo <strong style="color:var(--amber)">MCP</strong> emerge como estándar de interoperabilidad.</p>
-      <div class="ai-steps">
-        <div class="ai-step"><span class="ai-step-n">01</span><span>Orchestrator recibe goal y descompone en subtareas</span></div>
-        <div class="ai-step"><span class="ai-step-n">02</span><span>Delegación a agentes especializados (researcher, coder, writer...)</span></div>
-        <div class="ai-step"><span class="ai-step-n">03</span><span>Agentes ejecutan en paralelo con acceso a tools propios</span></div>
-        <div class="ai-step"><span class="ai-step-n">04</span><span>Resultados se consolidan y revisan (critic agent)</span></div>
-        <div class="ai-step"><span class="ai-step-n">05</span><span>Orchestrator sintetiza output final</span></div>
-      </div>
-    </div>
-    <div class="ai-diagram-wrap">
-      <svg viewBox="0 0 340 300" fill="none">
-        <!-- User -->
-        <rect x="120" y="8" width="100" height="26" rx="4" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
-        <text x="170" y="25" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Complex Goal</text>
-
-        <path d="M170 34 L170 52" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-
-        <!-- Orchestrator -->
-        <rect x="90" y="54" width="160" height="36" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="2"/>
-        <text x="170" y="70" font-family="'Outfit'" font-size="11" fill="#fcd34d" text-anchor="middle" font-weight="700">Orchestrator Agent</text>
-        <text x="170" y="83" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">decompose · delegate · coordinate</text>
-
-        <!-- Fan out arrows -->
-        <path d="M130 90 L80 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
-        <path d="M155 90 L148 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
-        <path d="M185 90 L215 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
-        <path d="M215 90 L282 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
-
-        <!-- Specialist agents -->
-        <rect x="30" y="122" width="95" height="34" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
-        <text x="77" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#67e8f9" text-anchor="middle">🔍 Researcher</text>
-        <text x="77" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">web · RAG · docs</text>
-
-        <rect x="133" y="122" width="72" height="34" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
-        <text x="169" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#c4b5fd" text-anchor="middle">💻 Coder</text>
-        <text x="169" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#8b5cf6" text-anchor="middle">write · run · fix</text>
-
-        <rect x="213" y="122" width="72" height="34" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
-        <text x="249" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">✍ Writer</text>
-        <text x="249" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">draft · format</text>
-
-        <rect x="285" y="122" width="50" height="34" rx="4" fill="rgba(244,63,94,0.1)" stroke="#f43f5e" stroke-width="1.2"/>
-        <text x="310" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#fca5a5" text-anchor="middle">👁 Critic</text>
-        <text x="310" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">review</text>
-
-        <!-- Results up to consolidator -->
-        <path d="M77 156 L130 186" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-        <path d="M169 156 L168 186" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-        <path d="M249 156 L210 186" stroke="#14b8a6" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-        <path d="M310 156 L232 186" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-
-        <!-- Shared memory / context -->
-        <rect x="40" y="188" width="265" height="26" rx="4" fill="rgba(99,102,241,0.08)" stroke="#6366f1" stroke-width="1"/>
-        <text x="172" y="205" font-family="'Outfit'" font-size="10" fill="#a5b4fc" text-anchor="middle" font-weight="600">Shared Memory / Context Store</text>
-
-        <path d="M172 214 L172 232" stroke="#6366f1" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
-
-        <!-- Final synthesis -->
-        <rect x="90" y="234" width="160" height="30" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
-        <text x="170" y="253" font-family="'Outfit'" font-size="11" fill="#86efac" text-anchor="middle" font-weight="600">Final Synthesis → Output</text>
-
-        <!-- MCP label -->
-        <rect x="15" y="274" width="310" height="18" rx="3" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="0.7" stroke-dasharray="2 2"/>
-        <text x="170" y="286" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">MCP Protocol · CrewAI · AutoGen · LangGraph</text>
-      </svg>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ PART 6: FUTURO ═══════════════════ -->
-<section class="section reveal" id="part6">
-  <div class="sec-head">
-    <div class="sec-num">PARTE 06</div>
-    <div class="sec-title-wrap">
-      <div class="sec-label">// Horizonte 2025–2030</div>
-      <h2 class="sec-title">El <span class="hl">Futuro</span> de la Arquitectura</h2>
-      <p class="sec-desc">Los paradigmas emergentes que redefinen los límites entre software, inteligencia artificial y sistemas autónomos.</p>
-    </div>
-  </div>
-
-  <div class="future-split">
-    <!-- Autonomous Systems -->
-    <div class="f-card reveal">
-      <div class="f-badge em">EMERGENTE</div>
-      <div class="f-title">Sistemas Autónomos</div>
-      <p class="f-body">Los sistemas autónomos perciben su entorno, razonan sobre él y actúan con mínima intervención humana. En software empresarial: sistemas que se autoconfiguran, autosanan y autoescalan.</p>
-      <p class="f-body" style="margin-top:0.8rem">El framework <strong style="color:var(--amber)">MAPE-K</strong> (Monitor, Analyze, Plan, Execute sobre una Knowledge base) es el modelo conceptual. Kubernetes con operadores personalizados es el ejemplo más maduro en producción hoy.</p>
-      <!-- MAPE-K diagram -->
-      <div class="f-svg">
-        <svg viewBox="0 0 300 130" fill="none">
-          <!-- Center K -->
-          <rect x="115" y="42" width="70" height="46" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
-          <text x="150" y="60" font-family="'Outfit'" font-size="11" fill="#fcd34d" text-anchor="middle" font-weight="700">Knowledge</text>
-          <text x="150" y="76" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">System State</text>
-          <text x="150" y="86" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">& Policies</text>
-
-          <!-- M -->
-          <rect x="10" y="5" width="70" height="32" rx="4" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="1.2"/>
-          <text x="45" y="25" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Monitor</text>
-
-          <!-- A -->
-          <rect x="220" y="5" width="70" height="32" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
-          <text x="255" y="25" font-family="'Outfit'" font-size="10" fill="#c4b5fd" text-anchor="middle" font-weight="600">Analyze</text>
-
-          <!-- P -->
-          <rect x="220" y="93" width="70" height="32" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
-          <text x="255" y="113" font-family="'Outfit'" font-size="10" fill="#67e8f9" text-anchor="middle" font-weight="600">Plan</text>
-
-          <!-- E -->
-          <rect x="10" y="93" width="70" height="32" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.2"/>
-          <text x="45" y="113" font-family="'Outfit'" font-size="10" fill="#86efac" text-anchor="middle" font-weight="600">Execute</text>
-
-          <!-- Circular arrows -->
-          <path d="M80 21 L115 52" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-          <path d="M185 52 L220 21" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-          <path d="M185 78 L220 109" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
-          <path d="M115 78 L80 109" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrG)"/>
-
-          <!-- Managed System below -->
-          <rect x="60" y="120" width="180" height="10" rx="2" fill="rgba(255,255,255,0.03)" stroke="#334155" stroke-width="0.8"/>
-          <text x="150" y="128.5" font-family="'JetBrains Mono'" font-size="6" fill="#64748b" text-anchor="middle">Managed System (K8s · Cloud · App)</text>
-        </svg>
-      </div>
-      <ul class="f-list">
-        <li>Self-healing: detección y remediación automática de fallos</li>
-        <li>Self-scaling: elasticidad predictiva basada en modelos ML</li>
-        <li>Self-configuring: ajuste dinámico de parámetros operacionales</li>
-        <li>Reinforcement Learning para optimización de infraestructura</li>
-      </ul>
-    </div>
-
-    <!-- AI-Native Architectures -->
-    <div class="f-card reveal">
-      <div class="f-badge dis">DISRUPTIVO</div>
-      <div class="f-title">AI-Native Architectures</div>
-      <p class="f-body">Las arquitecturas AI-native no añaden AI como feature — son sistemas donde el LLM es el componente fundamental de control y decisión. La lógica de negocio emerge de instrucciones en lenguaje natural interpretadas dinámicamente.</p>
-      <p class="f-body" style="margin-top:0.8rem">El concepto de <em>función determinística</em> se reemplaza por <em>razonamiento probabilístico</em>. Los patrones <strong style="color:var(--violet)">LLM-as-runtime</strong>, <strong style="color:var(--cyan)">prompt-as-contract</strong> y <strong style="color:var(--amber)">evals-as-CI/CD</strong> son los nuevos fundamentos del desarrollo.</p>
-      <!-- AI-Native stack diagram -->
-      <div class="f-svg">
-        <svg viewBox="0 0 300 130" fill="none">
-          <!-- Stack layers top to bottom -->
-          <rect x="10" y="8" width="280" height="20" rx="3" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1"/>
-          <text x="150" y="22" font-family="'JetBrains Mono'" font-size="7.5" fill="#c4b5fd" text-anchor="middle">Natural Language Interface</text>
-
-          <rect x="10" y="32" width="280" height="20" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
-          <text x="150" y="46" font-family="'Outfit'" font-size="9" fill="#fcd34d" text-anchor="middle" font-weight="700">LLM Reasoning Engine (Orchestrator)</text>
-
-          <rect x="10" y="56" width="135" height="20" rx="3" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
-          <text x="77" y="70" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Tool & Agent Layer</text>
-          <rect x="152" y="56" width="138" height="20" rx="3" fill="rgba(99,102,241,0.08)" stroke="#6366f1" stroke-width="1"/>
-          <text x="221" y="70" font-family="'JetBrains Mono'" font-size="7" fill="#a5b4fc" text-anchor="middle">Memory & Context</text>
-
-          <rect x="10" y="80" width="85" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
-          <text x="52" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Vector Store</text>
-          <rect x="100" y="80" width="85" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
-          <text x="142" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Traditional DB</text>
-          <rect x="190" y="80" width="100" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
-          <text x="240" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">External APIs/Tools</text>
-
-          <!-- Eval pipeline at bottom -->
-          <rect x="10" y="104" width="135" height="18" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="0.8"/>
-          <text x="77" y="116.5" font-family="'JetBrains Mono'" font-size="6" fill="#fca5a5" text-anchor="middle">Evals Pipeline (QA for AI)</text>
-          <rect x="152" y="104" width="138" height="18" rx="3" fill="rgba(34,197,94,0.07)" stroke="#22c55e" stroke-width="0.8"/>
-          <text x="221" y="116.5" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">AI Governance & Observability</text>
-        </svg>
-      </div>
-      <ul class="f-list">
-        <li>Prompt engineering como especificación formal de comportamiento</li>
-        <li>Agent Graphs: flujos de trabajo adaptativos y dinámicos</li>
-        <li>Evals como pipeline de QA: medir comportamiento del LLM</li>
-        <li>Fine-tuning para especialización de dominio (RLHF, LoRA)</li>
-        <li>AI Governance: trazabilidad, explicabilidad y bias auditing</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ PART 7: QUALITY ATTRIBUTES ═══════════════════ -->
-<section class="section reveal" id="part7">
-  <div class="sec-head">
-    <div class="sec-num">PARTE 07</div>
     <div class="sec-title-wrap">
       <div class="sec-label">// SEI · TOGAF · ISO 25010</div>
       <h2 class="sec-title">Quality <span class="hl">Attributes</span></h2>
@@ -2285,6 +1958,333 @@ footer {
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 6: AI ARCHITECTURES ═══════════════════ -->
+<section class="section reveal" id="part6">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 06</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Inteligencia Artificial en Sistemas</div>
+      <h2 class="sec-title">Arquitecturas <span class="hl">de AI</span></h2>
+      <p class="sec-desc">Los nuevos paradigmas que emergen al integrar modelos de lenguaje y razonamiento en sistemas de producción.</p>
+    </div>
+  </div>
+
+  <div class="ai-tabs">
+    <button class="ai-tab active" data-ai="rag">🔍 RAG</button>
+    <button class="ai-tab" data-ai="agent">🤖 AI Agents</button>
+    <button class="ai-tab" data-ai="multi">🕸 Multi-Agent Systems</button>
+  </div>
+
+  <!-- RAG Panel -->
+  <div class="ai-panel active" id="ai-rag">
+    <div class="ai-info">
+      <div class="ai-name">RAG</div>
+      <div class="ai-full">Retrieval-Augmented Generation</div>
+      <p class="ai-desc">RAG combina la capacidad generativa de un LLM con recuperación dinámica de información de fuentes externas. En lugar de depender del conocimiento pre-entrenado, el modelo recibe contexto relevante recuperado en tiempo real.</p>
+      <p class="ai-desc" style="margin-top:0.8rem">El pipeline convierte el query del usuario en un embedding vectorial → busca documentos similares en un vector store → inyecta los documentos como contexto en el prompt → el LLM genera una respuesta fundamentada y citable.</p>
+      <div class="ai-steps">
+        <div class="ai-step"><span class="ai-step-n">01</span><span>Query del usuario → Embedding vectorial</span></div>
+        <div class="ai-step"><span class="ai-step-n">02</span><span>Búsqueda semántica en Vector DB (cosine similarity)</span></div>
+        <div class="ai-step"><span class="ai-step-n">03</span><span>Re-ranking de documentos recuperados</span></div>
+        <div class="ai-step"><span class="ai-step-n">04</span><span>Context injection en el prompt del LLM</span></div>
+        <div class="ai-step"><span class="ai-step-n">05</span><span>LLM genera respuesta fundamentada + citas</span></div>
+      </div>
+    </div>
+    <div class="ai-diagram-wrap">
+      <svg viewBox="0 0 360 320" fill="none">
+        <!-- User -->
+        <rect x="130" y="10" width="100" height="32" rx="5" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="180" y="30" font-family="'Outfit'" font-size="11" fill="#93c5fd" text-anchor="middle" font-weight="600">User Query</text>
+        <path d="M180 42 L180 62" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Embedding -->
+        <rect x="80" y="64" width="200" height="32" rx="5" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="180" y="84" font-family="'JetBrains Mono'" font-size="8.5" fill="#c4b5fd" text-anchor="middle">Embedding Model</text>
+        <path d="M180 96 L180 116" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Vector search -->
+        <rect x="60" y="118" width="240" height="50" rx="5" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="180" y="139" font-family="'Outfit'" font-size="11" fill="#67e8f9" text-anchor="middle" font-weight="700">Vector Store</text>
+        <text x="180" y="157" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Pinecone · pgvector · Weaviate · Qdrant</text>
+
+        <!-- Retrieved docs -->
+        <path d="M180 168 L180 188" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="30" y="190" width="100" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
+        <text x="80" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 1</text>
+        <rect x="145" y="190" width="100" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
+        <text x="195" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 2</text>
+        <rect x="260" y="190" width="90" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
+        <text x="305" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 3</text>
+
+        <!-- Merge to LLM -->
+        <path d="M80 216 L160 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M195 216 L185 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M305 216 L210 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
+
+        <!-- LLM -->
+        <rect x="80" y="242" width="200" height="42" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="180" y="260" font-family="'Outfit'" font-size="12" fill="#fcd34d" text-anchor="middle" font-weight="700">LLM</text>
+        <text x="180" y="277" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Context + Query → Grounded Response</text>
+
+        <!-- Output -->
+        <path d="M180 284 L180 304" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="100" y="306" width="160" height="12" rx="3" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="0.8"/>
+        <text x="180" y="315.5" font-family="'JetBrains Mono'" font-size="6.5" fill="#86efac" text-anchor="middle">Cited · Grounded · Up-to-date Response</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- AI Agent Panel -->
+  <div class="ai-panel" id="ai-agent">
+    <div class="ai-info">
+      <div class="ai-name">AI Agents</div>
+      <div class="ai-full">Autonomous Reasoning & Acting Systems</div>
+      <p class="ai-desc">Un AI agent es un sistema que usa un LLM como motor de razonamiento para planificar y ejecutar acciones de forma autónoma. Opera en el ciclo <strong style="color:var(--blue)">Observe → Think → Act → Observe...</strong></p>
+      <p class="ai-desc" style="margin-top:0.8rem">Los agentes tienen acceso a <em>tools</em> (funciones, APIs, buscadores) y pueden mantener memoria a corto y largo plazo. El framework <strong style="color:var(--cyan)">ReAct</strong> formaliza el patrón de razonamiento encadenado con acciones.</p>
+      <div class="ai-steps">
+        <div class="ai-step"><span class="ai-step-n">01</span><span>Goal ingestion + context loading (memory)</span></div>
+        <div class="ai-step"><span class="ai-step-n">02</span><span>LLM Reasoning: planificar pasos y seleccionar herramienta</span></div>
+        <div class="ai-step"><span class="ai-step-n">03</span><span>Tool execution: API call, web search, code execution</span></div>
+        <div class="ai-step"><span class="ai-step-n">04</span><span>Observation: parsear resultado de la herramienta</span></div>
+        <div class="ai-step"><span class="ai-step-n">05</span><span>Replanning o entrega del resultado final</span></div>
+      </div>
+    </div>
+    <div class="ai-diagram-wrap">
+      <svg viewBox="0 0 340 320" fill="none">
+        <!-- Goal input -->
+        <rect x="110" y="8" width="120" height="28" rx="4" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="170" y="26" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Goal / Task</text>
+        <path d="M170 36 L170 56" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- LLM Core -->
+        <rect x="50" y="58" width="240" height="80" rx="6" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="2"/>
+        <text x="170" y="82" font-family="'Outfit'" font-size="13" fill="#fcd34d" text-anchor="middle" font-weight="800">LLM Reasoner</text>
+        <text x="170" y="100" font-family="'JetBrains Mono'" font-size="7.5" fill="#f59e0b" text-anchor="middle">Observe → Think → Plan → Act</text>
+        <!-- Memory + context inside -->
+        <rect x="65" y="108" width="70" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
+        <text x="100" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Short Memory</text>
+        <rect x="145" y="108" width="70" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
+        <text x="180" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Long Memory</text>
+        <rect x="225" y="108" width="55" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
+        <text x="252" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Context</text>
+
+        <!-- Tool selection arrow -->
+        <path d="M170 138 L170 162" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4 2" marker-end="url(#arrowBlue)"/>
+        <text x="183" y="155" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b">tool_call</text>
+
+        <!-- Tools row -->
+        <rect x="15" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="45" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Web Search</text>
+        <rect x="85" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="115" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Code Exec</text>
+        <rect x="155" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="185" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">DB Query</text>
+        <rect x="225" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="255" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">API Call</text>
+        <rect x="295" y="164" width="36" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="313" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">...</text>
+
+        <!-- Observation return -->
+        <path d="M170 192 L170 214" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <text x="183" y="207" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4">observation</text>
+
+        <!-- Re-plan or finish -->
+        <rect x="70" y="216" width="200" height="28" rx="4" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1"/>
+        <text x="170" y="234" font-family="'Outfit'" font-size="10" fill="#86efac" text-anchor="middle" font-weight="600">Re-plan? → Loop / Finish → Response</text>
+
+        <!-- Guardrails -->
+        <rect x="15" y="258" width="310" height="20" rx="3" fill="rgba(244,63,94,0.06)" stroke="#f43f5e" stroke-width="0.8" stroke-dasharray="3 2"/>
+        <text x="170" y="272" font-family="'JetBrains Mono'" font-size="6.5" fill="#f43f5e" text-anchor="middle">Guardrails: max iterations · content safety · human-in-the-loop</text>
+
+        <!-- Frameworks -->
+        <text x="170" y="300" font-family="'JetBrains Mono'" font-size="7" fill="#334155" text-anchor="middle">LangChain · LlamaIndex · AutoGen · CrewAI · Claude MCP</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Multi-Agent Panel -->
+  <div class="ai-panel" id="ai-multi">
+    <div class="ai-info">
+      <div class="ai-name">Multi-Agent Systems</div>
+      <div class="ai-full">Collaborative AI Networks</div>
+      <p class="ai-desc">Los sistemas multi-agente coordinan múltiples agentes especializados para resolver problemas que un agente único no puede abordar eficientemente. Cada agente tiene rol, habilidades y responsabilidades específicas.</p>
+      <p class="ai-desc" style="margin-top:0.8rem">Dos topologías: <strong style="color:var(--blue)">Orquestación</strong> (supervisor coordina a los agentes) y <strong style="color:var(--cyan)">Coreografía</strong> (agentes autónomos se comunican directamente). El protocolo <strong style="color:var(--amber)">MCP</strong> emerge como estándar de interoperabilidad.</p>
+      <div class="ai-steps">
+        <div class="ai-step"><span class="ai-step-n">01</span><span>Orchestrator recibe goal y descompone en subtareas</span></div>
+        <div class="ai-step"><span class="ai-step-n">02</span><span>Delegación a agentes especializados (researcher, coder, writer...)</span></div>
+        <div class="ai-step"><span class="ai-step-n">03</span><span>Agentes ejecutan en paralelo con acceso a tools propios</span></div>
+        <div class="ai-step"><span class="ai-step-n">04</span><span>Resultados se consolidan y revisan (critic agent)</span></div>
+        <div class="ai-step"><span class="ai-step-n">05</span><span>Orchestrator sintetiza output final</span></div>
+      </div>
+    </div>
+    <div class="ai-diagram-wrap">
+      <svg viewBox="0 0 340 300" fill="none">
+        <!-- User -->
+        <rect x="120" y="8" width="100" height="26" rx="4" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="170" y="25" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Complex Goal</text>
+
+        <path d="M170 34 L170 52" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Orchestrator -->
+        <rect x="90" y="54" width="160" height="36" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="2"/>
+        <text x="170" y="70" font-family="'Outfit'" font-size="11" fill="#fcd34d" text-anchor="middle" font-weight="700">Orchestrator Agent</text>
+        <text x="170" y="83" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">decompose · delegate · coordinate</text>
+
+        <!-- Fan out arrows -->
+        <path d="M130 90 L80 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M155 90 L148 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M185 90 L215 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M215 90 L282 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+
+        <!-- Specialist agents -->
+        <rect x="30" y="122" width="95" height="34" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
+        <text x="77" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#67e8f9" text-anchor="middle">🔍 Researcher</text>
+        <text x="77" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">web · RAG · docs</text>
+
+        <rect x="133" y="122" width="72" height="34" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="169" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#c4b5fd" text-anchor="middle">💻 Coder</text>
+        <text x="169" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#8b5cf6" text-anchor="middle">write · run · fix</text>
+
+        <rect x="213" y="122" width="72" height="34" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+        <text x="249" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">✍ Writer</text>
+        <text x="249" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">draft · format</text>
+
+        <rect x="285" y="122" width="50" height="34" rx="4" fill="rgba(244,63,94,0.1)" stroke="#f43f5e" stroke-width="1.2"/>
+        <text x="310" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#fca5a5" text-anchor="middle">👁 Critic</text>
+        <text x="310" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">review</text>
+
+        <!-- Results up to consolidator -->
+        <path d="M77 156 L130 186" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+        <path d="M169 156 L168 186" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+        <path d="M249 156 L210 186" stroke="#14b8a6" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+        <path d="M310 156 L232 186" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+
+        <!-- Shared memory / context -->
+        <rect x="40" y="188" width="265" height="26" rx="4" fill="rgba(99,102,241,0.08)" stroke="#6366f1" stroke-width="1"/>
+        <text x="172" y="205" font-family="'Outfit'" font-size="10" fill="#a5b4fc" text-anchor="middle" font-weight="600">Shared Memory / Context Store</text>
+
+        <path d="M172 214 L172 232" stroke="#6366f1" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Final synthesis -->
+        <rect x="90" y="234" width="160" height="30" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="170" y="253" font-family="'Outfit'" font-size="11" fill="#86efac" text-anchor="middle" font-weight="600">Final Synthesis → Output</text>
+
+        <!-- MCP label -->
+        <rect x="15" y="274" width="310" height="18" rx="3" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="0.7" stroke-dasharray="2 2"/>
+        <text x="170" y="286" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">MCP Protocol · CrewAI · AutoGen · LangGraph</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 7: FUTURO ═══════════════════ -->
+<section class="section reveal" id="part7">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 07</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Horizonte 2025–2030</div>
+      <h2 class="sec-title">El <span class="hl">Futuro</span> de la Arquitectura</h2>
+      <p class="sec-desc">Los paradigmas emergentes que redefinen los límites entre software, inteligencia artificial y sistemas autónomos.</p>
+    </div>
+  </div>
+
+  <div class="future-split">
+    <!-- Autonomous Systems -->
+    <div class="f-card reveal">
+      <div class="f-badge em">EMERGENTE</div>
+      <div class="f-title">Sistemas Autónomos</div>
+      <p class="f-body">Los sistemas autónomos perciben su entorno, razonan sobre él y actúan con mínima intervención humana. En software empresarial: sistemas que se autoconfiguran, autosanan y autoescalan.</p>
+      <p class="f-body" style="margin-top:0.8rem">El framework <strong style="color:var(--amber)">MAPE-K</strong> (Monitor, Analyze, Plan, Execute sobre una Knowledge base) es el modelo conceptual. Kubernetes con operadores personalizados es el ejemplo más maduro en producción hoy.</p>
+      <!-- MAPE-K diagram -->
+      <div class="f-svg">
+        <svg viewBox="0 0 300 130" fill="none">
+          <!-- Center K -->
+          <rect x="115" y="42" width="70" height="46" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="150" y="60" font-family="'Outfit'" font-size="11" fill="#fcd34d" text-anchor="middle" font-weight="700">Knowledge</text>
+          <text x="150" y="76" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">System State</text>
+          <text x="150" y="86" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">& Policies</text>
+
+          <!-- M -->
+          <rect x="10" y="5" width="70" height="32" rx="4" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="1.2"/>
+          <text x="45" y="25" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Monitor</text>
+
+          <!-- A -->
+          <rect x="220" y="5" width="70" height="32" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
+          <text x="255" y="25" font-family="'Outfit'" font-size="10" fill="#c4b5fd" text-anchor="middle" font-weight="600">Analyze</text>
+
+          <!-- P -->
+          <rect x="220" y="93" width="70" height="32" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
+          <text x="255" y="113" font-family="'Outfit'" font-size="10" fill="#67e8f9" text-anchor="middle" font-weight="600">Plan</text>
+
+          <!-- E -->
+          <rect x="10" y="93" width="70" height="32" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.2"/>
+          <text x="45" y="113" font-family="'Outfit'" font-size="10" fill="#86efac" text-anchor="middle" font-weight="600">Execute</text>
+
+          <!-- Circular arrows -->
+          <path d="M80 21 L115 52" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+          <path d="M185 52 L220 21" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+          <path d="M185 78 L220 109" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+          <path d="M115 78 L80 109" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrG)"/>
+
+          <!-- Managed System below -->
+          <rect x="60" y="120" width="180" height="10" rx="2" fill="rgba(255,255,255,0.03)" stroke="#334155" stroke-width="0.8"/>
+          <text x="150" y="128.5" font-family="'JetBrains Mono'" font-size="6" fill="#64748b" text-anchor="middle">Managed System (K8s · Cloud · App)</text>
+        </svg>
+      </div>
+      <ul class="f-list">
+        <li>Self-healing: detección y remediación automática de fallos</li>
+        <li>Self-scaling: elasticidad predictiva basada en modelos ML</li>
+        <li>Self-configuring: ajuste dinámico de parámetros operacionales</li>
+        <li>Reinforcement Learning para optimización de infraestructura</li>
+      </ul>
+    </div>
+
+    <!-- AI-Native Architectures -->
+    <div class="f-card reveal">
+      <div class="f-badge dis">DISRUPTIVO</div>
+      <div class="f-title">AI-Native Architectures</div>
+      <p class="f-body">Las arquitecturas AI-native no añaden AI como feature — son sistemas donde el LLM es el componente fundamental de control y decisión. La lógica de negocio emerge de instrucciones en lenguaje natural interpretadas dinámicamente.</p>
+      <p class="f-body" style="margin-top:0.8rem">El concepto de <em>función determinística</em> se reemplaza por <em>razonamiento probabilístico</em>. Los patrones <strong style="color:var(--violet)">LLM-as-runtime</strong>, <strong style="color:var(--cyan)">prompt-as-contract</strong> y <strong style="color:var(--amber)">evals-as-CI/CD</strong> son los nuevos fundamentos del desarrollo.</p>
+      <!-- AI-Native stack diagram -->
+      <div class="f-svg">
+        <svg viewBox="0 0 300 130" fill="none">
+          <!-- Stack layers top to bottom -->
+          <rect x="10" y="8" width="280" height="20" rx="3" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="150" y="22" font-family="'JetBrains Mono'" font-size="7.5" fill="#c4b5fd" text-anchor="middle">Natural Language Interface</text>
+
+          <rect x="10" y="32" width="280" height="20" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="150" y="46" font-family="'Outfit'" font-size="9" fill="#fcd34d" text-anchor="middle" font-weight="700">LLM Reasoning Engine (Orchestrator)</text>
+
+          <rect x="10" y="56" width="135" height="20" rx="3" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+          <text x="77" y="70" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Tool & Agent Layer</text>
+          <rect x="152" y="56" width="138" height="20" rx="3" fill="rgba(99,102,241,0.08)" stroke="#6366f1" stroke-width="1"/>
+          <text x="221" y="70" font-family="'JetBrains Mono'" font-size="7" fill="#a5b4fc" text-anchor="middle">Memory & Context</text>
+
+          <rect x="10" y="80" width="85" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
+          <text x="52" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Vector Store</text>
+          <rect x="100" y="80" width="85" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
+          <text x="142" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Traditional DB</text>
+          <rect x="190" y="80" width="100" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
+          <text x="240" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">External APIs/Tools</text>
+
+          <!-- Eval pipeline at bottom -->
+          <rect x="10" y="104" width="135" height="18" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="0.8"/>
+          <text x="77" y="116.5" font-family="'JetBrains Mono'" font-size="6" fill="#fca5a5" text-anchor="middle">Evals Pipeline (QA for AI)</text>
+          <rect x="152" y="104" width="138" height="18" rx="3" fill="rgba(34,197,94,0.07)" stroke="#22c55e" stroke-width="0.8"/>
+          <text x="221" y="116.5" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">AI Governance & Observability</text>
+        </svg>
+      </div>
+      <ul class="f-list">
+        <li>Prompt engineering como especificación formal de comportamiento</li>
+        <li>Agent Graphs: flujos de trabajo adaptativos y dinámicos</li>
+        <li>Evals como pipeline de QA: medir comportamiento del LLM</li>
+        <li>Fine-tuning para especialización de dominio (RLHF, LoRA)</li>
+        <li>AI Governance: trazabilidad, explicabilidad y bias auditing</li>
+      </ul>
+    </div>
   </div>
 </section>
 
