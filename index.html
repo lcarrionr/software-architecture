@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitectura de Software — Guía Interactiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   RESET & TOKENS
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #070b12;
+  --surface:  #0d1420;
+  --surface2: #111c2e;
+  --border:   rgba(99,179,237,0.1);
+  --border2:  rgba(255,255,255,0.06);
+
+  --blue:     #3b82f6;
+  --cyan:     #06b6d4;
+  --teal:     #14b8a6;
+  --amber:    #f59e0b;
+  --rose:     #f43f5e;
+  --violet:   #8b5cf6;
+  --green:    #22c55e;
+
+  --text:     #e2e8f0;
+  --muted:    #64748b;
+  --dim:      #334155;
+
+  --font:     'Outfit', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --r:        8px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+/* ─────────────────────────────────────────────
+   ANIMATED BACKGROUND
+───────────────────────────────────────────── */
+#bg-canvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.35;
+}
+
+/* ─────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px;
+  background: rgba(7,11,18,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 2rem; gap: 0;
+}
+.nav-brand {
+  font-weight: 800; font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-right: 2rem; white-space: nowrap; text-decoration: none;
+}
+.nav-links { display: flex; gap: 0; list-style: none; overflow-x: auto; flex: 1; }
+.nav-links li a {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0 0.85rem; height: 56px;
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--muted); text-decoration: none;
+  letter-spacing: 0.03em; white-space: nowrap;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.nav-links li a:hover,
+.nav-links li a.active { color: var(--text); border-bottom-color: var(--blue); }
+.nav-num { font-family: var(--mono); font-size: 0.6rem; opacity: 0.5; }
+
+/* ─────────────────────────────────────────────
+   PROGRESS BAR
+───────────────────────────────────────────── */
+#progress {
+  position: fixed; top: 56px; left: 0; height: 2px; z-index: 99;
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--teal));
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* ─────────────────────────────────────────────
+   SECTIONS & LAYOUT
+───────────────────────────────────────────── */
+.section {
+  min-height: 100vh;
+  padding: 100px 5vw 80px;
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border2);
+}
+
+/* ─────────────────────────────────────────────
+   SECTION HEADER
+───────────────────────────────────────────── */
+.sec-head {
+  display: flex; align-items: flex-start; gap: 2rem;
+  margin-bottom: 4rem;
+}
+.sec-num {
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+  color: var(--blue); letter-spacing: 0.1em;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(59,130,246,0.3);
+  border-radius: 4px;
+  white-space: nowrap; margin-top: 0.4rem;
+  background: rgba(59,130,246,0.06);
+}
+.sec-title-wrap {}
+.sec-label {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 800; line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.sec-title .hl { 
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.sec-desc { color: var(--muted); font-size: 0.95rem; margin-top: 0.6rem; max-width: 560px; }
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 4rem;
+  padding: 80px 6vw;
+}
+.hero-tag {
+  font-family: var(--mono); font-size: 0.72rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cyan); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.hero-tag::before {
+  content: ''; display: inline-block;
+  width: 28px; height: 1px; background: var(--cyan);
+}
+.hero-title {
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
+  font-weight: 900; line-height: 1; letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+}
+.hero-title .g1 {
+  background: linear-gradient(120deg, #e2e8f0 0%, #94a3b8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-title .g2 {
+  background: linear-gradient(120deg, var(--blue) 0%, var(--cyan) 50%, var(--teal) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-sub { color: var(--muted); font-size: 1rem; max-width: 480px; line-height: 1.8; }
+.hero-stats {
+  display: flex; gap: 2.5rem; margin-top: 2.5rem;
+}
+.stat-num {
+  font-size: 2rem; font-weight: 800; 
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 0.75rem; color: var(--muted); font-weight: 500; margin-top: 0.1rem; }
+
+/* Hero diagram container */
+.hero-viz { position: relative; }
+.hero-viz svg { width: 100%; max-width: 520px; display: block; margin: 0 auto; }
+
+/* ─────────────────────────────────────────────
+   CARDS GRID
+───────────────────────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 1px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 2rem;
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, background 0.3s;
+  cursor: default;
+}
+.card::before {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(59,130,246,0.08), transparent 60%);
+  transition: opacity 0.4s;
+}
+.card:hover { border-color: rgba(59,130,246,0.35); transform: translateY(-2px); background: var(--surface2); }
+.card:hover::before { opacity: 1; }
+
+.card-icon { font-size: 1.6rem; margin-bottom: 1rem; display: block; }
+.card-badge {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--cyan);
+  border: 1px solid rgba(6,182,212,0.25); border-radius: 3px;
+  padding: 0.15rem 0.5rem; display: inline-block; margin-bottom: 0.8rem;
+}
+.card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.7rem; letter-spacing: -0.01em; }
+.card-body { font-size: 0.87rem; color: var(--muted); line-height: 1.75; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 1.2rem; }
+.ctag {
+  font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.55rem;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
+  border-radius: 3px; color: var(--muted); letter-spacing: 0.04em;
+}
+
+/* QA bars */
+.qa-bar-list { margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.qa-bar-item {}
+.qa-bar-label {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+  margin-bottom: 0.3rem; letter-spacing: 0.04em;
+}
+.qa-track { height: 3px; background: var(--border2); border-radius: 2px; overflow: hidden; }
+.qa-fill {
+  height: 100%; border-radius: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  transition: width 1s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* ─────────────────────────────────────────────
+   EVOLUTION — INTERACTIVE TABS + DIAGRAMS
+───────────────────────────────────────────── */
+.evo-tabs {
+  display: flex; gap: 0; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: 2.5rem;
+}
+.evo-tab {
+  padding: 0.75rem 1.4rem;
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--muted); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  display: flex; align-items: center; gap: 0.5rem;
+  white-space: nowrap;
+}
+.evo-tab:hover { color: var(--text); }
+.evo-tab.active { color: var(--text); border-bottom-color: var(--blue); }
+.evo-tab .era { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); }
+
+.evo-panel { display: none; }
+.evo-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+.evo-info {}
+.evo-name { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.evo-era { font-family: var(--mono); font-size: 0.65rem; color: var(--amber); letter-spacing: 0.1em; margin-bottom: 1.2rem; }
+.evo-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.8; }
+
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+.pc-block {}
+.pc-head { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.6rem; }
+.pc-head.g { color: var(--green); }
+.pc-head.r { color: var(--rose); }
+.pc-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+.pc-list li {
+  font-size: 0.82rem; color: var(--muted);
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.pc-list li::before { flex-shrink: 0; margin-top: 0.35em; }
+.pc-head.g ~ .pc-list li::before { content: '▸'; color: var(--green); font-size: 0.6rem; }
+.pc-head.r ~ .pc-list li::before { content: '▸'; color: var(--rose); font-size: 0.6rem; }
+
+.evo-diagram { position: relative; }
+.evo-diagram svg { width: 100%; }
+
+/* ─────────────────────────────────────────────
+   CLOUD — 3 DARK CARDS
+───────────────────────────────────────────── */
+.cloud-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+.c-card {
+  border-radius: var(--r); padding: 2rem 1.8rem;
+  border: 1px solid var(--border2);
+  position: relative; overflow: hidden;
+}
+.c-card.eda  { background: linear-gradient(145deg, #0d1f2d, #091519); }
+.c-card.srv  { background: linear-gradient(145deg, #1a1028, #0f0a1a); }
+.c-card.cn   { background: linear-gradient(145deg, #0d1f18, #091511); }
+.c-card::after {
+  content: ''; position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  opacity: 0.15;
+}
+.c-card.eda::after  { background: var(--cyan);   }
+.c-card.srv::after  { background: var(--violet);  }
+.c-card.cn::after   { background: var(--teal);    }
+
+.c-accent { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+.c-card.eda .c-accent  { color: var(--cyan);   }
+.c-card.srv .c-accent  { color: var(--violet); }
+.c-card.cn .c-accent   { color: var(--teal);   }
+
+.c-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+.c-body { font-size: 0.84rem; color: var(--muted); line-height: 1.8; }
+.c-svg { margin-top: 1.5rem; }
+.c-svg svg { width: 100%; }
+.c-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 1.2rem; }
+.c-tag {
+  font-family: var(--mono); font-size: 0.58rem; padding: 0.15rem 0.5rem;
+  border-radius: 3px; letter-spacing: 0.04em;
+}
+.c-card.eda .c-tag  { background: rgba(6,182,212,0.1);  color: var(--cyan);   border: 1px solid rgba(6,182,212,0.2);  }
+.c-card.srv .c-tag  { background: rgba(139,92,246,0.1); color: var(--violet); border: 1px solid rgba(139,92,246,0.2); }
+.c-card.cn .c-tag   { background: rgba(20,184,166,0.1); color: var(--teal);   border: 1px solid rgba(20,184,166,0.2); }
+
+/* ─────────────────────────────────────────────
+   CROSS-CUTTING — ACCORDION
+───────────────────────────────────────────── */
+.cc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.cc-block {
+  border: 1px solid var(--border2); border-radius: var(--r);
+  overflow: hidden;
+}
+.cc-header {
+  padding: 1.5rem 1.8rem;
+  display: flex; align-items: center; gap: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cc-header:hover { background: var(--surface2); }
+.cc-ico { font-size: 1.4rem; }
+.cc-hname { font-size: 1rem; font-weight: 700; }
+.cc-chevron { margin-left: auto; transition: transform 0.3s; font-size: 0.8rem; color: var(--muted); }
+.cc-block.open .cc-chevron { transform: rotate(180deg); }
+.cc-body-wrap { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1); }
+.cc-block.open .cc-body-wrap { max-height: 600px; }
+.cc-inner { padding: 0 1.8rem 1.8rem; }
+.cc-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.2rem; }
+.cc-pillars { display: flex; flex-direction: column; gap: 0.5rem; }
+.cc-pill {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.55rem 0.9rem;
+  background: var(--surface2); border-radius: 4px;
+  font-size: 0.82rem; color: var(--text);
+}
+.cc-pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* ─────────────────────────────────────────────
+   AI — DIAGRAMS
+───────────────────────────────────────────── */
+.ai-tabs {
+  display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+}
+.ai-tab {
+  padding: 0.55rem 1.2rem;
+  font-size: 0.82rem; font-weight: 600; border-radius: 6px;
+  border: 1px solid var(--border2); color: var(--muted);
+  cursor: pointer; transition: all 0.2s; background: transparent;
+}
+.ai-tab:hover { color: var(--text); border-color: var(--border); }
+.ai-tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+.ai-panel { display: none; }
+.ai-panel.active { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: start; }
+
+.ai-info {}
+.ai-name { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.ai-full { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 1.2rem; }
+.ai-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
+
+.ai-steps { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.ai-step {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.7rem 1rem; border-radius: 6px;
+  background: var(--surface2); border-left: 2px solid var(--blue);
+  font-size: 0.84rem;
+}
+.ai-step-n {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--blue);
+  font-weight: 600; flex-shrink: 0; padding-top: 0.15rem;
+}
+
+.ai-diagram-wrap { position: relative; }
+.ai-diagram-wrap svg { width: 100%; }
+
+/* ─────────────────────────────────────────────
+   FUTURE
+───────────────────────────────────────────── */
+.future-split { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.f-card {
+  border: 1px solid var(--border2); border-radius: var(--r);
+  padding: 2.5rem; position: relative; overflow: hidden;
+  background: var(--surface);
+  transition: border-color 0.3s;
+}
+.f-card:hover { border-color: rgba(139,92,246,0.4); }
+.f-card::before {
+  content: ''; position: absolute; bottom: -60px; right: -60px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: var(--violet); opacity: 0.04;
+}
+.f-badge {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em;
+  padding: 0.2rem 0.6rem; border-radius: 3px;
+  display: inline-block; margin-bottom: 1.2rem;
+}
+.f-badge.em { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+.f-badge.dis { background: rgba(244,63,94,0.1); color: var(--rose); border: 1px solid rgba(244,63,94,0.25); }
+.f-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+.f-body { font-size: 0.87rem; color: var(--muted); line-height: 1.8; }
+.f-list { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.f-list li {
+  padding: 0.6rem 1rem; background: var(--surface2); border-radius: 5px;
+  font-size: 0.83rem; color: var(--text);
+  display: flex; align-items: flex-start; gap: 0.7rem;
+}
+.f-list li::before { content: '→'; color: var(--violet); flex-shrink: 0; font-weight: 700; }
+
+/* future svg */
+.f-svg { margin-top: 1.5rem; }
+
+/* ─────────────────────────────────────────────
+   TOOLTIP
+───────────────────────────────────────────── */
+.tooltip {
+  position: absolute; z-index: 200;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 0.6rem 0.9rem;
+  font-size: 0.78rem; color: var(--text);
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.2s; white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.tooltip.show { opacity: 1; }
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border2);
+  padding: 2.5rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+  letter-spacing: 0.06em; position: relative; z-index: 1;
+}
+.footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* ─────────────────────────────────────────────
+   SVG ANIMATION CLASSES
+───────────────────────────────────────────── */
+.flow-path { stroke-dasharray: 200; stroke-dashoffset: 200; }
+.flow-path.animate { animation: drawPath 1.5s ease forwards; }
+@keyframes drawPath { to { stroke-dashoffset: 0; } }
+
+.node-appear { opacity: 0; transform: scale(0.7); }
+.node-appear.animate { animation: popIn 0.4s ease forwards; }
+@keyframes popIn { to { opacity:1; transform:scale(1); } }
+
+.float { animation: floating 4s ease-in-out infinite; }
+@keyframes floating { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media (max-width: 960px) {
+  #hero { grid-template-columns: 1fr; }
+  .hero-viz { display: none; }
+  .evo-panel.active { grid-template-columns: 1fr; }
+  .cloud-trio { grid-template-columns: 1fr; }
+  .cc-grid { grid-template-columns: 1fr; }
+  .ai-panel.active { grid-template-columns: 1fr; }
+  .future-split { grid-template-columns: 1fr; }
+  .pros-cons { grid-template-columns: 1fr; }
+  nav .nav-links { display: none; }
+}
+@media (max-width: 560px) {
+  .sec-head { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- PROGRESS BAR -->
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-brand">ARCH.GUIDE</a>
+  <ul class="nav-links">
+    <li><a href="#part1"><span class="nav-num">01</span> Fundamentos</a></li>
+    <li><a href="#part2"><span class="nav-num">02</span> Evolución</a></li>
+    <li><a href="#part3"><span class="nav-num">03</span> Cloud</a></li>
+    <li><a href="#part4"><span class="nav-num">04</span> Cross-cutting</a></li>
+    <li><a href="#part5"><span class="nav-num">05</span> AI Arch</a></li>
+    <li><a href="#part6"><span class="nav-num">06</span> Futuro</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section id="hero">
+  <div>
+    <div class="hero-tag">Guía Interactiva Completa</div>
+    <h1 class="hero-title">
+      <span class="g1">Arquitectura</span><br>
+      <span class="g2">de Software</span>
+    </h1>
+    <p class="hero-sub">Desde monolitos a sistemas autónomos impulsados por IA. 6 capítulos, 18 tópicos, diagramas interactivos.</p>
+    <div class="hero-stats">
+      <div><div class="stat-num">6</div><div class="stat-label">Partes</div></div>
+      <div><div class="stat-num">18</div><div class="stat-label">Tópicos</div></div>
+      <div><div class="stat-num">∞</div><div class="stat-label">Trade-offs</div></div>
+    </div>
+  </div>
+  <div class="hero-viz">
+    <!-- Hero animated diagram: evolution arc -->
+    <svg viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg" id="hero-svg">
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#3b82f6"/>
+          <stop offset="100%" stop-color="#06b6d4"/>
+        </linearGradient>
+        <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M1,1 L7,4 L1,7 Z" fill="#3b82f6"/>
+        </marker>
+        <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M1,1 L7,4 L1,7 Z" fill="#06b6d4"/>
+        </marker>
+      </defs>
+
+      <!-- Background grid -->
+      <g opacity="0.06" stroke="#64748b" stroke-width="0.5">
+        <line x1="0" y1="70" x2="520" y2="70"/><line x1="0" y1="140" x2="520" y2="140"/>
+        <line x1="0" y1="210" x2="520" y2="210"/><line x1="0" y1="280" x2="520" y2="280"/>
+        <line x1="0" y1="350" x2="520" y2="350"/>
+        <line x1="65" y1="0" x2="65" y2="420"/><line x1="130" y1="0" x2="130" y2="420"/>
+        <line x1="195" y1="0" x2="195" y2="420"/><line x1="260" y1="0" x2="260" y2="420"/>
+        <line x1="325" y1="0" x2="325" y2="420"/><line x1="390" y1="0" x2="390" y2="420"/>
+        <line x1="455" y1="0" x2="455" y2="420"/>
+      </g>
+
+      <!-- AI Cloud zone -->
+      <rect x="20" y="18" width="480" height="100" rx="6" fill="rgba(20,184,166,0.04)" stroke="#14b8a6" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="260" y="38" font-family="'JetBrains Mono'" font-size="8" fill="#14b8a6" text-anchor="middle" letter-spacing="2" opacity="0.7">AI / CLOUD LAYER</text>
+
+      <!-- Event Bus -->
+      <rect x="40" y="50" width="440" height="26" rx="3" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+      <text x="260" y="67" font-family="'JetBrains Mono'" font-size="8" fill="#06b6d4" text-anchor="middle" letter-spacing="1.5">Event Bus  ·  API Gateway  ·  Service Mesh</text>
+
+      <!-- Microservices row -->
+      <g id="ms-group">
+        <rect x="50" y="100" width="70" height="34" rx="4" fill="var(--surface2)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="85" y="121" font-family="'JetBrains Mono'" font-size="8" fill="#3b82f6" text-anchor="middle">Auth</text>
+
+        <rect x="135" y="100" width="70" height="34" rx="4" fill="var(--surface2)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="170" y="121" font-family="'JetBrains Mono'" font-size="8" fill="#3b82f6" text-anchor="middle">Orders</text>
+
+        <rect x="220" y="100" width="70" height="34" rx="4" fill="var(--surface2)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="255" y="121" font-family="'JetBrains Mono'" font-size="8" fill="#3b82f6" text-anchor="middle">Inventory</text>
+
+        <rect x="305" y="100" width="70" height="34" rx="4" fill="var(--surface2)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="340" y="121" font-family="'JetBrains Mono'" font-size="8" fill="#3b82f6" text-anchor="middle">Notify</text>
+      </g>
+
+      <!-- AI Agent box -->
+      <rect x="395" y="95" width="110" height="90" rx="5" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+      <text x="450" y="116" font-family="'JetBrains Mono'" font-size="8" fill="#f59e0b" text-anchor="middle" letter-spacing="1">AI AGENT</text>
+      <text x="450" y="133" font-family="'Outfit'" font-size="9" fill="rgba(226,232,240,0.6)" text-anchor="middle">Reason → Plan</text>
+      <text x="450" y="147" font-family="'Outfit'" font-size="9" fill="rgba(226,232,240,0.6)" text-anchor="middle">→ Act → Observe</text>
+      <rect x="406" y="157" width="40" height="17" rx="2" fill="rgba(245,158,11,0.15)"/>
+      <rect x="455" y="157" width="40" height="17" rx="2" fill="rgba(245,158,11,0.15)"/>
+      <text x="426" y="169" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Tools</text>
+      <text x="475" y="169" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Memory</text>
+
+      <!-- Data stores -->
+      <ellipse cx="85" cy="210" rx="40" ry="13" fill="var(--surface)" stroke="#6366f1" stroke-width="1.2"/>
+      <rect x="45" y="210" width="80" height="26" fill="var(--surface)" stroke="#6366f1" stroke-width="1.2"/>
+      <ellipse cx="85" cy="236" rx="40" ry="13" fill="var(--surface)" stroke="#6366f1" stroke-width="1.2"/>
+      <text x="85" y="227" font-family="'JetBrains Mono'" font-size="8" fill="#6366f1" text-anchor="middle">PostgreSQL</text>
+
+      <ellipse cx="200" cy="210" rx="40" ry="13" fill="var(--surface)" stroke="#ec4899" stroke-width="1.2"/>
+      <rect x="160" y="210" width="80" height="26" fill="var(--surface)" stroke="#ec4899" stroke-width="1.2"/>
+      <ellipse cx="200" cy="236" rx="40" ry="13" fill="var(--surface)" stroke="#ec4899" stroke-width="1.2"/>
+      <text x="200" y="227" font-family="'JetBrains Mono'" font-size="8" fill="#ec4899" text-anchor="middle">Redis Cache</text>
+
+      <ellipse cx="315" cy="210" rx="40" ry="13" fill="var(--surface)" stroke="#14b8a6" stroke-width="1.2"/>
+      <rect x="275" y="210" width="80" height="26" fill="var(--surface)" stroke="#14b8a6" stroke-width="1.2"/>
+      <ellipse cx="315" cy="236" rx="40" ry="13" fill="var(--surface)" stroke="#14b8a6" stroke-width="1.2"/>
+      <text x="315" y="227" font-family="'JetBrains Mono'" font-size="8" fill="#14b8a6" text-anchor="middle">VectorDB</text>
+
+      <!-- Connect bars to stores -->
+      <line x1="85" y1="134" x2="85" y2="197" stroke="#6366f1" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+      <line x1="170" y1="134" x2="200" y2="197" stroke="#ec4899" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+      <line x1="255" y1="134" x2="315" y2="197" stroke="#14b8a6" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+      <line x1="340" y1="134" x2="450" y2="95" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+
+      <!-- Connect svc to bus -->
+      <line x1="85" y1="100" x2="85" y2="76" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.6"/>
+      <line x1="170" y1="100" x2="170" y2="76" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.6"/>
+      <line x1="255" y1="100" x2="255" y2="76" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.6"/>
+      <line x1="340" y1="100" x2="340" y2="76" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.6"/>
+
+      <!-- Observability row -->
+      <rect x="20" y="270" width="470" height="36" rx="4" fill="rgba(59,130,246,0.04)" stroke="#334155" stroke-width="1"/>
+      <text x="40" y="292" font-family="'JetBrains Mono'" font-size="7.5" fill="#3b82f6" letter-spacing="1">METRICS</text>
+      <text x="130" y="292" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" letter-spacing="1">TRACES</text>
+      <text x="215" y="292" font-family="'JetBrains Mono'" font-size="7.5" fill="#14b8a6" letter-spacing="1">LOGS</text>
+      <text x="280" y="292" font-family="'JetBrains Mono'" font-size="7.5" fill="#8b5cf6" letter-spacing="1">ALERTS</text>
+      <text x="360" y="292" font-family="'JetBrains Mono'" font-size="7.5" fill="#f59e0b" letter-spacing="1">SLOs/SLIs</text>
+      <rect x="440" y="278" width="42" height="18" rx="3" fill="rgba(34,197,94,0.12)"/>
+      <text x="461" y="290" font-family="'JetBrains Mono'" font-size="7" fill="#22c55e" text-anchor="middle">OTEL</text>
+
+      <!-- CI/CD row -->
+      <g>
+        <rect x="20" y="328" width="80" height="28" rx="4" fill="var(--surface)" stroke="#334155" stroke-width="1"/>
+        <text x="60" y="346" font-family="'JetBrains Mono'" font-size="7.5" fill="#94a3b8" text-anchor="middle">Code Push</text>
+        <path d="M100 342 L110 342" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="112" y="328" width="70" height="28" rx="4" fill="var(--surface)" stroke="#334155" stroke-width="1"/>
+        <text x="147" y="346" font-family="'JetBrains Mono'" font-size="7.5" fill="#94a3b8" text-anchor="middle">SAST/DAST</text>
+        <path d="M184 342 L194 342" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="196" y="328" width="60" height="28" rx="4" fill="var(--surface)" stroke="#334155" stroke-width="1"/>
+        <text x="226" y="346" font-family="'JetBrains Mono'" font-size="7.5" fill="#94a3b8" text-anchor="middle">Build</text>
+        <path d="M258 342 L268 342" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="270" y="328" width="60" height="28" rx="4" fill="var(--surface)" stroke="#334155" stroke-width="1"/>
+        <text x="300" y="346" font-family="'JetBrains Mono'" font-size="7.5" fill="#94a3b8" text-anchor="middle">Test</text>
+        <path d="M332 342 L342 342" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="344" y="328" width="70" height="28" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1"/>
+        <text x="379" y="346" font-family="'JetBrains Mono'" font-size="7.5" fill="#22c55e" text-anchor="middle">Deploy</text>
+        <path d="M416 342 L426 342" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrowCyan)"/>
+        <rect x="428" y="328" width="68" height="28" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="462" y="346" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">K8s/Cloud</text>
+      </g>
+
+      <!-- Layer labels left -->
+      <text x="6" y="70" font-family="'JetBrains Mono'" font-size="6.5" fill="#334155" text-anchor="middle" transform="rotate(-90,6,130)">SERVICES</text>
+      <text x="6" y="225" font-family="'JetBrains Mono'" font-size="6.5" fill="#334155" text-anchor="middle" transform="rotate(-90,6,225)">DATA</text>
+      <text x="6" y="290" font-family="'JetBrains Mono'" font-size="6.5" fill="#334155" text-anchor="middle" transform="rotate(-90,6,290)">OBSERV</text>
+      <text x="6" y="355" font-family="'JetBrains Mono'" font-size="6.5" fill="#334155" text-anchor="middle" transform="rotate(-90,6,355)">CI/CD</text>
+
+      <!-- Animated pulse on agent -->
+      <circle cx="450" cy="130" r="50" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0">
+        <animate attributeName="r" values="45;65;45" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 1: FUNDAMENTOS ═══════════════════ -->
+<section class="section reveal" id="part1">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 01</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Conceptos Esenciales</div>
+      <h2 class="sec-title">Fundamentos de <span class="hl">Arquitectura</span></h2>
+      <p class="sec-desc">Las bases conceptuales que todo arquitecto debe dominar antes de diseñar cualquier sistema.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <!-- Card 1: Qué es arquitectura -->
+    <div class="card reveal">
+      <span class="card-icon">🏛</span>
+      <div class="card-badge">Concepto Central</div>
+      <div class="card-title">¿Qué es Arquitectura de Software?</div>
+      <p class="card-body">La arquitectura de software es la estructura fundamental de un sistema: sus componentes, sus responsabilidades, las relaciones entre ellos y los principios que guían su diseño y evolución en el tiempo.</p>
+      <p class="card-body" style="margin-top:0.8rem">No es sólo el diagrama de cajas y flechas — es el conjunto de <em>decisiones significativas</em> que resultan costosas de cambiar. El arquitecto actúa como puente entre los requerimientos de negocio y la implementación técnica.</p>
+      <div style="margin-top:1.5rem">
+        <!-- Mini diagram: stakeholders → architect → system -->
+        <svg viewBox="0 0 280 80" fill="none">
+          <rect x="2" y="20" width="70" height="40" rx="4" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
+          <text x="37" y="44" font-family="'JetBrains Mono'" font-size="8" fill="#3b82f6" text-anchor="middle">Negocio</text>
+          <path d="M72 40 L100 40" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+          <rect x="102" y="16" width="76" height="48" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.5"/>
+          <text x="140" y="38" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Arquitecto</text>
+          <text x="140" y="53" font-family="'Outfit'" font-size="8" fill="rgba(6,182,212,0.6)" text-anchor="middle">trade-offs</text>
+          <path d="M178 40 L206 40" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowCyan)"/>
+          <rect x="208" y="20" width="68" height="40" rx="4" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="1"/>
+          <text x="242" y="44" font-family="'JetBrains Mono'" font-size="8" fill="#14b8a6" text-anchor="middle">Sistema</text>
+        </svg>
+      </div>
+      <div class="card-tags"><span class="ctag">IEEE 42010</span><span class="ctag">decisiones</span><span class="ctag">trade-offs</span><span class="ctag">ASRs</span></div>
+    </div>
+
+    <!-- Card 2: Estilos -->
+    <div class="card reveal">
+      <span class="card-icon">🗂</span>
+      <div class="card-badge">Patrones Estructurales</div>
+      <div class="card-title">Estilos de Arquitectura</div>
+      <p class="card-body">Un estilo arquitectónico es un patrón de organización de alto nivel que define cómo se estructuran los componentes y cómo se comunican. Cada estilo impone restricciones deliberadas que otorgan propiedades deseables.</p>
+      <!-- Styles comparison diagram -->
+      <div style="margin-top:1.5rem">
+        <svg viewBox="0 0 280 110" fill="none">
+          <!-- Pipe & Filter -->
+          <rect x="2" y="8" width="38" height="22" rx="3" fill="rgba(99,102,241,0.1)" stroke="#6366f1" stroke-width="1"/>
+          <text x="21" y="23" font-family="'JetBrains Mono'" font-size="6.5" fill="#6366f1" text-anchor="middle">Source</text>
+          <line x1="40" y1="19" x2="52" y2="19" stroke="#6366f1" stroke-width="1.2"/>
+          <rect x="52" y="8" width="38" height="22" rx="3" fill="rgba(99,102,241,0.1)" stroke="#6366f1" stroke-width="1"/>
+          <text x="71" y="23" font-family="'JetBrains Mono'" font-size="6.5" fill="#6366f1" text-anchor="middle">Filter</text>
+          <line x1="90" y1="19" x2="102" y2="19" stroke="#6366f1" stroke-width="1.2"/>
+          <rect x="102" y="8" width="38" height="22" rx="3" fill="rgba(99,102,241,0.1)" stroke="#6366f1" stroke-width="1"/>
+          <text x="121" y="23" font-family="'JetBrains Mono'" font-size="6.5" fill="#6366f1" text-anchor="middle">Sink</text>
+          <text x="2" y="43" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">Pipe & Filter</text>
+
+          <!-- Event-Driven -->
+          <circle cx="175" cy="19" r="14" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+          <text x="175" y="23" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Bus</text>
+          <rect x="155" y="46" width="20" height="14" rx="2" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+          <rect x="180" y="46" width="20" height="14" rx="2" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+          <rect x="205" y="46" width="20" height="14" rx="2" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+          <line x1="175" y1="33" x2="165" y2="46" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.6"/>
+          <line x1="175" y1="33" x2="190" y2="46" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.6"/>
+          <line x1="175" y1="33" x2="215" y2="46" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.6"/>
+          <text x="190" y="75" font-family="'JetBrains Mono'" font-size="6" fill="#64748b" text-anchor="middle">Event-Driven</text>
+
+          <!-- Layered -->
+          <rect x="2" y="82" width="120" height="12" rx="2" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1"/>
+          <text x="62" y="92" font-family="'JetBrains Mono'" font-size="6" fill="#22c55e" text-anchor="middle">Presentation</text>
+          <rect x="2" y="97" width="120" height="12" rx="2" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1" stroke-opacity="0.6"/>
+          <text x="62" y="107" font-family="'JetBrains Mono'" font-size="6" fill="#22c55e" text-anchor="middle" opacity="0.7">Business Logic</text>
+          <text x="62" y="122" font-family="'JetBrains Mono'" font-size="6" fill="#64748b" text-anchor="middle">Layered</text>
+
+          <!-- Microservices bubble -->
+          <circle cx="210" cy="96" r="8" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1"/>
+          <circle cx="228" cy="88" r="8" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1"/>
+          <circle cx="246" cy="96" r="8" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1"/>
+          <circle cx="228" cy="104" r="8" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1"/>
+          <line x1="218" y1="96" x2="220" y2="88" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5"/>
+          <line x1="236" y1="88" x2="238" y2="96" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5"/>
+          <line x1="228" y1="112" x2="228" y2="104" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5"/>
+          <text x="228" y="122" font-family="'JetBrains Mono'" font-size="6" fill="#64748b" text-anchor="middle">Microservices</text>
+        </svg>
+      </div>
+      <div class="card-tags"><span class="ctag">Layered</span><span class="ctag">EDA</span><span class="ctag">P2P</span><span class="ctag">Pipe&Filter</span><span class="ctag">Microservices</span></div>
+    </div>
+
+    <!-- Card 3: Quality Attributes -->
+    <div class="card reveal" id="qa-card">
+      <span class="card-icon">⚖️</span>
+      <div class="card-badge">Non-Functional Requirements</div>
+      <div class="card-title">Quality Attributes</div>
+      <p class="card-body">Los atributos de calidad son propiedades medibles del sistema que determinan qué tan bien satisface las necesidades de sus stakeholders. Su análisis genera los principales trade-offs del diseño.</p>
+      <div class="qa-bar-list">
+        <div class="qa-bar-item">
+          <div class="qa-bar-label"><span>🔒 Seguridad</span><span>95%</span></div>
+          <div class="qa-track"><div class="qa-fill" data-target="95"></div></div>
+        </div>
+        <div class="qa-bar-item">
+          <div class="qa-bar-label"><span>📈 Escalabilidad</span><span>90%</span></div>
+          <div class="qa-track"><div class="qa-fill" data-target="90"></div></div>
+        </div>
+        <div class="qa-bar-item">
+          <div class="qa-bar-label"><span>⚡ Performance</span><span>82%</span></div>
+          <div class="qa-track"><div class="qa-fill" data-target="82"></div></div>
+        </div>
+        <div class="qa-bar-item">
+          <div class="qa-bar-label"><span>🛡 Resiliencia</span><span>88%</span></div>
+          <div class="qa-track"><div class="qa-fill" data-target="88"></div></div>
+        </div>
+        <div class="qa-bar-item">
+          <div class="qa-bar-label"><span>🔧 Mantenibilidad</span><span>74%</span></div>
+          <div class="qa-track"><div class="qa-fill" data-target="74"></div></div>
+        </div>
+        <div class="qa-bar-item">
+          <div class="qa-bar-label"><span>🔍 Observabilidad</span><span>79%</span></div>
+          <div class="qa-track"><div class="qa-fill" data-target="79"></div></div>
+        </div>
+      </div>
+      <div class="card-tags" style="margin-top:1rem"><span class="ctag">ATAM</span><span class="ctag">ASRs</span><span class="ctag">trade-offs</span><span class="ctag">ATAM</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 2: EVOLUCIÓN ═══════════════════ -->
+<section class="section reveal" id="part2">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 02</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Historia & Patrones</div>
+      <h2 class="sec-title">Evolución de la <span class="hl">Arquitectura</span></h2>
+      <p class="sec-desc">De monolitos a microservicios — cómo la industria respondió a los retos de escala, equipo y velocidad.</p>
+    </div>
+  </div>
+
+  <div class="evo-tabs">
+    <div class="evo-tab active" data-tab="monolith">🧱 Monolito <span class="era">1980–2000</span></div>
+    <div class="evo-tab" data-tab="layered">📦 Layered <span class="era">1990–2010</span></div>
+    <div class="evo-tab" data-tab="soa">🔗 SOA <span class="era">2000–2012</span></div>
+    <div class="evo-tab" data-tab="microservices">⚡ Microservices <span class="era">2012–hoy</span></div>
+  </div>
+
+  <!-- MONOLITH -->
+  <div class="evo-panel active" id="tab-monolith">
+    <div class="evo-info">
+      <div class="evo-name">Monolito</div>
+      <div class="evo-era">ERA: 1980s – 2000s · Vigente como "Modular Monolith"</div>
+      <p class="evo-desc">En la arquitectura monolítica, toda la funcionalidad reside en un único proceso desplegable. UI, lógica de negocio y acceso a datos se compilan y despliegan juntos.</p>
+      <p class="evo-desc" style="margin-top:0.8rem">El Monolito Modular bien diseñado sigue siendo válido para equipos pequeños. La clave está en la separación lógica con interfaces bien definidas entre módulos, sin necesidad de distribuir el proceso.</p>
+      <div class="pros-cons">
+        <div>
+          <div class="pc-head g">✓ Ventajas</div>
+          <ul class="pc-list">
+            <li>Simplicidad de desarrollo inicial</li>
+            <li>Transacciones ACID nativas</li>
+            <li>Fácil debugging y trazabilidad</li>
+            <li>Sin latencia de red interna</li>
+            <li>Deploy simple (un artefacto)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pc-head r">✗ Limitaciones</div>
+          <ul class="pc-list">
+            <li>Escalabilidad acoplada</li>
+            <li>Deploy todo-o-nada (riesgo)</li>
+            <li>Deuda técnica difícil de aislar</li>
+            <li>Barreras para equipos grandes</li>
+            <li>Tecnología única para todo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="evo-diagram">
+      <svg viewBox="0 0 340 280" fill="none">
+        <!-- Outer box: monolith -->
+        <rect x="20" y="20" width="300" height="240" rx="6" fill="rgba(99,102,241,0.04)" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="170" y="42" font-family="'JetBrains Mono'" font-size="9" fill="#6366f1" text-anchor="middle" letter-spacing="2">MONOLITO</text>
+
+        <!-- UI Layer -->
+        <rect x="40" y="52" width="260" height="42" rx="4" fill="rgba(99,102,241,0.1)" stroke="#6366f1" stroke-width="1"/>
+        <text x="170" y="77" font-family="'Outfit'" font-size="11" fill="#a5b4fc" text-anchor="middle" font-weight="600">Presentation Layer (UI)</text>
+
+        <!-- Business Layer -->
+        <rect x="40" y="106" width="260" height="42" rx="4" fill="rgba(99,102,241,0.07)" stroke="#6366f1" stroke-width="1" stroke-opacity="0.7"/>
+        <text x="170" y="131" font-family="'Outfit'" font-size="11" fill="#a5b4fc" text-anchor="middle" font-weight="600">Business Logic Layer</text>
+
+        <!-- Data Layer -->
+        <rect x="40" y="160" width="260" height="42" rx="4" fill="rgba(99,102,241,0.05)" stroke="#6366f1" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="170" y="185" font-family="'Outfit'" font-size="11" fill="#a5b4fc" text-anchor="middle" font-weight="600">Data Access Layer</text>
+
+        <!-- DB -->
+        <ellipse cx="170" cy="226" rx="50" ry="13" fill="rgba(99,102,241,0.1)" stroke="#6366f1" stroke-width="1"/>
+        <rect x="120" y="226" width="100" height="16" fill="rgba(99,102,241,0.06)" stroke="#6366f1" stroke-width="1"/>
+        <ellipse cx="170" cy="242" rx="50" ry="13" fill="rgba(99,102,241,0.1)" stroke="#6366f1" stroke-width="1"/>
+        <text x="170" y="237" font-family="'JetBrains Mono'" font-size="7.5" fill="#a5b4fc" text-anchor="middle">Database</text>
+
+        <!-- Arrows between layers -->
+        <path d="M170 94 L170 106" stroke="#6366f1" stroke-width="1.2" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M170 148 L170 160" stroke="#6366f1" stroke-width="1.2" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M170 202 L170 213" stroke="#6366f1" stroke-width="1.2" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+
+        <!-- Single process label -->
+        <rect x="228" y="8" width="90" height="16" rx="3" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1"/>
+        <text x="273" y="19.5" font-family="'JetBrains Mono'" font-size="6.5" fill="#22c55e" text-anchor="middle">1 proceso · 1 deploy</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- LAYERED -->
+  <div class="evo-panel" id="tab-layered">
+    <div class="evo-info">
+      <div class="evo-name">Arquitectura en Capas</div>
+      <div class="evo-era">ERA: 1990s – 2010s · N-Tier Architecture</div>
+      <p class="evo-desc">Organiza el sistema en capas horizontales donde cada capa tiene una responsabilidad específica y sólo se comunica con la capa adyacente. El patrón clásico es Presentación → Negocio → Datos.</p>
+      <p class="evo-desc" style="margin-top:0.8rem">Cuidado con el antipatrón <strong style="color:var(--rose)">Sinkhole</strong>: peticiones que atraviesan todas las capas sin añadir lógica en cada una, generando latencia innecesaria sin valor.</p>
+      <div class="pros-cons">
+        <div>
+          <div class="pc-head g">✓ Ventajas</div>
+          <ul class="pc-list">
+            <li>Separación clara de responsabilidades</li>
+            <li>Fácil de entender y enseñar</li>
+            <li>Reutilización entre capas</li>
+            <li>Testing por capa independiente</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pc-head r">✗ Limitaciones</div>
+          <ul class="pc-list">
+            <li>Antipatrón Sinkhole frecuente</li>
+            <li>Escalabilidad compleja (capas acopladas)</li>
+            <li>Rigidez ante cambios cross-layer</li>
+            <li>Rendimiento subóptimo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="evo-diagram">
+      <svg viewBox="0 0 340 300" fill="none">
+        <defs>
+          <marker id="arrG" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
+            <path d="M1,1 L6,3.5 L1,6 Z" fill="#22c55e"/>
+          </marker>
+        </defs>
+        <!-- Client -->
+        <rect x="120" y="10" width="100" height="30" rx="4" fill="rgba(99,102,241,0.12)" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="170" y="29" font-family="'Outfit'" font-size="11" fill="#a5b4fc" text-anchor="middle" font-weight="600">Client / Browser</text>
+        <path d="M170 40 L170 60" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrG)"/>
+
+        <!-- Layer 1: Presentation -->
+        <rect x="50" y="60" width="240" height="40" rx="4" fill="rgba(99,102,241,0.12)" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="170" y="83" font-family="'Outfit'" font-size="11" fill="#a5b4fc" text-anchor="middle" font-weight="600">Presentation Layer</text>
+        <text x="286" y="76" font-family="'JetBrains Mono'" font-size="6.5" fill="#6366f1">MVC / REST</text>
+        <path d="M170 100 L170 120" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrG)"/>
+
+        <!-- Layer 2: Business -->
+        <rect x="50" y="120" width="240" height="40" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="170" y="143" font-family="'Outfit'" font-size="11" fill="#67e8f9" text-anchor="middle" font-weight="600">Business Logic Layer</text>
+        <text x="286" y="136" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4">Services</text>
+        <path d="M170 160 L170 180" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrG)"/>
+
+        <!-- Layer 3: Data Access -->
+        <rect x="50" y="180" width="240" height="40" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.5"/>
+        <text x="170" y="203" font-family="'Outfit'" font-size="11" fill="#5eead4" text-anchor="middle" font-weight="600">Data Access Layer</text>
+        <text x="286" y="196" font-family="'JetBrains Mono'" font-size="6.5" fill="#14b8a6">ORM/Repo</text>
+        <path d="M170 220 L170 240" stroke="#22c55e" stroke-width="1.2" marker-end="url(#arrG)"/>
+
+        <!-- DB -->
+        <ellipse cx="170" cy="254" rx="55" ry="13" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1"/>
+        <rect x="115" y="254" width="110" height="18" fill="rgba(20,184,166,0.06)" stroke="#14b8a6" stroke-width="1"/>
+        <ellipse cx="170" cy="272" rx="55" ry="13" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1"/>
+        <text x="170" y="267" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Database</text>
+
+        <!-- Sinkhole warning -->
+        <rect x="4" y="120" width="42" height="40" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2"/>
+        <text x="25" y="135" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">⚠ Sink-</text>
+        <text x="25" y="148" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">hole</text>
+        <path d="M4 140 L50 140" stroke="#f43f5e" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- SOA -->
+  <div class="evo-panel" id="tab-soa">
+    <div class="evo-info">
+      <div class="evo-name">Service-Oriented Architecture</div>
+      <div class="evo-era">ERA: 2000s – 2012 · Empresa & Integración</div>
+      <p class="evo-desc">SOA organiza el software como servicios interoperables que se comunican a través de un Enterprise Service Bus (ESB). Los servicios exponen contratos formales WSDL/SOAP y son reutilizables entre sistemas empresariales.</p>
+      <p class="evo-desc" style="margin-top:0.8rem">Fue el primer gran paso hacia distribución de responsabilidades. La limitación principal: el ESB centralizado se convirtió en cuello de botella, punto único de fallo y núcleo de lógica compleja.</p>
+      <div class="pros-cons">
+        <div>
+          <div class="pc-head g">✓ Ventajas</div>
+          <ul class="pc-list">
+            <li>Reutilización de servicios empresariales</li>
+            <li>Contratos formales (WSDL)</li>
+            <li>Interoperabilidad cross-platform</li>
+            <li>Orquestación centralizada (BPEL)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pc-head r">✗ Limitaciones</div>
+          <ul class="pc-list">
+            <li>ESB: cuello de botella central</li>
+            <li>SOAP/XML verboso y costoso</li>
+            <li>Vendor lock-in frecuente</li>
+            <li>Ciclos de deploy lentos</li>
+            <li>Complejidad de gobernanza</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="evo-diagram">
+      <svg viewBox="0 0 340 280" fill="none">
+        <!-- Services top -->
+        <rect x="10" y="10" width="70" height="30" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+        <text x="45" y="29" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">CRM Svc</text>
+        <rect x="135" y="10" width="70" height="30" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+        <text x="170" y="29" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">ERP Svc</text>
+        <rect x="260" y="10" width="70" height="30" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+        <text x="295" y="29" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">HR Svc</text>
+
+        <!-- ESB -->
+        <rect x="10" y="100" width="320" height="60" rx="5" fill="rgba(239,68,68,0.06)" stroke="#ef4444" stroke-width="2"/>
+        <text x="170" y="128" font-family="'Outfit'" font-size="13" fill="#fca5a5" text-anchor="middle" font-weight="700">Enterprise Service Bus</text>
+        <text x="170" y="146" font-family="'JetBrains Mono'" font-size="7.5" fill="#ef4444" text-anchor="middle" opacity="0.7">Transform · Route · Orchestrate · Monitor</text>
+
+        <!-- Services bottom -->
+        <rect x="10" y="220" width="70" height="30" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+        <text x="45" y="239" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Legacy A</text>
+        <rect x="135" y="220" width="70" height="30" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+        <text x="170" y="239" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Billing Svc</text>
+        <rect x="260" y="220" width="70" height="30" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1"/>
+        <text x="295" y="239" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Portal</text>
+
+        <!-- Lines to ESB -->
+        <line x1="45" y1="40" x2="45" y2="100" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="170" y1="40" x2="170" y2="100" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="295" y1="40" x2="295" y2="100" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="45" y1="160" x2="45" y2="220" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="170" y1="160" x2="170" y2="220" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="295" y1="160" x2="295" y2="220" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.5"/>
+
+        <!-- Warning: single point of failure -->
+        <text x="170" y="275" font-family="'JetBrains Mono'" font-size="7" fill="#ef4444" text-anchor="middle">⚠ Single point of failure</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- MICROSERVICES -->
+  <div class="evo-panel" id="tab-microservices">
+    <div class="evo-info">
+      <div class="evo-name">Microservicios</div>
+      <div class="evo-era">ERA: 2012 – Presente · Cloud-Native</div>
+      <p class="evo-desc">Los microservicios descomponen el sistema en servicios pequeños, autónomos y desplegables de forma independiente. Cada servicio es dueño de su dominio y sus datos, y se comunica mediante REST, gRPC o mensajería asíncrona.</p>
+      <p class="evo-desc" style="margin-top:0.8rem">El <strong style="color:var(--cyan)">Bounded Context</strong> (DDD) guía la descomposición. La complejidad operacional es el reto principal: service mesh, distributed tracing, SAGA transactions, gestión de estado distribuido.</p>
+      <div class="pros-cons">
+        <div>
+          <div class="pc-head g">✓ Ventajas</div>
+          <ul class="pc-list">
+            <li>Escalabilidad independiente por servicio</li>
+            <li>Deploy frecuente y aislado</li>
+            <li>Resiliencia por aislamiento de fallos</li>
+            <li>Equipos autónomos (Conway's Law)</li>
+            <li>Heterogeneidad tecnológica</li>
+          </ul>
+        </div>
+        <div>
+          <div class="pc-head r">✗ Limitaciones</div>
+          <ul class="pc-list">
+            <li>Alta complejidad operacional</li>
+            <li>Consistencia eventual compleja</li>
+            <li>SAGA / 2PC para transacciones</li>
+            <li>Latencia de red inter-servicio</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="evo-diagram">
+      <svg viewBox="0 0 340 280" fill="none">
+        <!-- API Gateway -->
+        <rect x="100" y="8" width="140" height="28" rx="4" fill="rgba(6,182,212,0.12)" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="170" y="26" font-family="'Outfit'" font-size="10" fill="#67e8f9" text-anchor="middle" font-weight="600">API Gateway</text>
+        <line x1="170" y1="36" x2="90" y2="60" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="170" y1="36" x2="170" y2="60" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
+        <line x1="170" y1="36" x2="255" y2="60" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5"/>
+
+        <!-- Service row 1 -->
+        <rect x="30" y="60" width="80" height="34" rx="4" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="70" y="80" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle">User Svc</text>
+        <rect x="130" y="60" width="80" height="34" rx="4" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="170" y="80" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle">Order Svc</text>
+        <rect x="230" y="60" width="80" height="34" rx="4" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="270" y="80" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle">Pay Svc</text>
+
+        <!-- Async Message Bus -->
+        <rect x="30" y="120" width="280" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+        <text x="170" y="134" font-family="'JetBrains Mono'" font-size="7" fill="#c4b5fd" text-anchor="middle" letter-spacing="1">Message Bus (Kafka / RabbitMQ)</text>
+
+        <!-- Lines svc → bus -->
+        <line x1="70" y1="94" x2="70" y2="120" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.5"/>
+        <line x1="170" y1="94" x2="170" y2="120" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.5"/>
+        <line x1="270" y1="94" x2="270" y2="120" stroke="#3b82f6" stroke-width="0.8" stroke-opacity="0.5"/>
+
+        <!-- Service row 2 -->
+        <rect x="30" y="160" width="80" height="34" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+        <text x="70" y="180" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Notif Svc</text>
+        <rect x="130" y="160" width="80" height="34" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+        <text x="170" y="180" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Inventory</text>
+        <rect x="230" y="160" width="80" height="34" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+        <text x="270" y="180" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Analytics</text>
+
+        <!-- Lines bus → svc2 -->
+        <line x1="70" y1="142" x2="70" y2="160" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.5"/>
+        <line x1="170" y1="142" x2="170" y2="160" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.5"/>
+        <line x1="270" y1="142" x2="270" y2="160" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.5"/>
+
+        <!-- DBs per service -->
+        <rect x="48" y="205" width="44" height="12" rx="2" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="0.8"/>
+        <text x="70" y="214" font-family="'JetBrains Mono'" font-size="5.5" fill="#93c5fd" text-anchor="middle">Postgres</text>
+        <rect x="148" y="205" width="44" height="12" rx="2" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="0.8"/>
+        <text x="170" y="214" font-family="'JetBrains Mono'" font-size="5.5" fill="#93c5fd" text-anchor="middle">MongoDB</text>
+        <rect x="248" y="205" width="44" height="12" rx="2" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="0.8"/>
+        <text x="270" y="214" font-family="'JetBrains Mono'" font-size="5.5" fill="#93c5fd" text-anchor="middle">Redis</text>
+
+        <!-- DB lines -->
+        <line x1="70" y1="194" x2="70" y2="205" stroke="#3b82f6" stroke-width="0.7" stroke-dasharray="2 2"/>
+        <line x1="170" y1="194" x2="170" y2="205" stroke="#3b82f6" stroke-width="0.7" stroke-dasharray="2 2"/>
+        <line x1="270" y1="194" x2="270" y2="205" stroke="#3b82f6" stroke-width="0.7" stroke-dasharray="2 2"/>
+
+        <!-- Bottom labels -->
+        <text x="170" y="240" font-family="'JetBrains Mono'" font-size="6.5" fill="#334155" text-anchor="middle">Database-per-Service pattern (polyglot persistence)</text>
+
+        <!-- Service mesh indicator -->
+        <rect x="4" y="55" width="22" height="150" rx="3" fill="rgba(139,92,246,0.06)" stroke="#8b5cf6" stroke-width="0.8" stroke-dasharray="2 2"/>
+        <text x="15" y="140" font-family="'JetBrains Mono'" font-size="6" fill="#8b5cf6" text-anchor="middle" transform="rotate(-90,15,130)">Service Mesh (mTLS · LB · CB)</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 3: CLOUD ═══════════════════ -->
+<section class="section reveal" id="part3">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 03</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Paradigmas Cloud</div>
+      <h2 class="sec-title">Arquitectura <span class="hl">Cloud Moderna</span></h2>
+      <p class="sec-desc">Paradigmas diseñados nativamente para entornos cloud que abrazan escala, elasticidad y resiliencia.</p>
+    </div>
+  </div>
+
+  <div class="cloud-trio">
+    <!-- Event-Driven -->
+    <div class="c-card eda reveal">
+      <div class="c-accent">// Event-Driven Architecture</div>
+      <div class="c-title">Arquitectura Orientada a Eventos</div>
+      <p class="c-body">Los sistemas EDA se construyen alrededor de la producción y reacción a eventos. Los productores emiten eventos sin conocer a los consumidores — desacoplamiento total en tiempo y espacio.</p>
+      <div class="c-svg">
+        <svg viewBox="0 0 260 120" fill="none">
+          <!-- Producer -->
+          <rect x="5" y="45" width="55" height="30" rx="4" fill="rgba(6,182,212,0.12)" stroke="#06b6d4" stroke-width="1"/>
+          <text x="32" y="64" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Producer</text>
+          <!-- Arrow -->
+          <path d="M60 60 L80 60" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arrowCyan)"/>
+          <!-- Event Bus -->
+          <rect x="82" y="30" width="96" height="60" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1.5"/>
+          <text x="130" y="57" font-family="'JetBrains Mono'" font-size="7" fill="#06b6d4" text-anchor="middle">Event</text>
+          <text x="130" y="69" font-family="'JetBrains Mono'" font-size="7" fill="#06b6d4" text-anchor="middle">Broker</text>
+          <text x="130" y="81" font-family="'JetBrains Mono'" font-size="6" fill="rgba(6,182,212,0.5)" text-anchor="middle">Kafka · Kinesis</text>
+          <!-- Fan out arrows -->
+          <path d="M178 45 L198 30" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
+          <path d="M178 60 L198 60" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
+          <path d="M178 75 L198 90" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
+          <!-- Consumers -->
+          <rect x="200" y="18" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
+          <text x="227" y="34" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer A</text>
+          <rect x="200" y="48" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
+          <text x="227" y="64" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer B</text>
+          <rect x="200" y="78" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
+          <text x="227" y="94" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer C</text>
+          <!-- CQRS label -->
+          <text x="130" y="112" font-family="'JetBrains Mono'" font-size="6" fill="#334155" text-anchor="middle">CQRS · Event Sourcing · Choreography</text>
+        </svg>
+      </div>
+      <div class="c-tags">
+        <span class="c-tag">Apache Kafka</span><span class="c-tag">Event Sourcing</span>
+        <span class="c-tag">CQRS</span><span class="c-tag">Pub/Sub</span>
+      </div>
+    </div>
+
+    <!-- Serverless -->
+    <div class="c-card srv reveal">
+      <div class="c-accent">// Function as a Service</div>
+      <div class="c-title">Arquitectura Serverless</div>
+      <p class="c-body">Abstrae completamente la infraestructura. El proveedor cloud gestiona el escalado y disponibilidad; se paga por ejecución. Ideal para cargas intermitentes y event-driven.</p>
+      <div class="c-svg">
+        <svg viewBox="0 0 260 120" fill="none">
+          <!-- Trigger sources -->
+          <rect x="5" y="10" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="30" y="24" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">HTTP Req</text>
+          <rect x="5" y="40" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="30" y="54" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">Schedule</text>
+          <rect x="5" y="70" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="30" y="84" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">S3 Event</text>
+
+          <!-- Arrows to fn -->
+          <path d="M55 21 L90 45" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M55 51 L90 55" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M55 81 L90 65" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+
+          <!-- Lambda fn -->
+          <rect x="90" y="30" width="80" height="50" rx="5" fill="rgba(139,92,246,0.14)" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="130" y="50" font-family="'JetBrains Mono'" font-size="8" fill="#c4b5fd" text-anchor="middle">λ fn(event)</text>
+          <text x="130" y="65" font-family="'Outfit'" font-size="8" fill="rgba(196,181,253,0.5)" text-anchor="middle">stateless</text>
+          <text x="130" y="75" font-family="'JetBrains Mono'" font-size="6" fill="rgba(196,181,253,0.4)" text-anchor="middle">0 → ∞ instances</text>
+
+          <!-- Outputs -->
+          <path d="M170 50 L195 35" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M170 55 L195 65" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <rect x="197" y="22" width="55" height="24" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
+          <text x="224" y="37" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">DynamoDB</text>
+          <rect x="197" y="52" width="55" height="24" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
+          <text x="224" y="67" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">SNS/SQS</text>
+
+          <!-- Cold start warning -->
+          <text x="130" y="104" font-family="'JetBrains Mono'" font-size="6" fill="#f59e0b" text-anchor="middle">⚡ Cold start latency ~100–500ms</text>
+        </svg>
+      </div>
+      <div class="c-tags">
+        <span class="c-tag">AWS Lambda</span><span class="c-tag">FaaS</span>
+        <span class="c-tag">Pay-per-exec</span><span class="c-tag">Step Functions</span>
+      </div>
+    </div>
+
+    <!-- Cloud Native -->
+    <div class="c-card cn reveal">
+      <div class="c-accent">// CNCF Principles</div>
+      <div class="c-title">Cloud-Native Architecture</div>
+      <p class="c-body">No es mover apps a la nube — es diseñar sistemas que explotan sus capacidades: elasticidad, automación y resiliencia desde el día uno. Contenedores, K8s, GitOps y observabilidad son fundamentos.</p>
+      <div class="c-svg">
+        <svg viewBox="0 0 260 120" fill="none">
+          <!-- Dev box -->
+          <rect x="5" y="48" width="40" height="24" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1"/>
+          <text x="25" y="63" font-family="'JetBrains Mono'" font-size="6.5" fill="#5eead4" text-anchor="middle">Dev</text>
+
+          <!-- git push -->
+          <path d="M45 60 L65 60" stroke="#14b8a6" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="55" y="55" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">git push</text>
+
+          <!-- CI/CD -->
+          <rect x="67" y="38" width="56" height="44" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+          <text x="95" y="57" font-family="'JetBrains Mono'" font-size="6.5" fill="#5eead4" text-anchor="middle">CI/CD</text>
+          <text x="95" y="69" font-family="'JetBrains Mono'" font-size="5.5" fill="rgba(94,234,212,0.5)" text-anchor="middle">build·test</text>
+          <text x="95" y="78" font-family="'JetBrains Mono'" font-size="5.5" fill="rgba(94,234,212,0.5)" text-anchor="middle">scan·push</text>
+          <path d="M123 60 L143 60" stroke="#14b8a6" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+          <!-- K8s Cluster -->
+          <rect x="145" y="20" width="110" height="90" rx="5" fill="rgba(20,184,166,0.06)" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <text x="200" y="36" font-family="'JetBrains Mono'" font-size="6.5" fill="#14b8a6" text-anchor="middle">K8s Cluster</text>
+
+          <!-- Pods -->
+          <rect x="155" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
+          <text x="169" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
+          <rect x="190" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
+          <text x="204" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
+          <rect x="225" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
+          <text x="239" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
+
+          <!-- HPA label -->
+          <rect x="155" y="72" width="98" height="14" rx="2" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="0.7"/>
+          <text x="204" y="82" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">HPA · Service Mesh · Ingress</text>
+
+          <!-- Observability -->
+          <rect x="155" y="94" width="98" height="12" rx="2" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="0.7"/>
+          <text x="204" y="103" font-family="'JetBrains Mono'" font-size="5.5" fill="#93c5fd" text-anchor="middle">OTEL · Prometheus · Grafana</text>
+
+          <!-- 12 factor label -->
+          <text x="95" y="112" font-family="'JetBrains Mono'" font-size="6" fill="#334155" text-anchor="middle">12-Factor · GitOps · IaC (Terraform)</text>
+        </svg>
+      </div>
+      <div class="c-tags">
+        <span class="c-tag">Kubernetes</span><span class="c-tag">GitOps</span>
+        <span class="c-tag">Helm</span><span class="c-tag">Terraform</span><span class="c-tag">12-Factor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 4: CROSS-CUTTING ═══════════════════ -->
+<section class="section reveal" id="part4">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 04</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Concerns Transversales</div>
+      <h2 class="sec-title"><span class="hl">Cross-Cutting</span> Concerns</h2>
+      <p class="sec-desc">Preocupaciones que afectan a todos los componentes, independientemente del dominio funcional.</p>
+    </div>
+  </div>
+
+  <div class="cc-grid">
+    <!-- Seguridad -->
+    <div class="cc-block open reveal" id="cc-sec">
+      <div class="cc-header" onclick="toggleCC('cc-sec')">
+        <span class="cc-ico">🔒</span>
+        <span class="cc-hname">Seguridad</span>
+        <span class="cc-chevron">▼</span>
+      </div>
+      <div class="cc-body-wrap">
+        <div class="cc-inner">
+          <p class="cc-desc">La seguridad arquitectónica no es un feature — es una propiedad emergente del diseño. <strong>Defense in Depth</strong> establece múltiples capas de control para que el fallo de una no comprometa el sistema.</p>
+          <!-- Security diagram -->
+          <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
+            <!-- Concentric zones -->
+            <ellipse cx="120" cy="40" rx="115" ry="36" fill="none" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.4"/>
+            <ellipse cx="120" cy="40" rx="85" ry="26" fill="none" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.5"/>
+            <ellipse cx="120" cy="40" rx="55" ry="17" fill="none" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.7"/>
+            <ellipse cx="120" cy="40" rx="28" ry="10" fill="rgba(244,63,94,0.15)" stroke="#f43f5e" stroke-width="1.2"/>
+            <text x="120" y="43" font-family="'JetBrains Mono'" font-size="6" fill="#fca5a5" text-anchor="middle">Data</text>
+            <text x="120" y="20" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" text-anchor="middle" opacity="0.6">App Security</text>
+            <text x="120" y="12" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" text-anchor="middle" opacity="0.4">Network</text>
+            <text x="120" y="5" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" text-anchor="middle" opacity="0.3">Perimeter</text>
+          </svg>
+          <div class="cc-pillars">
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>Zero Trust: never trust, always verify</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>IAM · OAuth 2.0 / OIDC · RBAC</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>Secrets Management (Vault)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>mTLS entre microservicios</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>SAST / DAST / SCA en CI/CD</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>Threat Modeling (STRIDE)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Observabilidad -->
+    <div class="cc-block open reveal" id="cc-obs">
+      <div class="cc-header" onclick="toggleCC('cc-obs')">
+        <span class="cc-ico">📡</span>
+        <span class="cc-hname">Observabilidad</span>
+        <span class="cc-chevron">▼</span>
+      </div>
+      <div class="cc-body-wrap">
+        <div class="cc-inner">
+          <p class="cc-desc">Un sistema observable permite entender su estado interno desde salidas externas. Los <strong>Three Pillars</strong>: Logs, Metrics y Traces — pero la observabilidad real requiere correlacionarlos para entender el comportamiento emergente.</p>
+          <!-- Three pillars diagram -->
+          <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
+            <rect x="5" y="15" width="68" height="50" rx="4" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
+            <text x="39" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle">Metrics</text>
+            <text x="39" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#3b82f6" text-anchor="middle">Prometheus</text>
+            <text x="39" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#3b82f6" text-anchor="middle">Grafana</text>
+            <rect x="87" y="15" width="68" height="50" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+            <text x="121" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#67e8f9" text-anchor="middle">Traces</text>
+            <text x="121" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Jaeger</text>
+            <text x="121" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Zipkin</text>
+            <rect x="169" y="15" width="68" height="50" rx="4" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="1"/>
+            <text x="203" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Logs</text>
+            <text x="203" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">ELK Stack</text>
+            <text x="203" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">Loki</text>
+            <!-- OTEL unifier -->
+            <rect x="60" y="72" width="118" height="8" rx="2" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="0.8"/>
+            <text x="119" y="79" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">OpenTelemetry (OTEL)</text>
+            <line x1="39" y1="65" x2="90" y2="76" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
+            <line x1="121" y1="65" x2="121" y2="72" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
+            <line x1="203" y1="65" x2="150" y2="76" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
+          </svg>
+          <div class="cc-pillars">
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>Distributed Tracing (request → response)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>Métricas RED: Rate · Errors · Duration</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>Logging estructurado (JSON + correlation ID)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>SLOs / SLIs / Error Budgets</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resiliencia -->
+    <div class="cc-block open reveal" id="cc-res">
+      <div class="cc-header" onclick="toggleCC('cc-res')">
+        <span class="cc-ico">🛡</span>
+        <span class="cc-hname">Resiliencia</span>
+        <span class="cc-chevron">▼</span>
+      </div>
+      <div class="cc-body-wrap">
+        <div class="cc-inner">
+          <p class="cc-desc">En sistemas distribuidos el fallo es la norma. El diseño debe asumir que las dependencias fallarán. Circuit Breaker, Bulkhead y Retry con jitter son los patrones fundamentales.</p>
+          <!-- Circuit Breaker diagram -->
+          <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
+            <!-- States -->
+            <circle cx="40" cy="40" r="30" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
+            <text x="40" y="37" font-family="'JetBrains Mono'" font-size="7.5" fill="#86efac" text-anchor="middle">CLOSED</text>
+            <text x="40" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#22c55e" text-anchor="middle">Normal</text>
+            <circle cx="120" cy="40" r="30" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="120" y="37" font-family="'JetBrains Mono'" font-size="7.5" fill="#fca5a5" text-anchor="middle">OPEN</text>
+            <text x="120" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#ef4444" text-anchor="middle">Fail fast</text>
+            <circle cx="200" cy="40" r="30" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="200" y="34" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">HALF</text>
+            <text x="200" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">OPEN</text>
+            <text x="200" y="54" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">Probing</text>
+            <!-- Transition arrows -->
+            <path d="M70 30 Q95 15 110 28" stroke="#ef4444" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
+            <text x="90" y="14" font-family="'JetBrains Mono'" font-size="5" fill="#ef4444">failures</text>
+            <path d="M150 30 Q175 15 190 28" stroke="#f59e0b" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
+            <text x="168" y="15" font-family="'JetBrains Mono'" font-size="5" fill="#f59e0b">timeout</text>
+            <path d="M190 52 Q165 70 130 52" stroke="#22c55e" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrG)"/>
+            <text x="158" y="74" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e">success</text>
+          </svg>
+          <div class="cc-pillars">
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Circuit Breaker (Resilience4j)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Bulkhead: aislar pools de recursos</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Retry + Exponential Backoff + Jitter</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Chaos Engineering (Netflix Simian Army)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Health checks · Readiness probes · Liveness</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 5: AI ARCHITECTURES ═══════════════════ -->
+<section class="section reveal" id="part5">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 05</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Inteligencia Artificial en Sistemas</div>
+      <h2 class="sec-title">Arquitecturas <span class="hl">de AI</span></h2>
+      <p class="sec-desc">Los nuevos paradigmas que emergen al integrar modelos de lenguaje y razonamiento en sistemas de producción.</p>
+    </div>
+  </div>
+
+  <div class="ai-tabs">
+    <button class="ai-tab active" data-ai="rag">🔍 RAG</button>
+    <button class="ai-tab" data-ai="agent">🤖 AI Agents</button>
+    <button class="ai-tab" data-ai="multi">🕸 Multi-Agent Systems</button>
+  </div>
+
+  <!-- RAG Panel -->
+  <div class="ai-panel active" id="ai-rag">
+    <div class="ai-info">
+      <div class="ai-name">RAG</div>
+      <div class="ai-full">Retrieval-Augmented Generation</div>
+      <p class="ai-desc">RAG combina la capacidad generativa de un LLM con recuperación dinámica de información de fuentes externas. En lugar de depender del conocimiento pre-entrenado, el modelo recibe contexto relevante recuperado en tiempo real.</p>
+      <p class="ai-desc" style="margin-top:0.8rem">El pipeline convierte el query del usuario en un embedding vectorial → busca documentos similares en un vector store → inyecta los documentos como contexto en el prompt → el LLM genera una respuesta fundamentada y citable.</p>
+      <div class="ai-steps">
+        <div class="ai-step"><span class="ai-step-n">01</span><span>Query del usuario → Embedding vectorial</span></div>
+        <div class="ai-step"><span class="ai-step-n">02</span><span>Búsqueda semántica en Vector DB (cosine similarity)</span></div>
+        <div class="ai-step"><span class="ai-step-n">03</span><span>Re-ranking de documentos recuperados</span></div>
+        <div class="ai-step"><span class="ai-step-n">04</span><span>Context injection en el prompt del LLM</span></div>
+        <div class="ai-step"><span class="ai-step-n">05</span><span>LLM genera respuesta fundamentada + citas</span></div>
+      </div>
+    </div>
+    <div class="ai-diagram-wrap">
+      <svg viewBox="0 0 360 320" fill="none">
+        <!-- User -->
+        <rect x="130" y="10" width="100" height="32" rx="5" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="180" y="30" font-family="'Outfit'" font-size="11" fill="#93c5fd" text-anchor="middle" font-weight="600">User Query</text>
+        <path d="M180 42 L180 62" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Embedding -->
+        <rect x="80" y="64" width="200" height="32" rx="5" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="180" y="84" font-family="'JetBrains Mono'" font-size="8.5" fill="#c4b5fd" text-anchor="middle">Embedding Model</text>
+        <path d="M180 96 L180 116" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Vector search -->
+        <rect x="60" y="118" width="240" height="50" rx="5" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="180" y="139" font-family="'Outfit'" font-size="11" fill="#67e8f9" text-anchor="middle" font-weight="700">Vector Store</text>
+        <text x="180" y="157" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Pinecone · pgvector · Weaviate · Qdrant</text>
+
+        <!-- Retrieved docs -->
+        <path d="M180 168 L180 188" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="30" y="190" width="100" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
+        <text x="80" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 1</text>
+        <rect x="145" y="190" width="100" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
+        <text x="195" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 2</text>
+        <rect x="260" y="190" width="90" height="26" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8"/>
+        <text x="305" y="207" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Doc chunk 3</text>
+
+        <!-- Merge to LLM -->
+        <path d="M80 216 L160 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M195 216 L185 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
+        <path d="M305 216 L210 240" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5"/>
+
+        <!-- LLM -->
+        <rect x="80" y="242" width="200" height="42" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="180" y="260" font-family="'Outfit'" font-size="12" fill="#fcd34d" text-anchor="middle" font-weight="700">LLM</text>
+        <text x="180" y="277" font-family="'JetBrains Mono'" font-size="7" fill="#f59e0b" text-anchor="middle">Context + Query → Grounded Response</text>
+
+        <!-- Output -->
+        <path d="M180 284 L180 304" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <rect x="100" y="306" width="160" height="12" rx="3" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="0.8"/>
+        <text x="180" y="315.5" font-family="'JetBrains Mono'" font-size="6.5" fill="#86efac" text-anchor="middle">Cited · Grounded · Up-to-date Response</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- AI Agent Panel -->
+  <div class="ai-panel" id="ai-agent">
+    <div class="ai-info">
+      <div class="ai-name">AI Agents</div>
+      <div class="ai-full">Autonomous Reasoning & Acting Systems</div>
+      <p class="ai-desc">Un AI agent es un sistema que usa un LLM como motor de razonamiento para planificar y ejecutar acciones de forma autónoma. Opera en el ciclo <strong style="color:var(--blue)">Observe → Think → Act → Observe...</strong></p>
+      <p class="ai-desc" style="margin-top:0.8rem">Los agentes tienen acceso a <em>tools</em> (funciones, APIs, buscadores) y pueden mantener memoria a corto y largo plazo. El framework <strong style="color:var(--cyan)">ReAct</strong> formaliza el patrón de razonamiento encadenado con acciones.</p>
+      <div class="ai-steps">
+        <div class="ai-step"><span class="ai-step-n">01</span><span>Goal ingestion + context loading (memory)</span></div>
+        <div class="ai-step"><span class="ai-step-n">02</span><span>LLM Reasoning: planificar pasos y seleccionar herramienta</span></div>
+        <div class="ai-step"><span class="ai-step-n">03</span><span>Tool execution: API call, web search, code execution</span></div>
+        <div class="ai-step"><span class="ai-step-n">04</span><span>Observation: parsear resultado de la herramienta</span></div>
+        <div class="ai-step"><span class="ai-step-n">05</span><span>Replanning o entrega del resultado final</span></div>
+      </div>
+    </div>
+    <div class="ai-diagram-wrap">
+      <svg viewBox="0 0 340 320" fill="none">
+        <!-- Goal input -->
+        <rect x="110" y="8" width="120" height="28" rx="4" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="170" y="26" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Goal / Task</text>
+        <path d="M170 36 L170 56" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- LLM Core -->
+        <rect x="50" y="58" width="240" height="80" rx="6" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="2"/>
+        <text x="170" y="82" font-family="'Outfit'" font-size="13" fill="#fcd34d" text-anchor="middle" font-weight="800">LLM Reasoner</text>
+        <text x="170" y="100" font-family="'JetBrains Mono'" font-size="7.5" fill="#f59e0b" text-anchor="middle">Observe → Think → Plan → Act</text>
+        <!-- Memory + context inside -->
+        <rect x="65" y="108" width="70" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
+        <text x="100" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Short Memory</text>
+        <rect x="145" y="108" width="70" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
+        <text x="180" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Long Memory</text>
+        <rect x="225" y="108" width="55" height="18" rx="3" fill="rgba(245,158,11,0.1)"/>
+        <text x="252" y="121" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">Context</text>
+
+        <!-- Tool selection arrow -->
+        <path d="M170 138 L170 162" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4 2" marker-end="url(#arrowBlue)"/>
+        <text x="183" y="155" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b">tool_call</text>
+
+        <!-- Tools row -->
+        <rect x="15" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="45" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Web Search</text>
+        <rect x="85" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="115" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Code Exec</text>
+        <rect x="155" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="185" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">DB Query</text>
+        <rect x="225" y="164" width="60" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="255" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">API Call</text>
+        <rect x="295" y="164" width="36" height="28" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1"/>
+        <text x="313" y="182" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">...</text>
+
+        <!-- Observation return -->
+        <path d="M170 192 L170 214" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+        <text x="183" y="207" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4">observation</text>
+
+        <!-- Re-plan or finish -->
+        <rect x="70" y="216" width="200" height="28" rx="4" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1"/>
+        <text x="170" y="234" font-family="'Outfit'" font-size="10" fill="#86efac" text-anchor="middle" font-weight="600">Re-plan? → Loop / Finish → Response</text>
+
+        <!-- Guardrails -->
+        <rect x="15" y="258" width="310" height="20" rx="3" fill="rgba(244,63,94,0.06)" stroke="#f43f5e" stroke-width="0.8" stroke-dasharray="3 2"/>
+        <text x="170" y="272" font-family="'JetBrains Mono'" font-size="6.5" fill="#f43f5e" text-anchor="middle">Guardrails: max iterations · content safety · human-in-the-loop</text>
+
+        <!-- Frameworks -->
+        <text x="170" y="300" font-family="'JetBrains Mono'" font-size="7" fill="#334155" text-anchor="middle">LangChain · LlamaIndex · AutoGen · CrewAI · Claude MCP</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Multi-Agent Panel -->
+  <div class="ai-panel" id="ai-multi">
+    <div class="ai-info">
+      <div class="ai-name">Multi-Agent Systems</div>
+      <div class="ai-full">Collaborative AI Networks</div>
+      <p class="ai-desc">Los sistemas multi-agente coordinan múltiples agentes especializados para resolver problemas que un agente único no puede abordar eficientemente. Cada agente tiene rol, habilidades y responsabilidades específicas.</p>
+      <p class="ai-desc" style="margin-top:0.8rem">Dos topologías: <strong style="color:var(--blue)">Orquestación</strong> (supervisor coordina a los agentes) y <strong style="color:var(--cyan)">Coreografía</strong> (agentes autónomos se comunican directamente). El protocolo <strong style="color:var(--amber)">MCP</strong> emerge como estándar de interoperabilidad.</p>
+      <div class="ai-steps">
+        <div class="ai-step"><span class="ai-step-n">01</span><span>Orchestrator recibe goal y descompone en subtareas</span></div>
+        <div class="ai-step"><span class="ai-step-n">02</span><span>Delegación a agentes especializados (researcher, coder, writer...)</span></div>
+        <div class="ai-step"><span class="ai-step-n">03</span><span>Agentes ejecutan en paralelo con acceso a tools propios</span></div>
+        <div class="ai-step"><span class="ai-step-n">04</span><span>Resultados se consolidan y revisan (critic agent)</span></div>
+        <div class="ai-step"><span class="ai-step-n">05</span><span>Orchestrator sintetiza output final</span></div>
+      </div>
+    </div>
+    <div class="ai-diagram-wrap">
+      <svg viewBox="0 0 340 300" fill="none">
+        <!-- User -->
+        <rect x="120" y="8" width="100" height="26" rx="4" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.2"/>
+        <text x="170" y="25" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Complex Goal</text>
+
+        <path d="M170 34 L170 52" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Orchestrator -->
+        <rect x="90" y="54" width="160" height="36" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="2"/>
+        <text x="170" y="70" font-family="'Outfit'" font-size="11" fill="#fcd34d" text-anchor="middle" font-weight="700">Orchestrator Agent</text>
+        <text x="170" y="83" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">decompose · delegate · coordinate</text>
+
+        <!-- Fan out arrows -->
+        <path d="M130 90 L80 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M155 90 L148 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M185 90 L215 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+        <path d="M215 90 L282 120" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowBlue)"/>
+
+        <!-- Specialist agents -->
+        <rect x="30" y="122" width="95" height="34" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
+        <text x="77" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#67e8f9" text-anchor="middle">🔍 Researcher</text>
+        <text x="77" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">web · RAG · docs</text>
+
+        <rect x="133" y="122" width="72" height="34" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
+        <text x="169" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#c4b5fd" text-anchor="middle">💻 Coder</text>
+        <text x="169" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#8b5cf6" text-anchor="middle">write · run · fix</text>
+
+        <rect x="213" y="122" width="72" height="34" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+        <text x="249" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">✍ Writer</text>
+        <text x="249" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">draft · format</text>
+
+        <rect x="285" y="122" width="50" height="34" rx="4" fill="rgba(244,63,94,0.1)" stroke="#f43f5e" stroke-width="1.2"/>
+        <text x="310" y="137" font-family="'JetBrains Mono'" font-size="7.5" fill="#fca5a5" text-anchor="middle">👁 Critic</text>
+        <text x="310" y="150" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">review</text>
+
+        <!-- Results up to consolidator -->
+        <path d="M77 156 L130 186" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+        <path d="M169 156 L168 186" stroke="#8b5cf6" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+        <path d="M249 156 L210 186" stroke="#14b8a6" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+        <path d="M310 156 L232 186" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+
+        <!-- Shared memory / context -->
+        <rect x="40" y="188" width="265" height="26" rx="4" fill="rgba(99,102,241,0.08)" stroke="#6366f1" stroke-width="1"/>
+        <text x="172" y="205" font-family="'Outfit'" font-size="10" fill="#a5b4fc" text-anchor="middle" font-weight="600">Shared Memory / Context Store</text>
+
+        <path d="M172 214 L172 232" stroke="#6366f1" stroke-width="1.2" marker-end="url(#arrowBlue)"/>
+
+        <!-- Final synthesis -->
+        <rect x="90" y="234" width="160" height="30" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
+        <text x="170" y="253" font-family="'Outfit'" font-size="11" fill="#86efac" text-anchor="middle" font-weight="600">Final Synthesis → Output</text>
+
+        <!-- MCP label -->
+        <rect x="15" y="274" width="310" height="18" rx="3" fill="rgba(245,158,11,0.06)" stroke="#f59e0b" stroke-width="0.7" stroke-dasharray="2 2"/>
+        <text x="170" y="286" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">MCP Protocol · CrewAI · AutoGen · LangGraph</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 6: FUTURO ═══════════════════ -->
+<section class="section reveal" id="part6">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 06</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Horizonte 2025–2030</div>
+      <h2 class="sec-title">El <span class="hl">Futuro</span> de la Arquitectura</h2>
+      <p class="sec-desc">Los paradigmas emergentes que redefinen los límites entre software, inteligencia artificial y sistemas autónomos.</p>
+    </div>
+  </div>
+
+  <div class="future-split">
+    <!-- Autonomous Systems -->
+    <div class="f-card reveal">
+      <div class="f-badge em">EMERGENTE</div>
+      <div class="f-title">Sistemas Autónomos</div>
+      <p class="f-body">Los sistemas autónomos perciben su entorno, razonan sobre él y actúan con mínima intervención humana. En software empresarial: sistemas que se autoconfiguran, autosanan y autoescalan.</p>
+      <p class="f-body" style="margin-top:0.8rem">El framework <strong style="color:var(--amber)">MAPE-K</strong> (Monitor, Analyze, Plan, Execute sobre una Knowledge base) es el modelo conceptual. Kubernetes con operadores personalizados es el ejemplo más maduro en producción hoy.</p>
+      <!-- MAPE-K diagram -->
+      <div class="f-svg">
+        <svg viewBox="0 0 300 130" fill="none">
+          <!-- Center K -->
+          <rect x="115" y="42" width="70" height="46" rx="5" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="150" y="60" font-family="'Outfit'" font-size="11" fill="#fcd34d" text-anchor="middle" font-weight="700">Knowledge</text>
+          <text x="150" y="76" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">System State</text>
+          <text x="150" y="86" font-family="'JetBrains Mono'" font-size="6.5" fill="#f59e0b" text-anchor="middle">& Policies</text>
+
+          <!-- M -->
+          <rect x="10" y="5" width="70" height="32" rx="4" fill="rgba(59,130,246,0.1)" stroke="#3b82f6" stroke-width="1.2"/>
+          <text x="45" y="25" font-family="'Outfit'" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="600">Monitor</text>
+
+          <!-- A -->
+          <rect x="220" y="5" width="70" height="32" rx="4" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.2"/>
+          <text x="255" y="25" font-family="'Outfit'" font-size="10" fill="#c4b5fd" text-anchor="middle" font-weight="600">Analyze</text>
+
+          <!-- P -->
+          <rect x="220" y="93" width="70" height="32" rx="4" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
+          <text x="255" y="113" font-family="'Outfit'" font-size="10" fill="#67e8f9" text-anchor="middle" font-weight="600">Plan</text>
+
+          <!-- E -->
+          <rect x="10" y="93" width="70" height="32" rx="4" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.2"/>
+          <text x="45" y="113" font-family="'Outfit'" font-size="10" fill="#86efac" text-anchor="middle" font-weight="600">Execute</text>
+
+          <!-- Circular arrows -->
+          <path d="M80 21 L115 52" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+          <path d="M185 52 L220 21" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+          <path d="M185 78 L220 109" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrowBlue)"/>
+          <path d="M115 78 L80 109" stroke="#22c55e" stroke-width="1" stroke-opacity="0.5" marker-end="url(#arrG)"/>
+
+          <!-- Managed System below -->
+          <rect x="60" y="120" width="180" height="10" rx="2" fill="rgba(255,255,255,0.03)" stroke="#334155" stroke-width="0.8"/>
+          <text x="150" y="128.5" font-family="'JetBrains Mono'" font-size="6" fill="#64748b" text-anchor="middle">Managed System (K8s · Cloud · App)</text>
+        </svg>
+      </div>
+      <ul class="f-list">
+        <li>Self-healing: detección y remediación automática de fallos</li>
+        <li>Self-scaling: elasticidad predictiva basada en modelos ML</li>
+        <li>Self-configuring: ajuste dinámico de parámetros operacionales</li>
+        <li>Reinforcement Learning para optimización de infraestructura</li>
+      </ul>
+    </div>
+
+    <!-- AI-Native Architectures -->
+    <div class="f-card reveal">
+      <div class="f-badge dis">DISRUPTIVO</div>
+      <div class="f-title">AI-Native Architectures</div>
+      <p class="f-body">Las arquitecturas AI-native no añaden AI como feature — son sistemas donde el LLM es el componente fundamental de control y decisión. La lógica de negocio emerge de instrucciones en lenguaje natural interpretadas dinámicamente.</p>
+      <p class="f-body" style="margin-top:0.8rem">El concepto de <em>función determinística</em> se reemplaza por <em>razonamiento probabilístico</em>. Los patrones <strong style="color:var(--violet)">LLM-as-runtime</strong>, <strong style="color:var(--cyan)">prompt-as-contract</strong> y <strong style="color:var(--amber)">evals-as-CI/CD</strong> son los nuevos fundamentos del desarrollo.</p>
+      <!-- AI-Native stack diagram -->
+      <div class="f-svg">
+        <svg viewBox="0 0 300 130" fill="none">
+          <!-- Stack layers top to bottom -->
+          <rect x="10" y="8" width="280" height="20" rx="3" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="150" y="22" font-family="'JetBrains Mono'" font-size="7.5" fill="#c4b5fd" text-anchor="middle">Natural Language Interface</text>
+
+          <rect x="10" y="32" width="280" height="20" rx="3" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="150" y="46" font-family="'Outfit'" font-size="9" fill="#fcd34d" text-anchor="middle" font-weight="700">LLM Reasoning Engine (Orchestrator)</text>
+
+          <rect x="10" y="56" width="135" height="20" rx="3" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+          <text x="77" y="70" font-family="'JetBrains Mono'" font-size="7" fill="#67e8f9" text-anchor="middle">Tool & Agent Layer</text>
+          <rect x="152" y="56" width="138" height="20" rx="3" fill="rgba(99,102,241,0.08)" stroke="#6366f1" stroke-width="1"/>
+          <text x="221" y="70" font-family="'JetBrains Mono'" font-size="7" fill="#a5b4fc" text-anchor="middle">Memory & Context</text>
+
+          <rect x="10" y="80" width="85" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
+          <text x="52" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Vector Store</text>
+          <rect x="100" y="80" width="85" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
+          <text x="142" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Traditional DB</text>
+          <rect x="190" y="80" width="100" height="18" rx="3" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="0.8"/>
+          <text x="240" y="93" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">External APIs/Tools</text>
+
+          <!-- Eval pipeline at bottom -->
+          <rect x="10" y="104" width="135" height="18" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="0.8"/>
+          <text x="77" y="116.5" font-family="'JetBrains Mono'" font-size="6" fill="#fca5a5" text-anchor="middle">Evals Pipeline (QA for AI)</text>
+          <rect x="152" y="104" width="138" height="18" rx="3" fill="rgba(34,197,94,0.07)" stroke="#22c55e" stroke-width="0.8"/>
+          <text x="221" y="116.5" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">AI Governance & Observability</text>
+        </svg>
+      </div>
+      <ul class="f-list">
+        <li>Prompt engineering como especificación formal de comportamiento</li>
+        <li>Agent Graphs: flujos de trabajo adaptativos y dinámicos</li>
+        <li>Evals como pipeline de QA: medir comportamiento del LLM</li>
+        <li>Fine-tuning para especialización de dominio (RLHF, LoRA)</li>
+        <li>AI Governance: trazabilidad, explicabilidad y bias auditing</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;align-items:center;gap:0.6rem">
+    <span class="footer-dot"></span>
+    <span>Arquitectura de Software — Guía Interactiva</span>
+  </div>
+  <span>6 Partes · 18 Tópicos · GitHub Pages Ready</span>
+</footer>
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+/* ── Background particle canvas ── */
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], lines = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function initParticles() {
+    particles = [];
+    const count = Math.floor((W * H) / 22000);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: randBetween(1, 2.5),
+        vx: randBetween(-0.15, 0.15),
+        vy: randBetween(-0.15, 0.15),
+        alpha: randBetween(0.1, 0.5),
+        color: ['#3b82f6','#06b6d4','#14b8a6','#8b5cf6','#f59e0b'][Math.floor(Math.random()*5)]
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // Draw connection lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.strokeStyle = particles[i].color;
+          ctx.globalAlpha = (1 - dist/120) * 0.12;
+          ctx.lineWidth = 0.5;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    // Draw particles
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+  resize(); initParticles(); draw();
+})();
+
+/* ── Progress bar ── */
+window.addEventListener('scroll', () => {
+  const st = window.scrollY;
+  const totalH = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (st / totalH * 100) + '%';
+});
+
+/* ── Active nav link on scroll ── */
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => observer.observe(s));
+
+/* ── Scroll reveal ── */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.style.transitionDelay = (i % 3 * 0.1) + 's';
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── QA bars animation ── */
+const qaObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.qa-fill').forEach(bar => {
+        bar.style.width = bar.dataset.target + '%';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+const qaCard = document.getElementById('qa-card');
+if (qaCard) qaObserver.observe(qaCard);
+
+/* ── Evolution tabs ── */
+document.querySelectorAll('.evo-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.evo-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.evo-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.getElementById('tab-' + tab.dataset.tab);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+/* ── AI tabs ── */
+document.querySelectorAll('.ai-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.ai-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.ai-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.getElementById('ai-' + tab.dataset.ai);
+    if (panel) panel.classList.add('active');
+  });
+});
+
+/* ── Accordion ── */
+function toggleCC(id) {
+  const block = document.getElementById(id);
+  block.classList.toggle('open');
+}
+
+/* ── SVG path draw on scroll ── */
+const pathObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.flow-path').forEach((path, i) => {
+        setTimeout(() => path.classList.add('animate'), i * 200);
+      });
+      e.target.querySelectorAll('.node-appear').forEach((node, i) => {
+        setTimeout(() => node.classList.add('animate'), i * 100);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.evo-diagram, .ai-diagram-wrap, .f-svg, .c-svg').forEach(el => pathObserver.observe(el));
+</script>
+</body>
+</html>
