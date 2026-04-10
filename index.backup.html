@@ -104,10 +104,10 @@ nav {
 }
 .theme-btn:hover { background: var(--surface); color: var(--text); border-color: var(--border); }
 .theme-btn svg { width: 16px; height: 16px; }
-.theme-btn .icon-sun { display: block; }
-.theme-btn .icon-moon { display: none; }
-[data-theme="light"] .theme-btn .icon-sun { display: none; }
-[data-theme="light"] .theme-btn .icon-moon { display: block; }
+.theme-btn .icon-sun { display: none; }
+.theme-btn .icon-moon { display: block; }
+[data-theme="light"] .theme-btn .icon-sun { display: block; }
+[data-theme="light"] .theme-btn .icon-moon { display: none; }
 .nav-brand {
   font-weight: 800; font-size: 0.9rem;
   letter-spacing: 0.05em;
@@ -796,140 +796,6 @@ footer {
 [data-theme="light"] .qa10-row { background: var(--surface2); }
 [data-theme="light"] .qa10-pill { background: var(--surface2); }
 [data-theme="light"] .qa-central { background: var(--surface); }
-
-/* ─────────────────────────────────────────────
-   DATA ARCHITECTURE — PARTE 05
-───────────────────────────────────────────── */
-.data-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-.db-card {
-  border: 1px solid var(--border2);
-  border-radius: var(--r);
-  padding: 1.8rem;
-  background: var(--surface);
-  position: relative; overflow: hidden;
-  transition: border-color 0.3s, transform 0.2s;
-}
-.db-card::before {
-  content: '';
-  position: absolute; top: -40px; right: -40px;
-  width: 120px; height: 120px; border-radius: 50%;
-  background: var(--db-color, #3b82f6);
-  opacity: 0.05;
-}
-.db-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--db-color, #3b82f6) 45%, transparent);
-}
-.db-num {
-  font-family: var(--mono); font-size: 0.6rem;
-  color: var(--db-color, #3b82f6); letter-spacing: 0.1em;
-  margin-bottom: 0.4rem; opacity: 0.75;
-}
-.db-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.db-title {
-  font-size: 1.1rem; font-weight: 800;
-  margin-bottom: 0.3rem; letter-spacing: -0.01em;
-  color: var(--text);
-}
-.db-examples {
-  font-family: var(--mono); font-size: 0.68rem;
-  color: var(--db-color, #3b82f6);
-  margin-bottom: 0.7rem; letter-spacing: 0.04em;
-}
-.db-use {
-  font-size: 0.83rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem;
-}
-.db-diagram { margin-bottom: 1rem; }
-.db-diagram svg { width: 100%; }
-.db-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-.db-tag {
-  font-family: var(--mono); font-size: 0.6rem; padding: 0.2rem 0.55rem;
-  background: color-mix(in srgb, var(--db-color, #3b82f6) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--db-color, #3b82f6) 25%, transparent);
-  border-radius: 3px;
-  color: var(--db-color, #3b82f6); letter-spacing: 0.04em;
-}
-
-/* Comparison table */
-.data-compare {
-  border: 1px solid var(--border2); border-radius: var(--r);
-  overflow: hidden; background: var(--surface);
-}
-.data-compare-head {
-  display: grid; grid-template-columns: 1.4fr 1fr 1.6fr 1fr;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border2);
-  padding: 0.9rem 1.5rem;
-  font-family: var(--mono); font-size: 0.68rem;
-  letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase;
-}
-.data-compare-row {
-  display: grid; grid-template-columns: 1.4fr 1fr 1.6fr 1fr;
-  padding: 0.85rem 1.5rem;
-  border-bottom: 1px solid var(--border2);
-  align-items: center;
-  transition: background 0.2s;
-}
-.data-compare-row:last-child { border-bottom: none; }
-.data-compare-row:hover { background: var(--surface2); }
-.data-compare-row .tipo {
-  font-weight: 700; font-size: 0.88rem; color: var(--text);
-  display: flex; align-items: center; gap: 0.5rem;
-}
-.data-compare-row .ejemplos {
-  font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
-}
-.data-compare-row .uso {
-  font-size: 0.83rem; color: var(--muted);
-}
-.data-compare-row .diagrama-info {
-  font-family: var(--mono); font-size: 0.68rem; color: var(--blue);
-}
-.compare-badge {
-  font-family: var(--mono); font-size: 0.58rem; padding: 0.15rem 0.45rem;
-  border-radius: 3px; letter-spacing: 0.04em;
-}
-
-@media (max-width: 960px) {
-  .data-compare-head,
-  .data-compare-row { grid-template-columns: 1fr 1fr; gap: 0.3rem 1rem; }
-  .data-compare-head span:nth-child(n+3),
-  .data-compare-row > *:nth-child(n+3) { display: none; }
-}
-
-[data-theme="light"] .db-card { background: var(--surface); box-shadow: 0 1px 3px rgba(15,23,42,0.06); }
-[data-theme="light"] .data-compare { background: var(--surface); }
-[data-theme="light"] .data-compare-head { background: var(--surface2); }
-[data-theme="light"] .data-compare-row:hover { background: var(--surface2); }
-
-/* ─────────────────────────────────────────────
-   CROSS-CUTTING GROUPS
-───────────────────────────────────────────── */
-.cc-group-section { margin-bottom: 2.5rem; }
-.cc-group-section:last-child { margin-bottom: 0; }
-.cc-group-label-row {
-  display: flex; align-items: center; gap: 0.8rem;
-  margin-bottom: 1.4rem;
-  padding: 0.65rem 1.2rem;
-  border-left: 3px solid var(--gc, var(--blue));
-  background: color-mix(in srgb, var(--gc, var(--blue)) 6%, transparent);
-  border-radius: 0 6px 6px 0;
-}
-.cc-group-icon-lg { font-size: 1.1rem; }
-.cc-group-name {
-  font-size: 0.9rem; font-weight: 800;
-  color: var(--gc, var(--blue)); letter-spacing: -0.01em;
-}
-.cc-group-topics {
-  font-family: var(--mono); font-size: 0.6rem;
-  color: var(--muted); letter-spacing: 0.06em; margin-left: auto;
-}
-[data-theme="light"] .cc-group-label-row { background: color-mix(in srgb, var(--gc, var(--blue)) 8%, transparent); }
 </style>
 </head>
 <body>
@@ -944,13 +810,13 @@ footer {
 <nav>
   <a href="#hero" class="nav-brand">ARCH.GUIDE</a>
   <ul class="nav-links">
-    <li><a href="#part1"><span class="nav-num">01</span> Fundamentals</a></li>
-    <li><a href="#part2"><span class="nav-num">02</span> Arch Styles</a></li>
-    <li><a href="#part5"><span class="nav-num">03</span> Quality Attrs</a></li>
-    <li><a href="#part4"><span class="nav-num">04</span> Cross-Cutting</a></li>
-    <li><a href="#part-data"><span class="nav-num">05</span> Data Arch</a></li>
-    <li><a href="#part3"><span class="nav-num">06</span> Cloud Arch</a></li>
-    <li><a href="#part6"><span class="nav-num">07</span> AI Arch</a></li>
+    <li><a href="#part1"><span class="nav-num">01</span> Fundamentos</a></li>
+    <li><a href="#part2"><span class="nav-num">02</span> Evolución</a></li>
+    <li><a href="#part3"><span class="nav-num">03</span> Cloud</a></li>
+    <li><a href="#part4"><span class="nav-num">04</span> Cross-cutting</a></li>
+    <li><a href="#part5"><span class="nav-num">05</span> Quality Attrs</a></li>
+    <li><a href="#part6"><span class="nav-num">06</span> AI Arch</a></li>
+    <li><a href="#part7"><span class="nav-num">07</span> Futuro</a></li>
   </ul>
   <button class="theme-btn" id="theme-toggle" aria-label="Toggle theme">
     <!-- Moon icon (shown in dark mode) -->
@@ -976,17 +842,7 @@ footer {
       <span class="g1">Arquitectura</span><br>
       <span class="g2">de Software</span>
     </h1>
-    <p class="hero-sub">Desde fundamentos hasta AI architectures. 7 capítulos, fundamentos, estilos, datos, cloud y más.</p>
-    <div style="display:flex;align-items:center;gap:1rem;margin-top:1.5rem;margin-bottom:0.5rem">
-      <span style="font-size:0.95rem;font-weight:700;color:var(--text)">Luis Carrión</span>
-      <a href="https://www.linkedin.com/in/luis-carrion-rumiche/" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:0.4rem;color:var(--blue);text-decoration:none;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.04em;border:1px solid rgba(59,130,246,0.3);border-radius:5px;padding:0.3rem 0.7rem;background:rgba(59,130,246,0.06);transition:all 0.2s"
-         onmouseover="this.style.background='rgba(59,130,246,0.12)';this.style.borderColor='rgba(59,130,246,0.6)'"
-         onmouseout="this.style.background='rgba(59,130,246,0.06)';this.style.borderColor='rgba(59,130,246,0.3)'">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        linkedin/luis-carrion-rumiche
-      </a>
-    </div>
+    <p class="hero-sub">Desde monolitos a sistemas autónomos impulsados por IA. 7 capítulos, 28 tópicos, diagramas interactivos.</p>
     <div class="hero-stats">
       <div><div class="stat-num">7</div><div class="stat-label">Partes</div></div>
       <div><div class="stat-num">28</div><div class="stat-label">Tópicos</div></div>
@@ -1134,7 +990,7 @@ footer {
     <div class="sec-num">PARTE 01</div>
     <div class="sec-title-wrap">
       <div class="sec-label">// Conceptos Esenciales</div>
-      <h2 class="sec-title"><span class="hl">Fundamentals</span> of Architecture</h2>
+      <h2 class="sec-title">Fundamentos de <span class="hl">Arquitectura</span></h2>
       <p class="sec-desc">Las bases conceptuales que todo arquitecto debe dominar antes de diseñar cualquier sistema.</p>
     </div>
   </div>
@@ -1258,8 +1114,8 @@ footer {
   <div class="sec-head">
     <div class="sec-num">PARTE 02</div>
     <div class="sec-title-wrap">
-      <div class="sec-label">// Monolith · Layered · SOA · Microservices</div>
-      <h2 class="sec-title"><span class="hl">Architecture</span> Styles</h2>
+      <div class="sec-label">// Historia & Patrones</div>
+      <h2 class="sec-title">Evolución de la <span class="hl">Arquitectura</span></h2>
       <p class="sec-desc">De monolitos a microservicios — cómo la industria respondió a los retos de escala, equipo y velocidad.</p>
     </div>
   </div>
@@ -1569,9 +1425,288 @@ footer {
 </section>
 
 <!-- ═══════════════════ PART 3: CLOUD ═══════════════════ -->
-<section class="section reveal" id="part5">
+<section class="section reveal" id="part3">
   <div class="sec-head">
     <div class="sec-num">PARTE 03</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Paradigmas Cloud</div>
+      <h2 class="sec-title">Arquitectura <span class="hl">Cloud Moderna</span></h2>
+      <p class="sec-desc">Paradigmas diseñados nativamente para entornos cloud que abrazan escala, elasticidad y resiliencia.</p>
+    </div>
+  </div>
+
+  <div class="cloud-trio">
+    <!-- Event-Driven -->
+    <div class="c-card eda reveal">
+      <div class="c-accent">// Event-Driven Architecture</div>
+      <div class="c-title">Arquitectura Orientada a Eventos</div>
+      <p class="c-body">Los sistemas EDA se construyen alrededor de la producción y reacción a eventos. Los productores emiten eventos sin conocer a los consumidores — desacoplamiento total en tiempo y espacio.</p>
+      <div class="c-svg">
+        <svg viewBox="0 0 260 120" fill="none">
+          <!-- Producer -->
+          <rect x="5" y="45" width="55" height="30" rx="4" fill="rgba(6,182,212,0.12)" stroke="#06b6d4" stroke-width="1"/>
+          <text x="32" y="64" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Producer</text>
+          <!-- Arrow -->
+          <path d="M60 60 L80 60" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arrowCyan)"/>
+          <!-- Event Bus -->
+          <rect x="82" y="30" width="96" height="60" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1.5"/>
+          <text x="130" y="57" font-family="'JetBrains Mono'" font-size="7" fill="#06b6d4" text-anchor="middle">Event</text>
+          <text x="130" y="69" font-family="'JetBrains Mono'" font-size="7" fill="#06b6d4" text-anchor="middle">Broker</text>
+          <text x="130" y="81" font-family="'JetBrains Mono'" font-size="6" fill="rgba(6,182,212,0.5)" text-anchor="middle">Kafka · Kinesis</text>
+          <!-- Fan out arrows -->
+          <path d="M178 45 L198 30" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
+          <path d="M178 60 L198 60" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
+          <path d="M178 75 L198 90" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
+          <!-- Consumers -->
+          <rect x="200" y="18" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
+          <text x="227" y="34" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer A</text>
+          <rect x="200" y="48" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
+          <text x="227" y="64" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer B</text>
+          <rect x="200" y="78" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
+          <text x="227" y="94" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer C</text>
+          <!-- CQRS label -->
+          <text x="130" y="112" font-family="'JetBrains Mono'" font-size="6" fill="#334155" text-anchor="middle">CQRS · Event Sourcing · Choreography</text>
+        </svg>
+      </div>
+      <div class="c-tags">
+        <span class="c-tag">Apache Kafka</span><span class="c-tag">Event Sourcing</span>
+        <span class="c-tag">CQRS</span><span class="c-tag">Pub/Sub</span>
+      </div>
+    </div>
+
+    <!-- Serverless -->
+    <div class="c-card srv reveal">
+      <div class="c-accent">// Function as a Service</div>
+      <div class="c-title">Arquitectura Serverless</div>
+      <p class="c-body">Abstrae completamente la infraestructura. El proveedor cloud gestiona el escalado y disponibilidad; se paga por ejecución. Ideal para cargas intermitentes y event-driven.</p>
+      <div class="c-svg">
+        <svg viewBox="0 0 260 120" fill="none">
+          <!-- Trigger sources -->
+          <rect x="5" y="10" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="30" y="24" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">HTTP Req</text>
+          <rect x="5" y="40" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="30" y="54" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">Schedule</text>
+          <rect x="5" y="70" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
+          <text x="30" y="84" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">S3 Event</text>
+
+          <!-- Arrows to fn -->
+          <path d="M55 21 L90 45" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M55 51 L90 55" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M55 81 L90 65" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+
+          <!-- Lambda fn -->
+          <rect x="90" y="30" width="80" height="50" rx="5" fill="rgba(139,92,246,0.14)" stroke="#8b5cf6" stroke-width="1.5"/>
+          <text x="130" y="50" font-family="'JetBrains Mono'" font-size="8" fill="#c4b5fd" text-anchor="middle">λ fn(event)</text>
+          <text x="130" y="65" font-family="'Outfit'" font-size="8" fill="rgba(196,181,253,0.5)" text-anchor="middle">stateless</text>
+          <text x="130" y="75" font-family="'JetBrains Mono'" font-size="6" fill="rgba(196,181,253,0.4)" text-anchor="middle">0 → ∞ instances</text>
+
+          <!-- Outputs -->
+          <path d="M170 50 L195 35" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M170 55 L195 65" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
+          <rect x="197" y="22" width="55" height="24" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
+          <text x="224" y="37" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">DynamoDB</text>
+          <rect x="197" y="52" width="55" height="24" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
+          <text x="224" y="67" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">SNS/SQS</text>
+
+          <!-- Cold start warning -->
+          <text x="130" y="104" font-family="'JetBrains Mono'" font-size="6" fill="#f59e0b" text-anchor="middle">⚡ Cold start latency ~100–500ms</text>
+        </svg>
+      </div>
+      <div class="c-tags">
+        <span class="c-tag">AWS Lambda</span><span class="c-tag">FaaS</span>
+        <span class="c-tag">Pay-per-exec</span><span class="c-tag">Step Functions</span>
+      </div>
+    </div>
+
+    <!-- Cloud Native -->
+    <div class="c-card cn reveal">
+      <div class="c-accent">// CNCF Principles</div>
+      <div class="c-title">Cloud-Native Architecture</div>
+      <p class="c-body">No es mover apps a la nube — es diseñar sistemas que explotan sus capacidades: elasticidad, automación y resiliencia desde el día uno. Contenedores, K8s, GitOps y observabilidad son fundamentos.</p>
+      <div class="c-svg">
+        <svg viewBox="0 0 260 120" fill="none">
+          <!-- Dev box -->
+          <rect x="5" y="48" width="40" height="24" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1"/>
+          <text x="25" y="63" font-family="'JetBrains Mono'" font-size="6.5" fill="#5eead4" text-anchor="middle">Dev</text>
+
+          <!-- git push -->
+          <path d="M45 60 L65 60" stroke="#14b8a6" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="55" y="55" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">git push</text>
+
+          <!-- CI/CD -->
+          <rect x="67" y="38" width="56" height="44" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
+          <text x="95" y="57" font-family="'JetBrains Mono'" font-size="6.5" fill="#5eead4" text-anchor="middle">CI/CD</text>
+          <text x="95" y="69" font-family="'JetBrains Mono'" font-size="5.5" fill="rgba(94,234,212,0.5)" text-anchor="middle">build·test</text>
+          <text x="95" y="78" font-family="'JetBrains Mono'" font-size="5.5" fill="rgba(94,234,212,0.5)" text-anchor="middle">scan·push</text>
+          <path d="M123 60 L143 60" stroke="#14b8a6" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+          <!-- K8s Cluster -->
+          <rect x="145" y="20" width="110" height="90" rx="5" fill="rgba(20,184,166,0.06)" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <text x="200" y="36" font-family="'JetBrains Mono'" font-size="6.5" fill="#14b8a6" text-anchor="middle">K8s Cluster</text>
+
+          <!-- Pods -->
+          <rect x="155" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
+          <text x="169" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
+          <rect x="190" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
+          <text x="204" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
+          <rect x="225" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
+          <text x="239" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
+
+          <!-- HPA label -->
+          <rect x="155" y="72" width="98" height="14" rx="2" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="0.7"/>
+          <text x="204" y="82" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">HPA · Service Mesh · Ingress</text>
+
+          <!-- Observability -->
+          <rect x="155" y="94" width="98" height="12" rx="2" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="0.7"/>
+          <text x="204" y="103" font-family="'JetBrains Mono'" font-size="5.5" fill="#93c5fd" text-anchor="middle">OTEL · Prometheus · Grafana</text>
+
+          <!-- 12 factor label -->
+          <text x="95" y="112" font-family="'JetBrains Mono'" font-size="6" fill="#334155" text-anchor="middle">12-Factor · GitOps · IaC (Terraform)</text>
+        </svg>
+      </div>
+      <div class="c-tags">
+        <span class="c-tag">Kubernetes</span><span class="c-tag">GitOps</span>
+        <span class="c-tag">Helm</span><span class="c-tag">Terraform</span><span class="c-tag">12-Factor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 4: CROSS-CUTTING ═══════════════════ -->
+<section class="section reveal" id="part4">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 04</div>
+    <div class="sec-title-wrap">
+      <div class="sec-label">// Concerns Transversales</div>
+      <h2 class="sec-title"><span class="hl">Cross-Cutting</span> Concerns</h2>
+      <p class="sec-desc">Preocupaciones que afectan a todos los componentes, independientemente del dominio funcional.</p>
+    </div>
+  </div>
+
+  <div class="cc-grid">
+    <!-- Seguridad -->
+    <div class="cc-block open reveal" id="cc-sec">
+      <div class="cc-header" onclick="toggleCC('cc-sec')">
+        <span class="cc-ico">🔒</span>
+        <span class="cc-hname">Seguridad</span>
+        <span class="cc-chevron">▼</span>
+      </div>
+      <div class="cc-body-wrap">
+        <div class="cc-inner">
+          <p class="cc-desc">La seguridad arquitectónica no es un feature — es una propiedad emergente del diseño. <strong>Defense in Depth</strong> establece múltiples capas de control para que el fallo de una no comprometa el sistema.</p>
+          <!-- Security diagram -->
+          <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
+            <!-- Concentric zones -->
+            <ellipse cx="120" cy="40" rx="115" ry="36" fill="none" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.4"/>
+            <ellipse cx="120" cy="40" rx="85" ry="26" fill="none" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.5"/>
+            <ellipse cx="120" cy="40" rx="55" ry="17" fill="none" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.7"/>
+            <ellipse cx="120" cy="40" rx="28" ry="10" fill="rgba(244,63,94,0.15)" stroke="#f43f5e" stroke-width="1.2"/>
+            <text x="120" y="43" font-family="'JetBrains Mono'" font-size="6" fill="#fca5a5" text-anchor="middle">Data</text>
+            <text x="120" y="20" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" text-anchor="middle" opacity="0.6">App Security</text>
+            <text x="120" y="12" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" text-anchor="middle" opacity="0.4">Network</text>
+            <text x="120" y="5" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" text-anchor="middle" opacity="0.3">Perimeter</text>
+          </svg>
+          <div class="cc-pillars">
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>Zero Trust: never trust, always verify</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>IAM · OAuth 2.0 / OIDC · RBAC</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>Secrets Management (Vault)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>mTLS entre microservicios</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>SAST / DAST / SCA en CI/CD</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--rose)"></div>Threat Modeling (STRIDE)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Observabilidad -->
+    <div class="cc-block open reveal" id="cc-obs">
+      <div class="cc-header" onclick="toggleCC('cc-obs')">
+        <span class="cc-ico">📡</span>
+        <span class="cc-hname">Observabilidad</span>
+        <span class="cc-chevron">▼</span>
+      </div>
+      <div class="cc-body-wrap">
+        <div class="cc-inner">
+          <p class="cc-desc">Un sistema observable permite entender su estado interno desde salidas externas. Los <strong>Three Pillars</strong>: Logs, Metrics y Traces — pero la observabilidad real requiere correlacionarlos para entender el comportamiento emergente.</p>
+          <!-- Three pillars diagram -->
+          <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
+            <rect x="5" y="15" width="68" height="50" rx="4" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
+            <text x="39" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle">Metrics</text>
+            <text x="39" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#3b82f6" text-anchor="middle">Prometheus</text>
+            <text x="39" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#3b82f6" text-anchor="middle">Grafana</text>
+            <rect x="87" y="15" width="68" height="50" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
+            <text x="121" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#67e8f9" text-anchor="middle">Traces</text>
+            <text x="121" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Jaeger</text>
+            <text x="121" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Zipkin</text>
+            <rect x="169" y="15" width="68" height="50" rx="4" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="1"/>
+            <text x="203" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Logs</text>
+            <text x="203" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">ELK Stack</text>
+            <text x="203" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">Loki</text>
+            <!-- OTEL unifier -->
+            <rect x="60" y="72" width="118" height="8" rx="2" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="0.8"/>
+            <text x="119" y="79" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">OpenTelemetry (OTEL)</text>
+            <line x1="39" y1="65" x2="90" y2="76" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
+            <line x1="121" y1="65" x2="121" y2="72" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
+            <line x1="203" y1="65" x2="150" y2="76" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
+          </svg>
+          <div class="cc-pillars">
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>Distributed Tracing (request → response)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>Métricas RED: Rate · Errors · Duration</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>Logging estructurado (JSON + correlation ID)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--cyan)"></div>SLOs / SLIs / Error Budgets</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resiliencia -->
+    <div class="cc-block open reveal" id="cc-res">
+      <div class="cc-header" onclick="toggleCC('cc-res')">
+        <span class="cc-ico">🛡</span>
+        <span class="cc-hname">Resiliencia</span>
+        <span class="cc-chevron">▼</span>
+      </div>
+      <div class="cc-body-wrap">
+        <div class="cc-inner">
+          <p class="cc-desc">En sistemas distribuidos el fallo es la norma. El diseño debe asumir que las dependencias fallarán. Circuit Breaker, Bulkhead y Retry con jitter son los patrones fundamentales.</p>
+          <!-- Circuit Breaker diagram -->
+          <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
+            <!-- States -->
+            <circle cx="40" cy="40" r="30" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
+            <text x="40" y="37" font-family="'JetBrains Mono'" font-size="7.5" fill="#86efac" text-anchor="middle">CLOSED</text>
+            <text x="40" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#22c55e" text-anchor="middle">Normal</text>
+            <circle cx="120" cy="40" r="30" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="120" y="37" font-family="'JetBrains Mono'" font-size="7.5" fill="#fca5a5" text-anchor="middle">OPEN</text>
+            <text x="120" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#ef4444" text-anchor="middle">Fail fast</text>
+            <circle cx="200" cy="40" r="30" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="200" y="34" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">HALF</text>
+            <text x="200" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">OPEN</text>
+            <text x="200" y="54" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">Probing</text>
+            <!-- Transition arrows -->
+            <path d="M70 30 Q95 15 110 28" stroke="#ef4444" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
+            <text x="90" y="14" font-family="'JetBrains Mono'" font-size="5" fill="#ef4444">failures</text>
+            <path d="M150 30 Q175 15 190 28" stroke="#f59e0b" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
+            <text x="168" y="15" font-family="'JetBrains Mono'" font-size="5" fill="#f59e0b">timeout</text>
+            <path d="M190 52 Q165 70 130 52" stroke="#22c55e" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrG)"/>
+            <text x="158" y="74" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e">success</text>
+          </svg>
+          <div class="cc-pillars">
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Circuit Breaker (Resilience4j)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Bulkhead: aislar pools de recursos</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Retry + Exponential Backoff + Jitter</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Chaos Engineering (Netflix Simian Army)</div>
+            <div class="cc-pill"><div class="cc-pillar-dot" style="background:var(--teal)"></div>Health checks · Readiness probes · Liveness</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PART 5: QUALITY ATTRIBUTES ═══════════════════ -->
+<section class="section reveal" id="part5">
+  <div class="sec-head">
+    <div class="sec-num">PARTE 05</div>
     <div class="sec-title-wrap">
       <div class="sec-label">// SEI · TOGAF · ISO 25010</div>
       <h2 class="sec-title">Quality <span class="hl">Attributes</span></h2>
@@ -1826,905 +1961,13 @@ footer {
   </div>
 </section>
 
-<!-- ═══════════════════ PART 5: DATA ARCHITECTURE ═══════════════════ -->
-<section class="section reveal" id="part4">
-  <div class="sec-head">
-    <div class="sec-num">PARTE 04</div>
-    <div class="sec-title-wrap">
-      <div class="sec-label">// Security · Resilience · Scalability · Observability</div>
-      <h2 class="sec-title"><span class="hl">Cross-Cutting</span> Concerns</h2>
-      <p class="sec-desc">Preocupaciones que afectan a todos los componentes. Architecture Patterns agrupados por concern: seguridad, resiliencia, escalabilidad y observabilidad.</p>
-    </div>
-  </div>
-
-  <!-- ── SECURITY ── -->
-  <div class="cc-group-section">
-    <div class="cc-group-label-row" style="--gc:var(--rose)">
-      <span class="cc-group-icon-lg">🔒</span>
-      <span class="cc-group-name">Security</span>
-      <span class="cc-group-topics">Authentication</span>
-    </div>
-    <div class="cc-grid">
-      <div class="cc-block open reveal" id="cc-auth">
-        <div class="cc-header" onclick="toggleCC('cc-auth')">
-          <span class="cc-ico">🔑</span>
-          <span class="cc-hname">Authentication</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Verificación de identidad de usuarios y servicios. <strong>OAuth 2.0 + OIDC</strong> es el estándar moderno: el identity provider emite tokens JWT que portan claims del usuario sin estado en el servidor.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <rect x="4" y="28" width="40" height="24" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1"/>
-              <text x="24" y="44" font-family="'JetBrains Mono'" font-size="6.5" fill="#fca5a5" text-anchor="middle">User</text>
-              <path d="M44 40 L64 40" stroke="#f43f5e" stroke-width="1" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
-              <text x="54" y="35" font-family="'JetBrains Mono'" font-size="5" fill="#f43f5e">login</text>
-              <rect x="66" y="20" width="52" height="40" rx="3" fill="rgba(244,63,94,0.1)" stroke="#f43f5e" stroke-width="1.2"/>
-              <text x="92" y="37" font-family="'JetBrains Mono'" font-size="6.5" fill="#fca5a5" text-anchor="middle">Auth</text>
-              <text x="92" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">Server</text>
-              <path d="M118 40 L138 40" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
-              <text x="128" y="35" font-family="'JetBrains Mono'" font-size="5" fill="#f59e0b">JWT</text>
-              <rect x="140" y="28" width="44" height="24" rx="3" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
-              <text x="162" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Client</text>
-              <path d="M184 40 L202 40" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
-              <text x="193" y="35" font-family="'JetBrains Mono'" font-size="5" fill="#3b82f6">Bearer</text>
-              <rect x="204" y="28" width="30" height="24" rx="3" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="1"/>
-              <text x="219" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#5eead4" text-anchor="middle">API</text>
-              <text x="54" y="72" font-family="'JetBrains Mono'" font-size="5" fill="#64748b" text-anchor="middle">OAuth 2.0</text>
-              <text x="128" y="72" font-family="'JetBrains Mono'" font-size="5" fill="#64748b" text-anchor="middle">OIDC / JWT</text>
-              <text x="203" y="72" font-family="'JetBrains Mono'" font-size="5" fill="#64748b" text-anchor="middle">RBAC</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--rose)"></div>OAuth 2.0 / OIDC — delegated authorization</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--rose)"></div>JWT — stateless tokens con claims (iss, sub, exp)</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--rose)"></div>MFA / 2FA — segundo factor obligatorio</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--rose)"></div>SSO + Federation (SAML, OIDC)</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--rose)"></div>Zero Trust: verify explicitly, least privilege</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── OBSERVABILITY ── -->
-  <div class="cc-group-section">
-    <div class="cc-group-label-row" style="--gc:var(--cyan)">
-      <span class="cc-group-icon-lg">📡</span>
-      <span class="cc-group-name">Observability</span>
-      <span class="cc-group-topics">Logging · Observability · Monitoring · Tracing</span>
-    </div>
-    <div class="cc-grid">
-
-      <!-- Logging -->
-      <div class="cc-block open reveal" id="cc-log">
-        <div class="cc-header" onclick="toggleCC('cc-log')">
-          <span class="cc-ico">📋</span>
-          <span class="cc-hname">Logging</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Registro estructurado de eventos del sistema. Los logs en <strong>JSON estructurado</strong> con correlation IDs permiten correlacionar eventos entre servicios y construir trazas end-to-end.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <rect x="4" y="24" width="48" height="28" rx="3" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
-              <text x="28" y="40" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9" text-anchor="middle">Service</text>
-              <text x="28" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#06b6d4" text-anchor="middle">JSON log</text>
-              <path d="M52 38 L72 38" stroke="#06b6d4" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.7"/>
-              <rect x="74" y="18" width="56" height="36" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="1.2"/>
-              <text x="102" y="34" font-family="'JetBrains Mono'" font-size="6" fill="#67e8f9" text-anchor="middle">Aggregator</text>
-              <text x="102" y="46" font-family="'JetBrains Mono'" font-size="5.5" fill="#06b6d4" text-anchor="middle">ELK / Loki</text>
-              <path d="M130 28 L158 20" stroke="#06b6d4" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <path d="M130 46 L158 54" stroke="#06b6d4" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <rect x="160" y="8" width="72" height="24" rx="3" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="0.8"/>
-              <text x="196" y="24" font-family="'JetBrains Mono'" font-size="6" fill="#67e8f9" text-anchor="middle">🔍 Search</text>
-              <rect x="160" y="42" width="72" height="24" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="0.8"/>
-              <text x="196" y="58" font-family="'JetBrains Mono'" font-size="6" fill="#fca5a5" text-anchor="middle">🔔 Alert</text>
-              <text x="63" y="72" font-family="'JetBrains Mono'" font-size="5" fill="#f59e0b" text-anchor="middle">x-correlation-id: abc123</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>JSON estructurado: timestamp, level, service, msg</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Correlation ID propagado por HTTP headers</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Log levels: DEBUG · INFO · WARN · ERROR · FATAL</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Retención, indexación y políticas de rotación</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Observability -->
-      <div class="cc-block open reveal" id="cc-obs">
-        <div class="cc-header" onclick="toggleCC('cc-obs')">
-          <span class="cc-ico">📡</span>
-          <span class="cc-hname">Observability</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Un sistema observable permite entender su estado interno desde salidas externas. Los <strong>Three Pillars</strong>: Logs, Metrics y Traces — unificados por <strong>OpenTelemetry</strong> como estándar de instrumentación.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <rect x="5" y="15" width="68" height="50" rx="4" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
-              <text x="39" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle">Metrics</text>
-              <text x="39" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#3b82f6" text-anchor="middle">Prometheus</text>
-              <text x="39" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#3b82f6" text-anchor="middle">Grafana</text>
-              <rect x="87" y="15" width="68" height="50" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1"/>
-              <text x="121" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#67e8f9" text-anchor="middle">Traces</text>
-              <text x="121" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Jaeger</text>
-              <text x="121" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#06b6d4" text-anchor="middle">Zipkin</text>
-              <rect x="169" y="15" width="68" height="50" rx="4" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="1"/>
-              <text x="203" y="35" font-family="'JetBrains Mono'" font-size="7.5" fill="#5eead4" text-anchor="middle">Logs</text>
-              <text x="203" y="48" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">ELK Stack</text>
-              <text x="203" y="59" font-family="'JetBrains Mono'" font-size="6" fill="#14b8a6" text-anchor="middle">Loki</text>
-              <rect x="60" y="72" width="118" height="8" rx="2" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="0.8"/>
-              <text x="119" y="79" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">OpenTelemetry (OTEL)</text>
-              <line x1="39" y1="65" x2="90" y2="76" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
-              <line x1="121" y1="65" x2="121" y2="72" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
-              <line x1="203" y1="65" x2="150" y2="76" stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.5"/>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Golden Signals: Latency · Traffic · Errors · Saturation</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>SLO / SLI / Error Budget</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>OpenTelemetry — estándar unifica los tres pilares</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Cardinality: dimensiones clave en métricas</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Monitoring -->
-      <div class="cc-block open reveal" id="cc-mon">
-        <div class="cc-header" onclick="toggleCC('cc-mon')">
-          <span class="cc-ico">📊</span>
-          <span class="cc-hname">Monitoring</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Vigilancia activa del estado del sistema. Los dashboards y alertas permiten detectar degradaciones antes de que impacten a usuarios. Define <strong>SLOs primero</strong>, alertas después.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <rect x="4" y="28" width="38" height="24" rx="3" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
-              <text x="23" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">App</text>
-              <path d="M42 40 L56 40" stroke="#3b82f6" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.7"/>
-              <rect x="58" y="22" width="52" height="36" rx="3" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="1"/>
-              <text x="84" y="38" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">Prometheus</text>
-              <text x="84" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">scrape</text>
-              <path d="M110 34 L130 26" stroke="#f59e0b" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <path d="M110 46 L130 54" stroke="#f59e0b" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <rect x="132" y="14" width="50" height="24" rx="3" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="0.8"/>
-              <text x="157" y="30" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">Grafana</text>
-              <rect x="132" y="44" width="50" height="24" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="0.8"/>
-              <text x="157" y="54" font-family="'JetBrains Mono'" font-size="5.5" fill="#fca5a5" text-anchor="middle">Alert</text>
-              <text x="157" y="63" font-family="'JetBrains Mono'" font-size="5.5" fill="#fca5a5" text-anchor="middle">Manager</text>
-              <path d="M182 56 L202 56" stroke="#f43f5e" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <rect x="204" y="44" width="32" height="24" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="0.8"/>
-              <text x="220" y="54" font-family="'JetBrains Mono'" font-size="5.5" fill="#fca5a5" text-anchor="middle">Pager</text>
-              <text x="220" y="63" font-family="'JetBrains Mono'" font-size="5.5" fill="#fca5a5" text-anchor="middle">Duty</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>SLO-based alerting: alerta en burn rate</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>RED Metrics: Rate · Errors · Duration</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Dashboard-as-code (Grafonnet / Terraform)</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>On-call rotations y runbooks</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tracing -->
-      <div class="cc-block open reveal" id="cc-trace">
-        <div class="cc-header" onclick="toggleCC('cc-trace')">
-          <span class="cc-ico">🔍</span>
-          <span class="cc-hname">Tracing</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Trazado distribuido de requests entre servicios. Cada operación genera un <strong>Span</strong> con TraceID, parentSpanID y timestamps. Permite identificar cuellos de botella en sistemas complejos.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <text x="4" y="11" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b">TraceID: a1b2c3d4e5f6</text>
-              <rect x="4" y="16" width="232" height="12" rx="2" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" stroke-width="0.8"/>
-              <text x="8" y="25" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd">API Gateway</text>
-              <text x="208" y="25" font-family="'JetBrains Mono'" font-size="5.5" fill="#3b82f6">150ms</text>
-              <rect x="20" y="31" width="60" height="10" rx="2" fill="rgba(244,63,94,0.2)" stroke="#f43f5e" stroke-width="0.7"/>
-              <text x="24" y="39" font-family="'JetBrains Mono'" font-size="5.5" fill="#fca5a5">Auth Svc</text>
-              <text x="65" y="39" font-family="'JetBrains Mono'" font-size="5" fill="#f43f5e">30ms</text>
-              <rect x="86" y="31" width="90" height="10" rx="2" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="0.7"/>
-              <text x="90" y="39" font-family="'JetBrains Mono'" font-size="5.5" fill="#67e8f9">Order Svc</text>
-              <text x="160" y="39" font-family="'JetBrains Mono'" font-size="5" fill="#06b6d4">80ms</text>
-              <rect x="100" y="44" width="70" height="10" rx="2" fill="rgba(20,184,166,0.2)" stroke="#14b8a6" stroke-width="0.7"/>
-              <text x="104" y="52" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4">PostgreSQL</text>
-              <text x="154" y="52" font-family="'JetBrains Mono'" font-size="5" fill="#14b8a6">60ms</text>
-              <text x="4" y="70" font-family="'JetBrains Mono'" font-size="5" fill="#64748b">Jaeger · Zipkin · AWS X-Ray · W3C TraceContext</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>TraceID + SpanID propagados en headers HTTP</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Jaeger / Zipkin / AWS X-Ray</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>W3C TraceContext — estándar de propagación</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--cyan)"></div>Sampling: head-based vs tail-based</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ── RESILIENCE ── -->
-  <div class="cc-group-section">
-    <div class="cc-group-label-row" style="--gc:var(--teal)">
-      <span class="cc-group-icon-lg">🛡</span>
-      <span class="cc-group-name">Resilience</span>
-      <span class="cc-group-topics">Error Handling · Resilience</span>
-    </div>
-    <div class="cc-grid">
-
-      <!-- Error Handling -->
-      <div class="cc-block open reveal" id="cc-err">
-        <div class="cc-header" onclick="toggleCC('cc-err')">
-          <span class="cc-ico">⚠</span>
-          <span class="cc-hname">Error Handling</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Gestión de errores sin degradar la experiencia del usuario. <strong>Graceful degradation</strong>: el sistema reduce funcionalidad en vez de fallar completamente. Los errores deben ser predecibles, trazables y recuperables.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <rect x="4" y="28" width="40" height="24" rx="3" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="1"/>
-              <text x="24" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Request</text>
-              <path d="M44 40 L60 40" stroke="#3b82f6" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.7"/>
-              <rect x="62" y="20" width="52" height="40" rx="3" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1.2"/>
-              <text x="88" y="37" font-family="'JetBrains Mono'" font-size="6.5" fill="#fca5a5" text-anchor="middle">Service</text>
-              <text x="88" y="50" font-family="'JetBrains Mono'" font-size="6" fill="#f43f5e" text-anchor="middle">❌ Error</text>
-              <path d="M114 40 L134 40" stroke="#f59e0b" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.7"/>
-              <text x="124" y="35" font-family="'JetBrains Mono'" font-size="5" fill="#f59e0b">fallback</text>
-              <rect x="136" y="22" width="52" height="36" rx="3" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="1"/>
-              <text x="162" y="38" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">Fallback</text>
-              <text x="162" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">Cache/Default</text>
-              <path d="M188 40 L208 40" stroke="#22c55e" stroke-width="1" marker-end="url(#arrowBlue)" stroke-opacity="0.7"/>
-              <rect x="210" y="28" width="26" height="24" rx="3" fill="rgba(34,197,94,0.08)" stroke="#22c55e" stroke-width="1"/>
-              <text x="223" y="40" font-family="'JetBrains Mono'" font-size="5" fill="#86efac" text-anchor="middle">Resp</text>
-              <text x="223" y="50" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" text-anchor="middle">degraded</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Graceful degradation: función reducida vs fallo total</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Fallback: valores por defecto o caché stale</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Dead Letter Queue (DLQ) para mensajes fallidos</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Error boundaries (UI) y fault isolation</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Resilience -->
-      <div class="cc-block open reveal" id="cc-res">
-        <div class="cc-header" onclick="toggleCC('cc-res')">
-          <span class="cc-ico">🛡</span>
-          <span class="cc-hname">Resilience</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">En sistemas distribuidos el fallo es la norma. El diseño debe asumir que las dependencias fallarán. <strong>Circuit Breaker</strong>, Bulkhead y Retry con jitter son los patrones fundamentales.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <circle cx="40" cy="40" r="30" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.5"/>
-              <text x="40" y="37" font-family="'JetBrains Mono'" font-size="7.5" fill="#86efac" text-anchor="middle">CLOSED</text>
-              <text x="40" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#22c55e" text-anchor="middle">Normal</text>
-              <circle cx="120" cy="40" r="30" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1.5"/>
-              <text x="120" y="37" font-family="'JetBrains Mono'" font-size="7.5" fill="#fca5a5" text-anchor="middle">OPEN</text>
-              <text x="120" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#ef4444" text-anchor="middle">Fail fast</text>
-              <circle cx="200" cy="40" r="30" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
-              <text x="200" y="34" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">HALF</text>
-              <text x="200" y="44" font-family="'JetBrains Mono'" font-size="6" fill="#fcd34d" text-anchor="middle">OPEN</text>
-              <text x="200" y="54" font-family="'JetBrains Mono'" font-size="5.5" fill="#f59e0b" text-anchor="middle">Probing</text>
-              <path d="M70 30 Q95 15 110 28" stroke="#ef4444" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
-              <text x="90" y="14" font-family="'JetBrains Mono'" font-size="5" fill="#ef4444">failures</text>
-              <path d="M150 30 Q175 15 190 28" stroke="#f59e0b" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrowBlue)"/>
-              <text x="168" y="15" font-family="'JetBrains Mono'" font-size="5" fill="#f59e0b">timeout</text>
-              <path d="M190 52 Q165 70 130 52" stroke="#22c55e" stroke-width="1" fill="none" stroke-opacity="0.7" marker-end="url(#arrG)"/>
-              <text x="158" y="74" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e">success</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Circuit Breaker (Resilience4j)</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Bulkhead: aislar pools de recursos</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Retry + Exponential Backoff + Jitter</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Chaos Engineering (Netflix Simian Army)</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--teal)"></div>Health checks · Readiness · Liveness probes</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ── OPERATIONS ── -->
-  <div class="cc-group-section">
-    <div class="cc-group-label-row" style="--gc:var(--violet)">
-      <span class="cc-group-icon-lg">⚙</span>
-      <span class="cc-group-name">Operations</span>
-      <span class="cc-group-topics">Configuration Management</span>
-    </div>
-    <div class="cc-grid">
-      <div class="cc-block open reveal" id="cc-cfg">
-        <div class="cc-header" onclick="toggleCC('cc-cfg')">
-          <span class="cc-ico">⚙</span>
-          <span class="cc-hname">Configuration Management</span>
-          <span class="cc-chevron">▼</span>
-        </div>
-        <div class="cc-body-wrap">
-          <div class="cc-inner">
-            <p class="cc-desc">Separación de configuración del código. La <strong>12-Factor App</strong> establece que la config debe vivir en el entorno. Los cambios de configuración no deben requerir redespliegue.</p>
-            <svg viewBox="0 0 240 80" fill="none" style="margin-bottom:1rem">
-              <rect x="4" y="6" width="58" height="18" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="1"/>
-              <text x="33" y="19" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">Git / Vault</text>
-              <rect x="4" y="30" width="58" height="18" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
-              <text x="33" y="43" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">Secrets Mgr</text>
-              <rect x="4" y="54" width="58" height="18" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
-              <text x="33" y="67" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">Feature Flags</text>
-              <path d="M62 15 L84 36" stroke="#8b5cf6" stroke-width="0.8" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <path d="M62 39 L84 41" stroke="#8b5cf6" stroke-width="0.8" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <path d="M62 63 L84 46" stroke="#8b5cf6" stroke-width="0.8" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <rect x="86" y="24" width="56" height="34" rx="3" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.2"/>
-              <text x="114" y="39" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">Config</text>
-              <text x="114" y="50" font-family="'JetBrains Mono'" font-size="6" fill="#8b5cf6" text-anchor="middle">Server</text>
-              <path d="M142 33 L164 20" stroke="#8b5cf6" stroke-width="0.8" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <path d="M142 41 L164 41" stroke="#8b5cf6" stroke-width="0.8" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <path d="M142 49 L164 58" stroke="#8b5cf6" stroke-width="0.8" marker-end="url(#arrowBlue)" stroke-opacity="0.6"/>
-              <rect x="166" y="10" width="48" height="18" rx="3" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="0.8"/>
-              <text x="190" y="23" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Service A</text>
-              <rect x="166" y="33" width="48" height="18" rx="3" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="0.8"/>
-              <text x="190" y="46" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Service B</text>
-              <rect x="166" y="52" width="48" height="18" rx="3" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="0.8"/>
-              <text x="190" y="65" font-family="'JetBrains Mono'" font-size="6" fill="#93c5fd" text-anchor="middle">Service C</text>
-            </svg>
-            <div class="cc-pillars">
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--violet)"></div>12-Factor App: config en entorno (env vars)</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--violet)"></div>Feature Flags (LaunchDarkly) — cambios sin deploy</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--violet)"></div>Secrets: HashiCorp Vault, AWS Secrets Manager</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--violet)"></div>GitOps — Git como fuente de verdad</div>
-              <div class="cc-pill"><div class="cc-pill-dot" style="background:var(--violet)"></div>Hot reload de configuración sin reiniciar servicios</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
-<!-- ═══════════════════ PART 5: QUALITY ATTRIBUTES ═══════════════════ -->
-<section class="section reveal" id="part-data">
-  <div class="sec-head">
-    <div class="sec-num">PARTE 05</div>
-    <div class="sec-title-wrap">
-      <div class="sec-label">// Relacional · NoSQL · Vector · Object Storage</div>
-      <h2 class="sec-title">Data <span class="hl">Architecture</span></h2>
-      <p class="sec-desc">Cada tipo de base de datos resuelve un problema diferente. Elegir el modelo correcto es una decisión arquitectónica fundamental.</p>
-    </div>
-  </div>
-
-  <div class="data-grid">
-
-    <!-- 5.1 Relational -->
-    <div class="db-card reveal" style="--db-color:#3b82f6">
-      <div class="db-num">5.1 · RELATIONAL</div>
-      <div class="db-icon">🗃</div>
-      <div class="db-title">Relational Databases</div>
-      <div class="db-examples">PostgreSQL · MySQL</div>
-      <p class="db-use">Sistemas transaccionales con datos estructurados, integridad referencial y consistencia ACID.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <!-- Table: Users -->
-          <rect x="4" y="4" width="110" height="92" rx="4" fill="rgba(59,130,246,0.06)" stroke="#3b82f6" stroke-width="1"/>
-          <rect x="4" y="4" width="110" height="20" rx="4" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="1"/>
-          <text x="59" y="18" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle" font-weight="600">users</text>
-          <line x1="4" y1="34" x2="114" y2="34" stroke="#3b82f6" stroke-width="0.5" stroke-opacity="0.4"/>
-          <text x="14" y="47" font-family="'JetBrains Mono'" font-size="6.5" fill="#3b82f6">🔑 id</text>
-          <text x="14" y="60" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">name</text>
-          <text x="14" y="73" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">email</text>
-          <text x="14" y="86" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">created_at</text>
-          <!-- Relation line -->
-          <line x1="114" y1="47" x2="146" y2="47" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 2" stroke-opacity="0.6"/>
-          <!-- Table: Orders -->
-          <rect x="146" y="4" width="110" height="92" rx="4" fill="rgba(59,130,246,0.06)" stroke="#3b82f6" stroke-width="1"/>
-          <rect x="146" y="4" width="110" height="20" rx="4" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="1"/>
-          <text x="201" y="18" font-family="'JetBrains Mono'" font-size="7.5" fill="#93c5fd" text-anchor="middle" font-weight="600">orders</text>
-          <line x1="146" y1="34" x2="256" y2="34" stroke="#3b82f6" stroke-width="0.5" stroke-opacity="0.4"/>
-          <text x="156" y="47" font-family="'JetBrains Mono'" font-size="6.5" fill="#3b82f6">🔑 id</text>
-          <text x="156" y="60" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">🔗 user_id</text>
-          <text x="156" y="73" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">total</text>
-          <text x="156" y="86" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">status</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">ACID</span>
-        <span class="db-tag">Tablas</span>
-        <span class="db-tag">Relaciones FK</span>
-        <span class="db-tag">SQL</span>
-      </div>
-    </div>
-
-    <!-- 5.2 Key-Value -->
-    <div class="db-card reveal" style="--db-color:#06b6d4">
-      <div class="db-num">5.2 · KEY-VALUE</div>
-      <div class="db-icon">🗝</div>
-      <div class="db-title">Key-Value Databases</div>
-      <div class="db-examples">Redis · DynamoDB</div>
-      <p class="db-use">Caching, sesiones de usuario, contadores y datos que se acceden por una clave única.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <!-- Outer border -->
-          <rect x="4" y="4" width="252" height="92" rx="4" fill="rgba(6,182,212,0.04)" stroke="#06b6d4" stroke-width="1"/>
-          <!-- Header row -->
-          <rect x="4" y="4" width="252" height="18" rx="4" fill="rgba(6,182,212,0.14)" stroke="#06b6d4" stroke-width="0.5"/>
-          <text x="72" y="16" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9" text-anchor="middle" font-weight="600">KEY</text>
-          <text x="188" y="16" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9" text-anchor="middle" font-weight="600">VALUE</text>
-          <!-- Vertical divider -->
-          <line x1="136" y1="4" x2="136" y2="96" stroke="#06b6d4" stroke-width="0.8" stroke-opacity="0.4"/>
-          <!-- Row 1 -->
-          <rect x="4" y="22" width="252" height="18" rx="0" fill="rgba(6,182,212,0.08)"/>
-          <text x="12" y="34" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9">session:abc123</text>
-          <text x="142" y="34" font-family="'JetBrains Mono'" font-size="6.5" fill="#94a3b8">{user:"alice", exp:3600}</text>
-          <!-- Row 2 -->
-          <text x="12" y="52" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9">cache:prod:item:42</text>
-          <text x="142" y="52" font-family="'JetBrains Mono'" font-size="6.5" fill="#94a3b8">"cached_value_str"</text>
-          <!-- Row 3 -->
-          <rect x="4" y="58" width="252" height="18" rx="0" fill="rgba(6,182,212,0.08)"/>
-          <text x="12" y="70" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9">counter:page_views</text>
-          <text x="142" y="70" font-family="'JetBrains Mono'" font-size="6.5" fill="#94a3b8">4821</text>
-          <!-- Row 4 -->
-          <text x="12" y="88" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9">lock:order:7f3a</text>
-          <text x="142" y="88" font-family="'JetBrains Mono'" font-size="6.5" fill="#94a3b8">1  (TTL: 30s)</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">Hash Table</span>
-        <span class="db-tag">O(1) lookup</span>
-        <span class="db-tag">TTL</span>
-        <span class="db-tag">In-memory</span>
-      </div>
-    </div>
-
-    <!-- 5.3 Document -->
-    <div class="db-card reveal" style="--db-color:#8b5cf6">
-      <div class="db-num">5.3 · DOCUMENT</div>
-      <div class="db-icon">📄</div>
-      <div class="db-title">Document Databases</div>
-      <div class="db-examples">MongoDB · DocumentDB</div>
-      <p class="db-use">JSON flexible para apps web, catálogos de productos y datos con esquema variable o jerárquico.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <rect x="4" y="4" width="252" height="92" rx="4" fill="rgba(139,92,246,0.05)" stroke="#8b5cf6" stroke-width="1"/>
-          <text x="20" y="18" font-family="'JetBrains Mono'" font-size="7" fill="#8b5cf6" opacity="0.7">document</text>
-          <text x="14" y="32" font-family="'JetBrains Mono'" font-size="6.5" fill="#a5b4fc">{"_id":</text>
-          <text x="60" y="32" font-family="'JetBrains Mono'" font-size="6.5" fill="#67e8f9">"507f1f..."</text>
-          <text x="120" y="32" font-family="'JetBrains Mono'" font-size="6.5" fill="#a5b4fc">,</text>
-          <text x="14" y="44" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b"> "name":</text>
-          <text x="72" y="44" font-family="'JetBrains Mono'" font-size="6.5" fill="#86efac">"Alice"</text>
-          <text x="14" y="56" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b"> "tags": [</text>
-          <text x="82" y="56" font-family="'JetBrains Mono'" font-size="6.5" fill="#fcd34d">"admin","user"</text>
-          <text x="164" y="56" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">],</text>
-          <text x="14" y="68" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b"> "addr": {</text>
-          <text x="14" y="80" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b">   "city":</text>
-          <text x="72" y="80" font-family="'JetBrains Mono'" font-size="6.5" fill="#86efac">"Madrid"</text>
-          <text x="14" y="92" font-family="'JetBrains Mono'" font-size="6.5" fill="#64748b"> }}</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">JSON</span>
-        <span class="db-tag">Schema-free</span>
-        <span class="db-tag">Nested docs</span>
-        <span class="db-tag">Arrays</span>
-      </div>
-    </div>
-
-    <!-- 5.4 Column Family -->
-    <div class="db-card reveal" style="--db-color:#f59e0b">
-      <div class="db-num">5.4 · COLUMN FAMILY</div>
-      <div class="db-icon">📊</div>
-      <div class="db-title">Column-Family Databases</div>
-      <div class="db-examples">Cassandra</div>
-      <p class="db-use">Big data y sistemas distribuidos a escala masiva. Optimizado para escrituras rápidas y queries por rango de tiempo.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <!-- Wide table representation -->
-          <rect x="4" y="4" width="252" height="92" rx="4" fill="rgba(245,158,11,0.04)" stroke="#f59e0b" stroke-width="1"/>
-          <!-- Header row -->
-          <rect x="4" y="4" width="252" height="18" rx="4" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="0.5"/>
-          <text x="35" y="16" font-family="'JetBrains Mono'" font-size="6.5" fill="#fcd34d" text-anchor="middle">row_key</text>
-          <line x1="66" y1="4" x2="66" y2="96" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
-          <text x="118" y="16" font-family="'JetBrains Mono'" font-size="6.5" fill="#fcd34d" text-anchor="middle">col_family: metrics</text>
-          <line x1="170" y1="4" x2="170" y2="96" stroke="#f59e0b" stroke-width="0.5" stroke-opacity="0.3"/>
-          <text x="215" y="16" font-family="'JetBrains Mono'" font-size="6.5" fill="#fcd34d" text-anchor="middle">col_family: meta</text>
-          <!-- Data rows -->
-          <text x="10" y="32" font-family="'JetBrains Mono'" font-size="6" fill="#f59e0b">user#alice</text>
-          <text x="74" y="32" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">cpu:92% · mem:4GB</text>
-          <text x="174" y="32" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">region:eu</text>
-          <line x1="4" y1="38" x2="256" y2="38" stroke="#f59e0b" stroke-width="0.3" stroke-opacity="0.3"/>
-          <text x="10" y="52" font-family="'JetBrains Mono'" font-size="6" fill="#f59e0b">user#bob</text>
-          <text x="74" y="52" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">cpu:34% · mem:2GB</text>
-          <text x="174" y="52" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">region:us</text>
-          <line x1="4" y1="58" x2="256" y2="58" stroke="#f59e0b" stroke-width="0.3" stroke-opacity="0.3"/>
-          <text x="10" y="72" font-family="'JetBrains Mono'" font-size="6" fill="#f59e0b">sensor#001</text>
-          <text x="74" y="72" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">temp:23° · hum:60%</text>
-          <text x="174" y="72" font-family="'JetBrains Mono'" font-size="6" fill="#64748b">loc:plant-A</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">Wide Row</span>
-        <span class="db-tag">Distributed</span>
-        <span class="db-tag">CQL</span>
-        <span class="db-tag">Tunable Consistency</span>
-      </div>
-    </div>
-
-    <!-- 5.5 Graph -->
-    <div class="db-card reveal" style="--db-color:#22c55e">
-      <div class="db-num">5.5 · GRAPH</div>
-      <div class="db-icon">🕸</div>
-      <div class="db-title">Graph Databases</div>
-      <div class="db-examples">Neo4j</div>
-      <p class="db-use">Redes sociales, detección de fraude y sistemas de recomendación donde las relaciones son tan importantes como los datos.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <!-- Nodes -->
-          <circle cx="50" cy="50" r="18" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1.5"/>
-          <text x="50" y="47" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">Alice</text>
-          <text x="50" y="57" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" text-anchor="middle">:Person</text>
-          <circle cx="140" cy="25" r="16" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1.5"/>
-          <text x="140" y="22" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">Bob</text>
-          <text x="140" y="32" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" text-anchor="middle">:Person</text>
-          <circle cx="140" cy="75" r="16" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.2"/>
-          <text x="140" y="72" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">Order</text>
-          <text x="140" y="82" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" text-anchor="middle">:Purchase</text>
-          <circle cx="220" cy="50" r="16" fill="rgba(34,197,94,0.1)" stroke="#22c55e" stroke-width="1.2"/>
-          <text x="220" y="47" font-family="'JetBrains Mono'" font-size="6" fill="#86efac" text-anchor="middle">ACME</text>
-          <text x="220" y="57" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" text-anchor="middle">:Company</text>
-          <!-- Edges -->
-          <line x1="68" y1="40" x2="124" y2="30" stroke="#22c55e" stroke-width="1" stroke-opacity="0.7"/>
-          <text x="92" y="30" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" opacity="0.8">KNOWS</text>
-          <line x1="68" y1="60" x2="124" y2="70" stroke="#22c55e" stroke-width="1" stroke-opacity="0.7"/>
-          <text x="88" y="72" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" opacity="0.8">BOUGHT</text>
-          <line x1="156" y1="65" x2="204" y2="55" stroke="#22c55e" stroke-width="1" stroke-opacity="0.7"/>
-          <text x="175" y="55" font-family="'JetBrains Mono'" font-size="5" fill="#22c55e" opacity="0.8">FROM</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">Nodes & Edges</span>
-        <span class="db-tag">Cypher</span>
-        <span class="db-tag">Graph traversal</span>
-        <span class="db-tag">Relationships</span>
-      </div>
-    </div>
-
-    <!-- 5.6 Time-Series -->
-    <div class="db-card reveal" style="--db-color:#f43f5e">
-      <div class="db-num">5.6 · TIME-SERIES</div>
-      <div class="db-icon">📈</div>
-      <div class="db-title">Time-Series Databases</div>
-      <div class="db-examples">InfluxDB · Prometheus</div>
-      <p class="db-use">Métricas, observabilidad y monitoreo. Optimizadas para datos ordenados por tiempo con alta frecuencia de escritura.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <rect x="4" y="4" width="252" height="92" rx="4" fill="rgba(244,63,94,0.04)" stroke="#f43f5e" stroke-width="1"/>
-          <!-- Axes -->
-          <line x1="20" y1="80" x2="248" y2="80" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5"/>
-          <line x1="20" y1="15" x2="20" y2="80" stroke="#f43f5e" stroke-width="0.8" stroke-opacity="0.5"/>
-          <!-- Grid lines -->
-          <line x1="20" y1="55" x2="248" y2="55" stroke="#f43f5e" stroke-width="0.4" stroke-opacity="0.2" stroke-dasharray="3 3"/>
-          <line x1="20" y1="30" x2="248" y2="30" stroke="#f43f5e" stroke-width="0.4" stroke-opacity="0.2" stroke-dasharray="3 3"/>
-          <!-- Time series line: cpu -->
-          <polyline points="20,65 55,52 90,60 125,40 160,45 195,28 230,35 248,30"
-            stroke="#f43f5e" stroke-width="1.5" fill="none"/>
-          <polyline points="20,65 55,52 90,60 125,40 160,45 195,28 230,35 248,30 248,80 20,80"
-            fill="rgba(244,63,94,0.06)"/>
-          <!-- Second series: mem -->
-          <polyline points="20,72 55,70 90,68 125,65 160,68 195,62 230,60 248,58"
-            stroke="#fb923c" stroke-width="1" fill="none" stroke-dasharray="4 2"/>
-          <!-- Labels -->
-          <text x="24" y="13" font-family="'JetBrains Mono'" font-size="5.5" fill="#f43f5e" opacity="0.7">cpu_usage%</text>
-          <text x="80" y="13" font-family="'JetBrains Mono'" font-size="5.5" fill="#fb923c" opacity="0.7">--- mem_usage%</text>
-          <text x="20" y="92" font-family="'JetBrains Mono'" font-size="5" fill="#64748b">00:00</text>
-          <text x="100" y="92" font-family="'JetBrains Mono'" font-size="5" fill="#64748b">06:00</text>
-          <text x="185" y="92" font-family="'JetBrains Mono'" font-size="5" fill="#64748b">12:00</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">Time panel</span>
-        <span class="db-tag">PromQL</span>
-        <span class="db-tag">Retention</span>
-        <span class="db-tag">Downsampling</span>
-      </div>
-    </div>
-
-    <!-- 5.7 Object Storage -->
-    <div class="db-card reveal" style="--db-color:#14b8a6">
-      <div class="db-num">5.7 · OBJECT STORAGE</div>
-      <div class="db-icon">🪣</div>
-      <div class="db-title">Object Storage</div>
-      <div class="db-examples">S3</div>
-      <p class="db-use">Archivos, imágenes, video y data lakes. Almacenamiento masivo de objetos binarios no estructurados con acceso HTTP.</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <!-- Bucket -->
-          <rect x="4" y="10" width="252" height="82" rx="6" fill="rgba(20,184,166,0.05)" stroke="#14b8a6" stroke-width="1"/>
-          <text x="130" y="22" font-family="'JetBrains Mono'" font-size="7" fill="#14b8a6" text-anchor="middle" opacity="0.8">bucket: my-data-lake</text>
-          <line x1="4" y1="28" x2="256" y2="28" stroke="#14b8a6" stroke-width="0.5" stroke-opacity="0.3"/>
-          <!-- Objects -->
-          <rect x="14" y="34" width="50" height="40" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="39" y="51" font-family="'JetBrains Mono'" font-size="7" fill="#5eead4" text-anchor="middle">🖼</text>
-          <text x="39" y="66" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">img.jpg</text>
-          <rect x="72" y="34" width="50" height="40" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="97" y="51" font-family="'JetBrains Mono'" font-size="7" fill="#5eead4" text-anchor="middle">🎬</text>
-          <text x="97" y="66" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">video.mp4</text>
-          <rect x="130" y="34" width="50" height="40" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="155" y="51" font-family="'JetBrains Mono'" font-size="7" fill="#5eead4" text-anchor="middle">📄</text>
-          <text x="155" y="66" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">data.parquet</text>
-          <rect x="188" y="34" width="50" height="40" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="213" y="51" font-family="'JetBrains Mono'" font-size="7" fill="#5eead4" text-anchor="middle">🗜</text>
-          <text x="213" y="66" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">logs.gz</text>
-          <text x="130" y="88" font-family="'JetBrains Mono'" font-size="5.5" fill="#64748b" text-anchor="middle">key: /prefix/object · Versioning · Lifecycle policies</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">Files · Images · Video</span>
-        <span class="db-tag">Data Lake</span>
-        <span class="db-tag">HTTP API</span>
-        <span class="db-tag">Immutable</span>
-      </div>
-    </div>
-
-    <!-- 5.8 Vector -->
-    <div class="db-card reveal" style="--db-color:#a855f7">
-      <div class="db-num">5.8 · VECTOR</div>
-      <div class="db-icon">🧠</div>
-      <div class="db-title">Vector Databases</div>
-      <div class="db-examples">Pinecone · Weaviate</div>
-      <p class="db-use">GenAI y RAG. Almacena embeddings vectoriales de alta dimensión para búsqueda semántica por similitud (cosine, dot product).</p>
-      <div class="db-diagram">
-        <svg viewBox="0 0 260 100" fill="none">
-          <rect x="4" y="4" width="252" height="92" rx="4" fill="rgba(168,85,247,0.04)" stroke="#a855f7" stroke-width="1"/>
-          <!-- Vector space dots -->
-          <circle cx="60" cy="55" r="6" fill="rgba(168,85,247,0.25)" stroke="#a855f7" stroke-width="1.2"/>
-          <text x="60" y="72" font-family="'JetBrains Mono'" font-size="5" fill="#a855f7" text-anchor="middle">doc_A</text>
-          <circle cx="80" cy="45" r="5" fill="rgba(168,85,247,0.2)" stroke="#a855f7" stroke-width="1"/>
-          <text x="80" y="62" font-family="'JetBrains Mono'" font-size="5" fill="#a855f7" text-anchor="middle">doc_B</text>
-          <circle cx="100" cy="50" r="5" fill="rgba(168,85,247,0.2)" stroke="#a855f7" stroke-width="1"/>
-          <circle cx="45" cy="65" r="4" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="0.8"/>
-          <!-- Query vector -->
-          <circle cx="70" cy="40" r="7" fill="rgba(239,68,68,0.2)" stroke="#ef4444" stroke-width="1.5"/>
-          <text x="70" y="37" font-family="'JetBrains Mono'" font-size="5" fill="#fca5a5" text-anchor="middle">query</text>
-          <!-- Similarity lines -->
-          <line x1="70" y1="47" x2="62" y2="51" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="3 2" stroke-opacity="0.7"/>
-          <line x1="70" y1="45" x2="77" y2="46" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="3 2" stroke-opacity="0.7"/>
-          <!-- ANN label -->
-          <text x="140" y="30" font-family="'JetBrains Mono'" font-size="6" fill="#a855f7" opacity="0.7">ANN Search</text>
-          <!-- Embedding vectors display -->
-          <text x="134" y="50" font-family="'JetBrains Mono'" font-size="5.5" fill="#64748b">[0.82, -0.14, 0.57,</text>
-          <text x="134" y="62" font-family="'JetBrains Mono'" font-size="5.5" fill="#64748b"> 0.33, 0.91, -0.22,</text>
-          <text x="134" y="74" font-family="'JetBrains Mono'" font-size="5.5" fill="#64748b"> 0.08,  ...1536d]</text>
-          <text x="134" y="88" font-family="'JetBrains Mono'" font-size="5.5" fill="#a855f7" opacity="0.8">cosine similarity</text>
-        </svg>
-      </div>
-      <div class="db-tags">
-        <span class="db-tag">Embeddings</span>
-        <span class="db-tag">ANN / HNSW</span>
-        <span class="db-tag">RAG</span>
-        <span class="db-tag">Semantic Search</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Comparison Table -->
-  <div class="reveal">
-    <div class="sec-label" style="margin-bottom:1.2rem">// TABLA COMPARACIÓN — Elección por caso de uso</div>
-    <div class="data-compare">
-      <div class="data-compare-head" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <span>Tipo</span>
-        <span>Ejemplos</span>
-        <span>Caso de Uso Principal</span>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#3b82f6">🗃</span> Relational</div>
-        <div class="ejemplos">PostgreSQL · MySQL</div>
-        <div class="uso">Sistemas transaccionales, ACID</div>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#06b6d4">🗝</span> Key-Value</div>
-        <div class="ejemplos">Redis · DynamoDB</div>
-        <div class="uso">Caching, sesiones</div>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#8b5cf6">📄</span> Document</div>
-        <div class="ejemplos">MongoDB · DocumentDB</div>
-        <div class="uso">Apps web, JSON flexible</div>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#f59e0b">📊</span> Column Family</div>
-        <div class="ejemplos">Cassandra</div>
-        <div class="uso">Big data, sistemas distribuidos</div>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#22c55e">🕸</span> Graph</div>
-        <div class="ejemplos">Neo4j</div>
-        <div class="uso">Redes sociales, fraude, relaciones</div>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#f43f5e">📈</span> Time-Series</div>
-        <div class="ejemplos">InfluxDB · Prometheus</div>
-        <div class="uso">Métricas, observabilidad</div>
-      </div>
-      <div class="data-compare-row" style="grid-template-columns:1.4fr 1fr 1.6fr">
-        <div class="tipo"><span style="color:#14b8a6">🪣</span> Object Storage</div>
-        <div class="ejemplos">S3</div>
-        <div class="uso">Archivos, data lakes</div>
-      </div>
-      <div class="data-compare-row">
-        <div class="tipo"><span style="color:#a855f7">🧠</span> Vector</div>
-        <div class="ejemplos">Pinecone · Weaviate</div>
-        <div class="uso">GenAI, RAG</div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
 <!-- ═══════════════════ PART 6: AI ARCHITECTURES ═══════════════════ -->
-<section class="section reveal" id="part3">
+<section class="section reveal" id="part6">
   <div class="sec-head">
     <div class="sec-num">PARTE 06</div>
     <div class="sec-title-wrap">
-      <div class="sec-label">// EDA · Serverless · Cloud Native</div>
-      <h2 class="sec-title"><span class="hl">Cloud</span> Architecture</h2>
-      <p class="sec-desc">Paradigmas diseñados nativamente para entornos cloud que abrazan escala, elasticidad y resiliencia.</p>
-    </div>
-  </div>
-
-  <div class="cloud-trio">
-    <!-- Event-Driven -->
-    <div class="c-card eda reveal">
-      <div class="c-accent">// Event-Driven Architecture</div>
-      <div class="c-title">Arquitectura Orientada a Eventos</div>
-      <p class="c-body">Los sistemas EDA se construyen alrededor de la producción y reacción a eventos. Los productores emiten eventos sin conocer a los consumidores — desacoplamiento total en tiempo y espacio.</p>
-      <div class="c-svg">
-        <svg viewBox="0 0 260 120" fill="none">
-          <!-- Producer -->
-          <rect x="5" y="45" width="55" height="30" rx="4" fill="rgba(6,182,212,0.12)" stroke="#06b6d4" stroke-width="1"/>
-          <text x="32" y="64" font-family="'JetBrains Mono'" font-size="7.5" fill="#06b6d4" text-anchor="middle">Producer</text>
-          <!-- Arrow -->
-          <path d="M60 60 L80 60" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arrowCyan)"/>
-          <!-- Event Bus -->
-          <rect x="82" y="30" width="96" height="60" rx="4" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" stroke-width="1.5"/>
-          <text x="130" y="57" font-family="'JetBrains Mono'" font-size="7" fill="#06b6d4" text-anchor="middle">Event</text>
-          <text x="130" y="69" font-family="'JetBrains Mono'" font-size="7" fill="#06b6d4" text-anchor="middle">Broker</text>
-          <text x="130" y="81" font-family="'JetBrains Mono'" font-size="6" fill="rgba(6,182,212,0.5)" text-anchor="middle">Kafka · Kinesis</text>
-          <!-- Fan out arrows -->
-          <path d="M178 45 L198 30" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
-          <path d="M178 60 L198 60" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
-          <path d="M178 75 L198 90" stroke="#06b6d4" stroke-width="1" stroke-opacity="0.6" marker-end="url(#arrowCyan)"/>
-          <!-- Consumers -->
-          <rect x="200" y="18" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
-          <text x="227" y="34" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer A</text>
-          <rect x="200" y="48" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
-          <text x="227" y="64" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer B</text>
-          <rect x="200" y="78" width="55" height="24" rx="3" fill="rgba(6,182,212,0.1)" stroke="#06b6d4" stroke-width="0.8"/>
-          <text x="227" y="94" font-family="'JetBrains Mono'" font-size="6.5" fill="#06b6d4" text-anchor="middle">Consumer C</text>
-          <!-- CQRS label -->
-          <text x="130" y="112" font-family="'JetBrains Mono'" font-size="6" fill="#334155" text-anchor="middle">CQRS · Event Sourcing · Choreography</text>
-        </svg>
-      </div>
-      <div class="c-tags">
-        <span class="c-tag">Apache Kafka</span><span class="c-tag">Event Sourcing</span>
-        <span class="c-tag">CQRS</span><span class="c-tag">Pub/Sub</span>
-      </div>
-    </div>
-
-    <!-- Serverless -->
-    <div class="c-card srv reveal">
-      <div class="c-accent">// Function as a Service</div>
-      <div class="c-title">Arquitectura Serverless</div>
-      <p class="c-body">Abstrae completamente la infraestructura. El proveedor cloud gestiona el escalado y disponibilidad; se paga por ejecución. Ideal para cargas intermitentes y event-driven.</p>
-      <div class="c-svg">
-        <svg viewBox="0 0 260 120" fill="none">
-          <!-- Trigger sources -->
-          <rect x="5" y="10" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
-          <text x="30" y="24" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">HTTP Req</text>
-          <rect x="5" y="40" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
-          <text x="30" y="54" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">Schedule</text>
-          <rect x="5" y="70" width="50" height="22" rx="3" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1"/>
-          <text x="30" y="84" font-family="'JetBrains Mono'" font-size="6.5" fill="#c4b5fd" text-anchor="middle">S3 Event</text>
-
-          <!-- Arrows to fn -->
-          <path d="M55 21 L90 45" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
-          <path d="M55 51 L90 55" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
-          <path d="M55 81 L90 65" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
-
-          <!-- Lambda fn -->
-          <rect x="90" y="30" width="80" height="50" rx="5" fill="rgba(139,92,246,0.14)" stroke="#8b5cf6" stroke-width="1.5"/>
-          <text x="130" y="50" font-family="'JetBrains Mono'" font-size="8" fill="#c4b5fd" text-anchor="middle">λ fn(event)</text>
-          <text x="130" y="65" font-family="'Outfit'" font-size="8" fill="rgba(196,181,253,0.5)" text-anchor="middle">stateless</text>
-          <text x="130" y="75" font-family="'JetBrains Mono'" font-size="6" fill="rgba(196,181,253,0.4)" text-anchor="middle">0 → ∞ instances</text>
-
-          <!-- Outputs -->
-          <path d="M170 50 L195 35" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
-          <path d="M170 55 L195 65" stroke="#8b5cf6" stroke-width="0.9" stroke-opacity="0.5"/>
-          <rect x="197" y="22" width="55" height="24" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
-          <text x="224" y="37" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">DynamoDB</text>
-          <rect x="197" y="52" width="55" height="24" rx="3" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="0.8"/>
-          <text x="224" y="67" font-family="'JetBrains Mono'" font-size="6" fill="#c4b5fd" text-anchor="middle">SNS/SQS</text>
-
-          <!-- Cold start warning -->
-          <text x="130" y="104" font-family="'JetBrains Mono'" font-size="6" fill="#f59e0b" text-anchor="middle">⚡ Cold start latency ~100–500ms</text>
-        </svg>
-      </div>
-      <div class="c-tags">
-        <span class="c-tag">AWS Lambda</span><span class="c-tag">FaaS</span>
-        <span class="c-tag">Pay-per-exec</span><span class="c-tag">Step Functions</span>
-      </div>
-    </div>
-
-    <!-- Cloud Native -->
-    <div class="c-card cn reveal">
-      <div class="c-accent">// CNCF Principles</div>
-      <div class="c-title">Cloud-Native Architecture</div>
-      <p class="c-body">No es mover apps a la nube — es diseñar sistemas que explotan sus capacidades: elasticidad, automación y resiliencia desde el día uno. Contenedores, K8s, GitOps y observabilidad son fundamentos.</p>
-      <div class="c-svg">
-        <svg viewBox="0 0 260 120" fill="none">
-          <!-- Dev box -->
-          <rect x="5" y="48" width="40" height="24" rx="3" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1"/>
-          <text x="25" y="63" font-family="'JetBrains Mono'" font-size="6.5" fill="#5eead4" text-anchor="middle">Dev</text>
-
-          <!-- git push -->
-          <path d="M45 60 L65 60" stroke="#14b8a6" stroke-width="1" stroke-dasharray="3 2"/>
-          <text x="55" y="55" font-family="'JetBrains Mono'" font-size="5.5" fill="#14b8a6" text-anchor="middle">git push</text>
-
-          <!-- CI/CD -->
-          <rect x="67" y="38" width="56" height="44" rx="4" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.2"/>
-          <text x="95" y="57" font-family="'JetBrains Mono'" font-size="6.5" fill="#5eead4" text-anchor="middle">CI/CD</text>
-          <text x="95" y="69" font-family="'JetBrains Mono'" font-size="5.5" fill="rgba(94,234,212,0.5)" text-anchor="middle">build·test</text>
-          <text x="95" y="78" font-family="'JetBrains Mono'" font-size="5.5" fill="rgba(94,234,212,0.5)" text-anchor="middle">scan·push</text>
-          <path d="M123 60 L143 60" stroke="#14b8a6" stroke-width="1" marker-end="url(#arrowBlue)"/>
-
-          <!-- K8s Cluster -->
-          <rect x="145" y="20" width="110" height="90" rx="5" fill="rgba(20,184,166,0.06)" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="3 2"/>
-          <text x="200" y="36" font-family="'JetBrains Mono'" font-size="6.5" fill="#14b8a6" text-anchor="middle">K8s Cluster</text>
-
-          <!-- Pods -->
-          <rect x="155" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="169" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
-          <rect x="190" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="204" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
-          <rect x="225" y="44" width="28" height="18" rx="3" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="0.8"/>
-          <text x="239" y="56" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">Pod</text>
-
-          <!-- HPA label -->
-          <rect x="155" y="72" width="98" height="14" rx="2" fill="rgba(20,184,166,0.08)" stroke="#14b8a6" stroke-width="0.7"/>
-          <text x="204" y="82" font-family="'JetBrains Mono'" font-size="5.5" fill="#5eead4" text-anchor="middle">HPA · Service Mesh · Ingress</text>
-
-          <!-- Observability -->
-          <rect x="155" y="94" width="98" height="12" rx="2" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="0.7"/>
-          <text x="204" y="103" font-family="'JetBrains Mono'" font-size="5.5" fill="#93c5fd" text-anchor="middle">OTEL · Prometheus · Grafana</text>
-
-          <!-- 12 factor label -->
-          <text x="95" y="112" font-family="'JetBrains Mono'" font-size="6" fill="#334155" text-anchor="middle">12-Factor · GitOps · IaC (Terraform)</text>
-        </svg>
-      </div>
-      <div class="c-tags">
-        <span class="c-tag">Kubernetes</span><span class="c-tag">GitOps</span>
-        <span class="c-tag">Helm</span><span class="c-tag">Terraform</span><span class="c-tag">12-Factor</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ PART 4: CROSS-CUTTING ═══════════════════ -->
-<section class="section reveal" id="part6">
-  <div class="sec-head">
-    <div class="sec-num">PARTE 07</div>
-    <div class="sec-title-wrap">
-      <div class="sec-label">// RAG · Agents · Multi-Agent Systems</div>
-      <h2 class="sec-title"><span class="hl">AI</span> Architectures</h2>
+      <div class="sec-label">// Inteligencia Artificial en Sistemas</div>
+      <h2 class="sec-title">Arquitecturas <span class="hl">de AI</span></h2>
       <p class="sec-desc">Los nuevos paradigmas que emergen al integrar modelos de lenguaje y razonamiento en sistemas de producción.</p>
     </div>
   </div>
@@ -2940,7 +2183,7 @@ footer {
 <!-- ═══════════════════ PART 7: FUTURO ═══════════════════ -->
 <section class="section reveal" id="part7">
   <div class="sec-head">
-    <div class="sec-num">BONUS</div>
+    <div class="sec-num">PARTE 07</div>
     <div class="sec-title-wrap">
       <div class="sec-label">// Horizonte 2025–2030</div>
       <h2 class="sec-title">El <span class="hl">Futuro</span> de la Arquitectura</h2>
@@ -3051,15 +2294,7 @@ footer {
     <span class="footer-dot"></span>
     <span>Arquitectura de Software — Guía Interactiva</span>
   </div>
-  <div style="display:flex;align-items:center;gap:1.2rem">
-    <span style="color:var(--muted)">Luis Carrión</span>
-    <a href="https://www.linkedin.com/in/luis-carrion-rumiche/" target="_blank" rel="noopener"
-       style="display:flex;align-items:center;gap:0.4rem;color:var(--blue);text-decoration:none;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.04em;transition:color 0.2s"
-       onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--blue)'">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      linkedin/luis-carrion-rumiche
-    </a>
-  </div>
+  <span>7 Partes · 28 Tópicos · GitHub Pages Ready</span>
 </footer>
 
 <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
